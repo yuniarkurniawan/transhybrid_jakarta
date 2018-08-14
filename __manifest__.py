@@ -34,8 +34,8 @@
         'views/progressbar_view.xml',
         'views/transhybrid_sale_order_customer_report_view.xml',
 
-        'wizard/transhybrid_purchase_order_excel_tmpl_view.xml',
-        'wizard/transhybrid_purchase_order_excel_wizard_view.xml',
+        #'wizard/transhybrid_purchase_order_excel_tmpl_view.xml',
+        #'wizard/transhybrid_purchase_order_excel_wizard_view.xml',
 
 
         'data/transhybrid_email_server_configuration_data.xml',
