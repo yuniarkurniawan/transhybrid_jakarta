@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="res_users_kanban_view">
+            <field name="name">res.users.kanban</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="name" string="Name" />
+                    <field name="login" string="User Name" />
+                    <field name="image"/>
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_res_partner_kanban">
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                <div class="o_kanban_image">
+                                    <t t-if="record.image.raw_value">
+                                        <img t-att-src="kanban_image('res.users', 'image', record.id.value)"
+                                        style="height:70px;width:100px;"
+                                        />
+                                    </t>
+                                </div>
+
+                                <div class="oe_kanban_details">
+                                    <strong class="oe_partner_heading"><field name="name"/></strong>
+                                    <ul>
+                                        <li><field name="login"/></li>
+                                        <li><field name="user_condition"/></li>                                  
+                                                                                
+                                    </ul>                                    
+                                </div>
+
+                            </div>
+
+                        </t>
+                    </templates>
+
+                
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="transhybrid_res_users_tree_view" model="ir.ui.view">
+            <field name="name">transhybrid.res.users.tree</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string="Name"/>
+                    <field name="login" string="User Name" />
+                    <field name="groups_id" string="Role" />                    
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="transhybrid_res_users_form_view">
+            <field name="name">transhybrid.res.users.form.view</field>
+            <field name="model">res.users</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        
+                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image": "image_medium"}'/>
+                        <div class="oe_title">
+                            
+                            <group>
+                                <field name="name" class="oe_inline" required="1"/>
+                                <field 
+                                    name="login" 
+                                    placeholder="email@yourcompany.com"
+                                    class="oe_inline"
+                                    />
+                                <field name="password" password="True" class="oe_inline" />
+                                
+                                <field 
+                                    name="user_phone" 
+                                    class="oe_inline" 
+                                    required="1" />
+                                <field 
+                                    name="user_condition" 
+                                    string="Company" 
+                                    class="oe_inline"
+                                    required="1" 
+                                /> 
+                                
+                                <field 
+                                    name="user_company"
+                                    class="oe_inline" 
+                                    attrs="{'invisible':[('user_condition','=',1)], 'required':[('user_condition','=',2)]}"
+                                    string="Vendor" />
+
+                                <field name="user_address" string="Address" class="oe_inline" />
+                                
+
+
+                            </group>
+                            
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- XPATH VIEW FORM -->
+        <record model="ir.ui.view" id="view_send_reset_password_inherit">
+            <field name="name">form.change.password.wizard.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="auth_signup.res_users_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//header//button[@name='action_reset_password']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//header//field[@name='state']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="transhybrid_res_users_form_view_inherit">
+            <field name="name">transhybrid.res.users.form.view.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//label[@for='login']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='login']" position="replace">
+                    <h3>
+                            
+                        <group>
+                            <field name="name" class="oe_inline" required="1"/>
+                            <field 
+                                name="login" 
+                                placeholder="email@yourcompany.com"
+                                class="oe_inline"
+                                />
+                            <field name="user_phone" class="oe_inline" required="1" />
+                            <field 
+                                    name="user_condition" 
+                                    string="Company" 
+                                    class="oe_inline"
+                                    required="1" 
+                                /> 
+                                
+                                <field 
+                                    name="user_company"
+                                    class="oe_inline" 
+                                    options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                    attrs="{'invisible':[('user_condition','=',1)], 'required':[('user_condition','=',2)]}"
+                                    string="Vendor" />
+
+                            
+                            <field name="user_address" string="Address" class="oe_inline" />
+                            
+                        </group>
+                        
+                    
+                    </h3>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//notebook//page[@name='access_rights']//group" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//sheet//div//button[@name='toggle_active']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        <!-- XPATH VIEW FORM -->
+
+
+        <!--SEARCH-->
+        <record model="ir.ui.view" id="transhybrid_res_users_search_view">
+            <field name="name">transhybrid.res.users.search.view</field>
+            <field name="model">res.users</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Searching">
+                    
+                    <field name="name" string="Name"/>
+                    <field name="login" string="User Name" />
+                    <field name="user_phone" string="Phone"/>
+                    <field name="user_address" string="Address" />  
+                    
+                </search>
+            </field>
+        </record>
+
+
+        <!--ACTION-->
+        <record id="transhybrid_res_users_action" model="ir.actions.act_window">
+            <field name="name">User</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>           
+            <field name="search_view_id" ref="transhybrid_res_users_search_view" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    You can create, update and delete Data.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_transhybrid_res_users_form_view1" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="res_users_kanban_view"/>
+            <field name="act_window_id" ref="transhybrid_res_users_action"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_transhybrid_res_users_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="transhybrid_res_users_tree_view"/>
+            <field name="act_window_id" ref="transhybrid_res_users_action"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="action_transhybrid_res_users_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_id" ref="danawa_res_users_form_view"/> -->
+            <field name="view_id" ref="base.view_users_form"/>
+            <field name="act_window_id" ref="transhybrid_res_users_action"/>
+        </record>        
+        
+        <menuitem action="transhybrid_res_users_action" icon="STOCK_JUSTIFY_FILL" sequence="1"
+            id="res_users_model_menu_view" parent="sub_menu_user_data_transhybrid"
+        />
+
+    </data>
+</openerp>

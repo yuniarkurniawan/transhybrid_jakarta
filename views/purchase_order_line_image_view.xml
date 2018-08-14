@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+        <record model="ir.ui.view" id="purchase_order_line_image_model_form">
+            <field name="name">purchase.order.line.image.model.form</field>
+            <field name="model">purchase.order.line.image.model</field>
+            <field name="arch" type="xml">
+                <form string="Images">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name" string="Image Name"/>
+                            <h1><field name="name" placeholder="Image Name" required="True"/></h1>
+                            <field name="purchase_order_line_id" invisible="1"/>                            
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

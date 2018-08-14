@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+	<record model="ir.ui.view" id="sale_order_customer_thc_search_view">
+            <field name="name">sale.order.customer.the.search.view</field>
+            <field name="model">sale.order</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer">
+                   
+                   <field name="partner_id" string="Customer Name" />
+                   <field name="name" string="Purchase Order Number"/>
+
+                   <!--
+                   <group 
+                        expand="0" 
+                        name="group_by" 
+                        string="Group By">
+                        <filter 
+                            name="salesperson" 
+                            string="Salesperson" 
+                            domain="[]" 
+                            context="{'group_by' : 'user_id'}" />
+                       
+                       <filter 
+                            name="group_company" 
+                            string="Company" 
+                            context="{'group_by': 'parent_id'}"/>
+                       
+                       <filter 
+                            name="group_country" 
+                            string="Country" 
+                            context="{'group_by': 'country_id'}"/>
+                   </group>
+                    -->
+                </search>
+            </field>
+        </record>
+
+    <data>
+		<record id="sale_order_customer_thc_action" model="ir.actions.act_window">
+            <field name="name">Customer Graphics</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="search_view_id" ref="sale_order_customer_thc_search_view"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Quotation, the first step of a new sale.
+                </p><p>
+                    Once the quotation is confirmed, it becomes a sales order.
+                    You'll be able to invoice it and collect payments.
+                    From the <i>Sales Orders</i> menu, you can track delivery
+                    orders or services.
+                </p>
+            </field>
+        </record>
+    </data>
+
+
+    <menuitem 
+    	action="sale_order_customer_thc_action" 
+    	icon="STOCK_JUSTIFY_FILL" 
+    	sequence="1"
+        id="sale_order_customer_thc_menu_view" 
+        parent="sub_menu_reporting_data_transhybrid"
+        />
+
+</openerp>

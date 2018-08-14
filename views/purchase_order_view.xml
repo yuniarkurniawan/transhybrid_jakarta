@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>        
+		
+		<!--TREE-->
+		<record model="ir.ui.view" id="purchase_order_model_tree_view">
+			<field name="name">purchase.order.model.tree.view</field>
+			<field name="model">purchase.order.model</field>
+			<field name="type">tree</field> 
+			<field name="arch" type="xml">
+				<!--<tree create="false">-->
+				<tree>
+					<field name="name" string="Name"/>
+					<field name="purchase_order_date" string="Purchase Order Date" />
+					<field name="customer" string="Customer"/>
+					<field name="description" string="Description" />
+					<field name="state" string="Status" />	
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="purchase_order_model_form_view">
+			<field name="name">purchase.order.model.form.view</field>
+			<field name="model">purchase.order.model</field>
+			<field name="type">form</field>
+			<field eval="4" name="priority"/>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+                        <div class="header_bar">
+
+                        	
+                            <button string="Deal" 
+                                    name="action_deal" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Change The State Tob Be Deal ?" 
+                                    type="object"
+                                    attrs="{'invisible' : [('state','in',(2,3,4,5))]}"
+                                    />
+
+                            <button string="New" 
+                                    name="action_new" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Change The State To Be New ?" 
+                                    type="object"
+                                    attrs="{'invisible' : [('state','in',(1,3,4,5))]}"
+                                    />
+
+
+                            <button string="In Progress" 
+                                    name="action_in_progress" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Change The State To Be In Progress ?" 
+                                    type="object"
+                                    attrs="{'invisible' : [('state','in',(1,2,4,5))]}"
+                                    />
+
+							<button string="Monitoring" 
+                                    name="action_monitoring" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Change The State To Be Monitoring ?" 
+                                    type="object"
+                                    attrs="{'invisible' : [('state','in',(1,2,3,5))]}"
+                                    />                            
+
+							
+                            <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="1,2,3,4,5"/>
+
+                        </div>
+                    </header>
+
+
+					<sheet>
+						<separator string="Purchase Order" colspan="4"/>
+						<group>
+							
+							<field 
+									name="name" 
+									string="Name" 
+									class="oe_inline"
+									/>
+								<field 
+									name="purchase_order_date" 
+									string="Purchase Order Date" 
+									class="oe_inline"
+									/>
+								
+								<field 
+									name="customer" 
+									string="Customer"
+									options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}" 
+									domain="[('supplier', '=',False)]" 
+									class="oe_inline"
+									/>
+						
+								<field 
+									name="description" 
+									string="Description"
+									class="oe_inline"
+									/>
+							
+						</group>                        
+
+						<notebook>
+							<page string="Products" >
+								<field string="Purchase Order Detail" name="purchase_order_line_ids" >
+									<tree string="Detail">
+										<field 
+											name="product_thc" 
+											string="Product"
+											options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"  />
+										<field name="price_per_unit" string="Unit Price" />
+										<field name="quantity_buy" string="Quantity Buy" />
+										<field name="total" string="Total" sum="Total"/>
+									</tree>
+								</field>									
+							</page>
+						</notebook>
+
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		
+		<!--SEARCH-->
+		<record model="ir.ui.view" id="purchase_order_model_search_view">
+			<field name="name">purchase.order.model.search.view</field>
+			<field name="model">purchase.order.model</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Searching">                    
+					<field name="name" string="Name"/>
+					<field name="purchase_order_date" string="Purchase Order Date" />
+					<field name="customer" string="Customer"/>
+					<field name="description" string="Description" />
+					<field name="state" string="Status" />	
+				</search>
+			</field>
+		</record>
+
+
+		<!--ACTION-->
+		<record id="purchase_order_model_action" model="ir.actions.act_window">
+			<field name="name">Purchase Order</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">purchase.order.model</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>           
+			<field name="search_view_id" ref="purchase_order_model_search_view" />
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					You can create, update and delete Data.
+				</p>
+			</field>
+		</record>
+		
+		
+		<record model="ir.actions.act_window.view" id="action_purchase_order_model_tree_view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="purchase_order_model_tree_view"/>
+			<field name="act_window_id" ref="purchase_order_model_action"/>
+		</record>
+		
+		<record model="ir.actions.act_window.view" id="action_purchase_order_model_form_view">
+			<field eval="2" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="purchase_order_model_form_view"/>
+			<field name="act_window_id" ref="purchase_order_model_action"/>
+		</record>        
+		
+		<menuitem action="purchase_order_model_action" icon="STOCK_JUSTIFY_FILL" sequence="3"
+            id="purchase_order_model_menu_view" parent="sub_menu_purchasing_data_transhybrid"
+        />
+				
+	</data>
+</openerp>

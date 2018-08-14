@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>   
+
+        <!--TREE-->
+        <record model="ir.ui.view" id="transhybrid_state_progress_order_tree_view">
+            <field name="name">transhybrid.state.progress.order.tree.view</field>
+            <field name="model">transhybrid.state.progress.order</field>
+            <field name="type">tree</field> 
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string="Name" />   
+                    <field name="percentage" string="Percentage"/>                 
+                    <field name="description" string="Description" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="transhybrid_state_progress_order_form_view">
+            <field name="name">transhybrid.state.progress.order.form.view</field>
+            <field name="model">transhybrid.state.progress.order</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>                    
+                    <sheet>
+                        <group>
+                            <field name="name" class="oe_inline" string="Name" />
+                            <field name="percentage" class="oe_inline" string="Percentage"/>
+                            <field name="description" string="Description" class="oe_inline" /> 
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--SEARCH-->
+        <record model="ir.ui.view" id="transhybrid_state_progress_order_search_view">
+            <field name="name">transhybrid.state.progress.order.search.view</field>
+            <field name="model">transhybrid.state.progress.order</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Searching">                    
+                    <field name="name" string="Name" />   
+                    <field name="percentage" string="Percentage"/>                 
+                    <field name="description" string="Description" />                  
+                </search>
+            </field>
+        </record>
+
+
+        <!--ACTION-->
+        <record id="transhybrid_state_progress_order_action" model="ir.actions.act_window">
+            <field name="name">State Percentage</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transhybrid.state.progress.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>           
+            <field name="search_view_id" ref="transhybrid_state_progress_order_search_view" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    You can create, update and delete Data.
+                </p>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_danawa_bridge_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="transhybrid_state_progress_order_tree_view"/>
+            <field name="act_window_id" ref="transhybrid_state_progress_order_action"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="action_danawa_bridge_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="transhybrid_state_progress_order_form_view"/>
+            <field name="act_window_id" ref="transhybrid_state_progress_order_action"/>
+        </record>        
+        
+        <menuitem 
+            action="transhybrid_state_progress_order_action" 
+            icon="STOCK_JUSTIFY_FILL" 
+            sequence="1"
+            id="transhybrid_state_progress_order_menu_view" 
+            parent="sub_menu_purchasing_data_transhybrid"
+            
+        />
+
+        
+    </data>
+</openerp>

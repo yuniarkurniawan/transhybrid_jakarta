@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>        
+        <record model="ir.ui.view" id="sale_order_line_service_model_form_view">
+            <field name="name">sale.order.line.service.model.form.view</field>
+            <field name="model">sale.order.line.service.model</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <separator string="Images 55" colspan="8"/>
+                            <notebook>                            
+                                <page>
+                                    
+                                    <field name="sale_order_line_serive_image_ids" mode="kanban">
+                                        <kanban string="Upload Images">
+
+                                            <field name="name"/>
+                                            <field name="image" />
+
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <div class="oe_kanban_global_click">
+                                                        <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                        <div>
+                                                            <img
+                                                                style="height:240px;width:300px;" 
+                                                                t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                        </div>
+                                                        <div class="oe_kanban_details">
+                                                            <field name="name"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                    </field>
+                                </page>
+                            </notebook>                        
+                    </sheet>
+                </form>
+            </field>
+        </record>        
+    </data>
+</openerp>

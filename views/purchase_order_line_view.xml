@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>		
+        <record model="ir.ui.view" id="purchase_order_line_model_form_view">
+			<field name="name">purchase.order.line.model.form.view</field>
+			<field name="model">purchase.order.line.model</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">				
+				<form>
+					<sheet>
+						<separator string="Detail Purchase Order" colspan="4"/>
+						<group>
+							
+							<field 
+								name="product_thc" 
+								string="Product"
+								options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+								class="oe_inline"
+								/>
+							
+							<!--
+							<field 
+								name="price_per_unit" 
+								string="Price"
+								class="oe_inline"
+								/>
+							<field 
+								name="quantity_buy" 
+								string="quantity"
+								class="oe_inline"
+								/>
+							<field 
+								name="total" 
+								string="Total"
+								class="oe_inline"
+								/>
+							-->
+							<!--
+							<field 
+								name="service_id"
+								string="Service"
+								domain="[('product_id', '=',product_thc.id)]"
+								class="oe_inline" />
+							-->
+
+							<field 
+								name="service_id"
+								string="Service"
+								class="oe_inline" />
+
+							<field 
+								name="total_service"
+								string="Total"
+								class="oe_inline" />
+
+						</group>
+						
+						<notebook>
+							<!--
+							<page string="Items" >
+								<field string="Detail Pesanan Pembelian" name="purchase_order_line_item_ids" >
+									<tree string="Detail" editable="bottom">
+										<field 
+											name="item_model_id" 
+											string="Item"
+											options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+											class="oe_inline"  />
+										<field name="price_per_item" string="Item Price" />
+										<field name="quantity_item_buy" string="Quantity Item" />
+										<field name="total_item" string="Total" sum="Total"/>
+									</tree>
+								</field>									
+							</page>
+							-->
+
+
+							<page string="Service" >
+								<field string="Detail Service" name="purchase_order_line_service_ids" >
+									<tree string="Detail" editable="bottom">
+										<field 
+											name="service_id" 
+											string="Service"
+											options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+											class="oe_inline"  />
+										<field name="total_item_service" string="Total Service" />
+										<field name="pic" string="Person In Charge" />
+										<field name="address" string="Address"/>
+									</tree>
+								</field>									
+							</page>
+
+							<page string="Images">
+								<field  
+									name="purchase_order_line_image_ids"
+									mode="kanban">
+
+									<kanban string="Upload Image">
+                                        <field name="name"/>
+                                        <field name="image" />
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                
+                                                <div class="oe_kanban_global_click">
+                                                    <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                    <div>
+                                                        <img
+                                                            style="height:240px;width:300px;" 
+                                                            t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                    </div>
+                                                    <div class="oe_kanban_details">
+                                                        <field name="name"/>
+                                                    </div>
+                                                </div>
+                                                
+                                            </t>
+                                        </templates>
+                                            
+                                    </kanban>
+
+								</field>
+							</page>
+
+						</notebook>
+												
+					</sheet>
+					
+				</form>
+                
+			</field>
+		</record>        
+        
+		<record model="ir.ui.view" id="purchase_order_line_model_tree_view">
+			<field name="name">purchase.order.line.model.tree.view</field>
+			<field name="model">purchase.order.line.model</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Purchase Order List">
+					<field string="Product" name="product_thc"/>					
+				</tree>
+			</field>
+		</record>
+        
+		<record model="ir.ui.view" id="purchasing_purchase_order_line_search">
+			<field name="name">purchase.order.line.model.search</field>
+			<field name="model">purchase.order.line.model</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Purchase Order Searching">
+					<field string="Product" name="product_thc"/>
+				</search>
+			</field>
+		</record>
+        
+	</data>
+</openerp>

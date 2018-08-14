@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+        <record model="ir.ui.view" id="transhybrid_sale_order_line_image_form">
+            <field name="name">transhybrid.sale.order.line.image.form</field>
+            <field name="model">sale.order.line.image.model</field>
+            <field name="arch" type="xml">
+                <form string="Images">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name" string="Image Name"/>
+                            <field name="name" placeholder="Image Name" required="True"/>
+                            <field 
+                                name="order_line_service" 
+                                options="{'no_quick_create': True, 'no_create_edit' : True,'no_open':True}" 
+                                />
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>

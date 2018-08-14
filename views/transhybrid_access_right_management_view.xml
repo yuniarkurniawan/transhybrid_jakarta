@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="transhybrid_res_groups_access_tree_view" model="ir.ui.view">
+			<field name="name">transhybrid.res.groups.access.tree</field>
+			<field name="model">res.groups</field>
+			<field name="arch" type="xml">
+				<tree>
+					<!--<field name="category_id" string="Groups" />-->
+					<field name="name" string="Name"/>
+					<field name="description" string="Description" />					
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="transhybrid_res_groups_access_form_view">
+			<field name="name">transhybrid.res.groups.access.form.view</field>
+			<field name="model">res.groups</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<separator string="GROUPS" colspan="4"/>
+						<group>
+							<field 
+								name="category_id" 
+								string="Aplication"
+								required="1" 
+								options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+								class="oe_inline"
+								/>
+
+							<field name="name" string="Name" required="1" class="oe_inline" />
+							
+							<!--
+							<field 
+								name="work_type_id" 
+								string="Work Type" 
+								options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+								class="oe_inline" />
+							-->
+							<field name="description" string="Description" class="oe_inline" />
+						</group>
+
+						<notebook>
+							
+							<page string="Menus">
+	                            <field name="menu_access"/>
+	                        </page>
+
+	                        <page string="Users">
+	                            <field name="users" context="{'search_default_no_share':1}"/>
+	                        </page>
+
+	                        <page string="Access Rights">
+	                            <field name="model_access">
+	                                <tree string="Access Rules" editable="top">
+	                                    <field name="model_id"/>
+	                                    <field name="perm_read"/>
+	                                    <field name="perm_write"/>
+	                                    <field name="perm_create"/>
+	                                    <field name="perm_unlink"/>
+	                                    <field name="name"/>
+	                                </tree>
+	                                <form string="Access Controls">
+	                                    <group col="4">
+	                                        <field name="name"/>
+	                                        <field name="active"/>
+	                                        <field name="model_id"/>
+	                                        <newline/>
+	                                        <field name="perm_read"/>
+	                                        <field name="perm_write"/>
+	                                        <field name="perm_create"/>
+	                                        <field name="perm_unlink"/>
+	                                    </group>
+	                                </form>
+	                            </field>
+	                        </page>
+
+						</notebook>
+
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<!--SEARCH-->
+		<record model="ir.ui.view" id="transhybrid_res_groups_search_view">
+			<field name="name">transhybrid.res.groups.access.search.view</field>
+			<field name="model">res.groups</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Searching">
+					
+					<field name="name" string="Name"/>
+					<field name="description" string="Description" />	
+					
+				</search>
+			</field>
+		</record>
+
+
+		<!--ACTION-->
+		<record id="transhybrid_ir_model_access_action" model="ir.actions.act_window">
+			<field name="name">Groups</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.groups</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>           
+			<field name="search_view_id" ref="transhybrid_res_groups_search_view" />
+			<!-- <field name="domain">[('category_id', 'ilike',('Danawa','Admin'))]</field> -->
+			<!--<field name="domain">['|', ('category_id','ilike','Danawa'), ('category_id','ilike','Admin')]</field> -->
+			<field name="domain">[('name', 'ilike','Transhybrid')]</field>
+
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					You can create, update and delete Data.
+				</p>
+			</field>
+		</record>
+		
+		
+		<record model="ir.actions.act_window.view" id="action_transhybrid_res_groups_access_tree_view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="transhybrid_res_groups_access_tree_view"/>
+			<field name="act_window_id" ref="transhybrid_ir_model_access_action"/>
+		</record>
+		
+		<record model="ir.actions.act_window.view" id="action_transhybrid_res_groups_access_form_view">
+			<field eval="2" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="transhybrid_res_groups_access_form_view"/>
+			<field name="act_window_id" ref="transhybrid_ir_model_access_action"/>
+		</record>        
+		
+		<menuitem action="transhybrid_ir_model_access_action" icon="STOCK_JUSTIFY_FILL" sequence="2"
+			id="transhybrid_ir_models_menu_view" parent="sub_menu_user_data_transhybrid"
+			
+		/>
+
+	</data>
+</openerp>

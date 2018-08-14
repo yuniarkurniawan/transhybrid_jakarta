@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>		
+        <record model="ir.ui.view" id="sale_order_line_thc_form_view">
+			<field name="name">sale.order.line.thc.form.view</field>
+			<field name="model">sale.order.line</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">				
+				<form>
+					<sheet>
+						<group>
+								<!--
+								<field name="product_id"
+                                    attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"
+                                    options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                    class="oe_inline"
+                                   />
+                               -->
+
+                               <field 
+                                    name="product_id"
+                                    context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                    class="oe_inline"
+                                    options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3,4))]}"
+                                   />
+                                <field 
+                                	name="layout_category_id" 
+                                	groups="sale.group_sale_layout"
+                                	class="oe_inline" />
+                                <field 
+                                	name="name" 
+                                	class="oe_inline"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3,4))]}" />
+
+                                <field 
+                                	name="product_uom_qty"
+                                    string="Ordered Qty"
+                                    context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                	class="oe_inline"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3,4))]}"
+                                />
+
+
+                                <field name="qty_delivered" invisible="1" />
+                                <field name="qty_invoiced" invisible="1"/>
+
+                                <field name="qty_to_invoice" invisible="1"/>
+                                <field name="product_uom"
+                                    attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}"
+                                    context="{'company_id': parent.company_id}"
+                                    groups="product.group_uom" options='{"no_open": True}'/>
+                                
+                                <field 
+                                	name="analytic_tag_ids" 
+                                	groups="analytic.group_analytic_accounting" 
+                                	widget="many2many_tags"
+                                	invisible="1" />
+
+                                <field 
+                                	name="price_unit"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3))]}"
+                                    class="oe_inline"/>
+                                
+                                <field 
+                                	name="tax_id" 
+                                	widget="many2many_tags" 
+                                	domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3))]}"
+                                    class="oe_inline"                                       
+                                    />
+
+
+                                <field 
+                                	name="discount" 
+                                	groups="sale.group_discount_per_so_line"
+                                	class="oe_inline" />
+
+                                <field 
+                                	name="price_subtotal" 
+                                	widget="monetary" 
+                                	groups="sale.group_show_price_subtotal"
+                                	class="oe_inline"
+                                	/>
+
+                                <field 
+                                	name="price_total" 
+                                	widget="monetary" 
+                                	groups="sale.group_show_price_total"
+                                    attrs="{'readonly': [('state_new', 'in', (2,3))]}"
+                                	class="oe_inline"
+                                	/>
+
+                                <field name="qty_delivered_updateable" invisible="1"/>
+                                <field name="procurement_ids" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="invoice_status" invisible="1"/>
+                                <field name="customer_lead" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="state_new" invisible="1" />
+                        </group>
+
+                        <group attrs="{'invisible' : [('state_new','in',(2,3,4))]}">
+                        		<field 
+                       				name="service_id" 
+                       				string="Product Service"
+                       				class="oe_inline"
+                       				options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                    domain="[('product_product','=',product_id)]"
+                       				
+                       			/>
+
+                                <!--
+
+                                    <field 
+                                        name="core_managment_id" 
+                                        options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                        domain="[('task_id.id','=',task_id)]"
+                                        class="oe_inline"
+                                        />
+
+                                -->
+
+                                <field 
+									name="total_service"
+									string="Total"
+									class="oe_inline"
+									 />
+
+						</group>
+						
+						<notebook>
+							
+							<page string="Service" >
+								<field string="Detail Service" name="sale_order_line_service_ids" >
+									<tree string="Detail" editable="bottom">
+										<field 
+											name="service_id" 
+											string="Service"
+											options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+											domain="[('product_product','=',parent.product_id)]"
+											attrs="{'readonly':[('state_parent','in',(2,3,4))]}" 
+                                            style="width:10%%"
+											 />
+										<field 
+                                            name="total_item_service" 
+                                            string="Total Service"
+                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}"
+                                            invisible="1"  
+                                            />
+										
+                                        <field 
+                                            name="pic" 
+                                            string="PIC"
+                                            required="1"
+                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
+										
+                                        <field 
+                                            name="pic_phone" 
+                                            string="Phone"
+                                            required="1"
+                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
+                                        
+
+
+                                        <field 
+                                            name="address" 
+                                            string="Address"
+                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}" 
+
+                                            />
+                                        
+                                        <field 
+                                            name="state" 
+                                            string="State"
+                                            class="oe_inline"
+                                            attrs="{'readonly':[('state_parent','in',(2,4))]}"
+                                            options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+
+                                            />
+
+                                        <field 
+                                            name="state_parent" 
+                                            string="State"
+                                            invisible="1"
+                                            />
+                                        
+                                        <field name="percentage" invisible="1"/>
+                                        <field 
+                                            name="progress_bar" 
+                                            widget="progressbar" 
+                                            string="Progress"
+                                             />
+                                        
+									</tree>
+								</field>									
+							</page>
+
+                            
+							<page 
+                                string="Images"
+                                attrs="{'invisible':[('state_new','in',(1,2))]}">
+								<field  
+									name="sale_order_line_image_ids"
+									mode="kanban">
+
+									<kanban string="Upload Image">
+                                        <field name="name"/>
+                                        <field name="image" />
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                
+                                                <div class="oe_kanban_global_click">
+                                                    <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                    <div>
+                                                        <img
+                                                            style="height:240px;width:300px;" 
+                                                            t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                    </div>
+                                                    <div class="oe_kanban_details">
+                                                        <field name="name"/>
+                                                        
+                                                    </div>
+                                                    <div class="oe_kanban_details">
+                                                        <field name="order_line_service"/>
+                                                    </div>
+                                                </div>
+                                                
+                                            </t>
+                                        </templates>
+                                            
+                                    </kanban>
+
+								</field>
+							</page>
+		                  					
+        
+						</notebook>
+												
+					</sheet>
+					
+				</form>
+                
+			</field>
+		</record>        
+        
+		<record model="ir.ui.view" id="sale_order_line_thc_tree_view">
+			<field name="name">sale.order.line.thc.tree.view</field>
+			<field name="model">sale.order.line</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Order Line">
+					<field string="Product" name="product_id"/>					
+				</tree>
+			</field>
+		</record>
+        
+		<record model="ir.ui.view" id="sale_order_line_thc_search">
+			<field name="name">sale.order.line.thc.search</field>
+			<field name="model">sale.order.line</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Order Line Searching">
+					<field string="Product" name="product_id"/>
+				</search>
+			</field>
+		</record>
+        
+	</data>
+</openerp>

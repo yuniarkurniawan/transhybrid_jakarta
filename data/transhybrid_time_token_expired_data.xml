@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="default_email_server_configuration" model="transhybrid.configuration">
+			<field name="time_expired">180</field>
+			<field name="is_time_token_configuration">True</field>
+		</record>		
+	</data>
+</openerp>

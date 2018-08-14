@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="transhybrid_time_token_expired_configuration_tree_view">
+			<field name="name">transhybrid.time.token.expired.configuration.tree.view</field>
+			<field name="model">transhybrid.configuration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Konfigurasi" editable="bottom">
+                    <field string="Time (Sedond)" name="time_expired" />					
+                    <field string="Description" name="time_token_description" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="transhybrid_time_token_expired_configuration_search">
+			<field name="name">transhybrid.time.token.expired.configuration.search</field>
+			<field name="model">transhybrid.configuration</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Pencarian Konfigurasi">
+					<!--<field string="Nama" name="name"/>-->
+				</search>
+			</field>
+		</record>
+        
+        <record id="transhybrid_time_token_expired_configuration_action" model="ir.actions.act_window">
+			<field name="name">Time Token Expired</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">transhybrid.configuration</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>			
+			<field name="context">{}</field>
+			<field name="domain">[('is_time_token_configuration','=',True)]</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					You can create, update and delete Data.
+				</p>
+			</field>
+		</record>
+        
+		<record model="ir.actions.act_window.view" id="action_transhybrid_time_token_expired_configuration_tree_view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="transhybrid_time_token_expired_configuration_tree_view"/>
+			<field name="act_window_id" ref="transhybrid_time_token_expired_configuration_action"/>
+		</record>
+		
+		<menuitem action="transhybrid_time_token_expired_configuration_action" sequence="2"
+		    id="transhybrid_time_token_expired_configuration_action_menu"
+		    parent="sub_menu_configuration_data_transhybrid" />
+
+		
+	</data>
+</openerp>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>        
+
+        <!-- KANBAN VIEW -->
+        <record model="ir.ui.view" id="product_thc_model_kanban_view">
+            <field name="name">product.thc.model.kanban</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="name" string="Name" />                    
+                    <field name="product_type" string="Product Type" />
+                    <field name="image"/>
+                    <field name="list_price" string="Revenue Year" />
+                    
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_res_partner_kanban">
+                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                                <div class="o_kanban_image">
+                                    <t t-if="record.image.raw_value">
+                                        <img t-att-src="kanban_image('product.thc.model', 'image', record.id.value)"
+                                        style="height:70px;width:100px;"
+                                        />
+                                    </t>
+                                </div>
+
+                                <div class="oe_kanban_details">
+                                    <strong class="oe_partner_heading"><field name="name"/></strong>
+                                    <ul>
+                                        <li><field name="product_type"/></li>
+                                        <li><field name="list_price"/></li>
+                                        <li><field name="note"/></li>
+                                    </ul>                                    
+                                </div>
+                            </div>                            
+                        </t>
+                    </templates>
+
+                
+                </kanban>
+            </field>
+        </record>
+
+
+        
+        <!--TREE-->
+        <record model="ir.ui.view" id="product_thc_model_tree_view">
+            <field name="name">product.thc.model.tree.view</field>
+            <field name="model">product.template</field>
+            <field name="type">tree</field> 
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string="Name" />                    
+                    <field name="product_type" string="Product Type" />
+                    <field name="list_price" string="Price" class="oe_inline"/>
+                    
+                    <field name="standard_price" string="Cost" class="oe_inline"/>
+                    <field name="description_sale" string="Description" class="oe_inline" />
+
+                    <!--
+                    <field name="volume_solution" string="Volume Solution"  />
+                    <field name="price_solution" string="Price Solution"  />
+                    <field name="volume_deployment" string="Volume Deployment"  />
+                    <field name="price_deployment" string="Price Deployment"  />
+                    <field name="volume_operation_maintenance" string="Volume Operation"  />
+                    <field name="price_operation_maintenance" string="Price Operation"  />
+                    <field name="revenue_year" string="Revenue Year" />
+                    <field name="note" string="Note" />
+                    <field name="benchmark" string="Benchmark" />                                        
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_thc_model_form_view">
+            <field name="name">product.thc.model.form.view</field>
+            <field name="model">product.template</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        
+                        <field 
+                            name="image" 
+                            widget='image' 
+                            class="oe_avatar" 
+                            options='{"preview_image": "image", "size": [90, 90]}'/>
+                        <div class="oe_title">
+                            <h1>
+                                <field 
+                                    name="name" 
+                                    default_focus="1" 
+                                    placeholder="Product Catalogue Name" />
+                            </h1>
+                                <field name="product_code" placeholder="Product Code" />
+                               
+                                
+                            
+                        </div>
+
+
+                        <!--
+                        <group>
+                            <group>         
+                                <field 
+                                    name="volume_solution" 
+                                    string="Volume Solution"
+                                    class="oe_inline" />
+
+                                <field 
+                                    name="price_solution" 
+                                    string="Price Solution"
+                                    class="oe_inline"  />
+                            </group>
+
+                            <group>
+                                <field 
+                                    name="volume_deployment" 
+                                    string="Volume Deployment" 
+                                    class="oe_inline" />
+                                
+                                <field 
+                                    name="price_deployment" 
+                                    string="Price Deployment" 
+                                    class="oe_inline" />
+                            </group>
+
+                            <group>
+                                <field 
+                                    name="volume_operation_maintenance" 
+                                    string="Volume Maintenance" 
+                                    class="oe_inline" />
+                                
+                                <field 
+                                    name="price_operation_maintenance" 
+                                    string="Price Maintenance" 
+                                    class="oe_inline" />
+                            </group>
+
+                            <group>
+                                <field name="revenue_year" string="Revenue Year" class="oe_inline" />
+                            </group>
+
+                            <group>
+                                <field name="note" string="Note"  />
+                                <field name="benchmark" string="Benchmark"  />
+                            </group>
+
+                        </group>
+                        -->
+
+                        <notebook>
+
+                            <page string="General Information">
+                                <group>
+                                    <field name="product_type" string="Product Type" class="oe_inline" />
+                                    <field name="list_price" string="Price" class="oe_inline"/>
+                                    <field name="standard_price" string="Cost" class="oe_inline"/>
+                                    <field name="sale_ok" invisible="1" />   
+                                    <field 
+                                        name="taxes_id"
+                                        widget="many2many_tags"
+                                        class="oe_inline"/>       
+
+                                     <field 
+                                        name="description" 
+                                        string="Description"
+                                        colspan="2"
+                                        class="oe_inline"
+                                        placeholder="This note will be displayed on the quotations."/>
+
+                                </group>
+                            </page>
+
+                            <page string="Service" >
+                                <field string="Purchase Order Detail" name="product_templete_line_ids" >
+                                    <tree string="Service" editable="bottom">
+                                        <field name="name" string="Name" />
+                                        <field name="description" string="Description" />
+                                    </tree>
+                                </field>                                    
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        
+        <!--SEARCH-->
+        <record model="ir.ui.view" id="product_thc_model_search_view">
+            <field name="name">product.thc.model.search.view</field>
+            <field name="model">product.template</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Product">
+                <field name="name" string="Product" filter_domain="['|','|',('default_code','ilike',self),('name','ilike',self),('barcode','ilike',self)]"/>
+                <field name="categ_id" filter_domain="[('categ_id', 'child_of', raw_value)]"/>
+                <separator/>
+                <filter string="Services" name="services" domain="[('type','=','service')]"/>
+                <filter string="Products" name="consumable" domain="[('type', 'in', ['consu', 'product'])]" help="Products your store in the inventory"/>
+                <separator/>
+                <filter string="Can be Sold" name="filter_to_sell" domain="[('sale_ok','=',1)]"/>
+                <filter string="Can be Purchased" name="filter_to_purchase" domain="[('purchase_ok', '=', 1)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                <field string="Attributes" name="attribute_line_ids" groups="product.group_product_variant"/>
+                <field name="pricelist_id" widget="selection" context="{'pricelist': self}" filter_domain="[]" groups="product.group_sale_pricelist"/> <!-- Keep widget=selection on this field to pass numeric `self` value, which is not the case for regular m2o widgets! -->
+            </search>
+            </field>
+        </record>
+
+
+        <!--ACTION-->
+        <record id="product_thc_action" model="ir.actions.act_window">
+            <field name="name">Product Catalogue</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>           
+            <field name="search_view_id" ref="product_thc_model_search_view" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    You can create, update and delete Data.
+                </p>
+            </field>
+        </record>
+        
+
+        <record id="action_product_thc_model_kanban_form_view1" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="product_thc_model_kanban_view"/>
+            <field name="act_window_id" ref="product_thc_action"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_product_thc_model_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product_thc_model_tree_view"/>
+            <field name="act_window_id" ref="product_thc_action"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="action_product_thc_model_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_thc_model_form_view"/>
+            <field name="act_window_id" ref="product_thc_action"/>
+        </record>        
+        
+        <menuitem action="product_thc_action" icon="STOCK_JUSTIFY_FILL" sequence="3"
+            id="product_thc_model_menu_view" parent="sub_menu_purchasing_data_transhybrid"
+        />
+                
+    </data>
+</openerp>

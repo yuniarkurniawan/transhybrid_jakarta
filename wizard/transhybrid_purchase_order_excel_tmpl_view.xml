@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<report
+
+		    id="purchase_order_summary_xlsx"
+		    model="sale.order"
+		    string="Print to XLSX"
+		    report_type="xlsx"
+		    name="purchase_order_detail.xlsx"
+		    file="purchase_order_detail.xlsx"
+		    attachment_use="False"
+		    menu="False"
+		/>
+	</data>
+</openerp>
