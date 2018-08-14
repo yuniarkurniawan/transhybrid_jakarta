@@ -30,7 +30,7 @@
                <!-- <div class="col-md-6 col-md-offset-3 o_database_list"> -->
               <div class="text-center">
                  <!-- <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}"/> -->
-                 <img t-attf-src="/transhybrid/static/image_login/danawa.png"/>
+                 <img t-attf-src="/transhybrid_jakarta/static/image_login/logo.png"/>
               </div>
               <t t-raw="0"/>
                <!-- </div> -->
@@ -48,7 +48,7 @@
   <!-- </template> -->
       
 
-            <link rel="stylesheet" type="text/css" href="/transhybrid/static/src/css/main.css"/>
+            <link rel="stylesheet" type="text/css" href="/transhybrid_jakarta/static/src/css/main.css"/>
             <form class="login100-form validate-form" role="form" t-attf-action="/web/login{{ '?debug' if debug else '' }}" method="post" onsubmit="this.action = this.action + location.hash">
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
               <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
