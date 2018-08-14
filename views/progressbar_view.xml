@@ -4,7 +4,7 @@
 
         <template id="assets_backend" name="progressbar_tree_aos" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/transhybrid/static/src/js/progressbar_tree.js"></script>
+                <script type="text/javascript" src="/transhybrid_custom_addons/transhybrid_jakarta/static/src/js/progressbar_tree.js"></script>
             </xpath>
         </template>
 
