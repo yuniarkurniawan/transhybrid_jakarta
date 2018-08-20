@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Sales Orders Kanban View  -->
+        <record model="ir.ui.view" id="sale_order_thc_vendor_view_kanban">
+            <field name="name">sale.order.thc.vendor.view.kanban</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <kanban 
+                    create="false"
+                    delete="false"
+                    class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="date_order"/>
+                    <field name="state"/>
+                    <field name="currency_id"/>
+                    <field name="assign_to_choise"/>
+                    <field name="assign_to"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <strong><span><t t-esc="record.partner_id.value"/></span></strong>
+                                    </div>
+                                    <div class="col-xs-6 pull-right text-right">
+                                        <strong><field name="amount_total" widget="monetary"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text-muted">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_order.value"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span class="pull-right text-right">
+                                            <field name="state_new" widget="kanban_label_selection" />
+                                        </span>
+                                    </div>
+                                    <!--
+                                    <div class="col-xs-6">
+                                        <span class="pull-right text-right">
+                                            <field name="state" widget="kanban_label_selection" options="{'classes': {'draft': 'default', 'cancel': 'default',
+                                            'done': 'success'}}"/>
+                                        </span>
+                                    </div>
+                                -->
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-7">
+                                        <field 
+                                            name="percentage_task" 
+                                            widget="gauge" 
+                                            string="Progress"
+                                            style="width:120px;height:90px;cursor:pointer;" 
+                                            />
+
+                                        <h5>
+                                            <field name="vendor_assign_order"/> - <field name="assign_to_by_vendor"/>
+                                        </h5>  
+
+                                    </div>
+                                </div>
+
+                                
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="sale_order_thc_vendor_tree_view" model="ir.ui.view">
+            <field name="name">sale.order.thc.vendor.tree.view</field>
+            <field name="model">sale.order</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree 
+                    string="Sales Orders" 
+                    create="false"
+                    delete="false"
+                    decoration-bf="message_needaction==True" 
+                    decoration-muted="state=='cancel'">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Order Number"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="assign_to"/>
+                    <!--<field name="user_id"/>-->
+                    <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                    <!--<field name="invoice_status"/>-->
+                    <field name="state" invisible="1"/>
+                    <field name="state_new"/>
+                    <field name="percentage_task" widget="progressbar" string="Progress"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="sale_order_thc_vendor_form_view" model="ir.ui.view">
+            <field name="name">sale.order.thc.vendor.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <form 
+                    string="Sales Order" 
+                    create="false"
+                    delete="false">
+                <header>
+                           
+                           
+                            <button 
+                                    string="In Progress" 
+                                    name="action_progress" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Progress This Purchase Order ?" 
+                                    type="object"
+                                    attrs="{'invisible':[('state_new','in',(1,3,4,5))]}"
+                                    />
+
+                            <button 
+                                    string="Monitoring" 
+                                    name="action_monitoring" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Monitor This Purchase Order ?" 
+                                    type="object"
+                                    attrs="{'invisible':['|',('percentage_task','&lt;',100),('state_new','in',(4,5))]}"
+                                    />
+
+                            
+                            
+                        <field name="state_new" widget="statusbar" statusbar_visible="1,2,3,4,5"/>
+                    
+                </header>
+                <sheet>
+                    <!--
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                -->
+                    <!--
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                -->
+                        <group>
+                            <field name="state" invisible="1" />
+                            <field 
+                                name="vendor_name_order"
+                                string="PO. Vendor Number"
+                                class="oe_inline"
+                                readonly="1"
+                            />
+
+                            <field 
+                                string="PO. Number" 
+                                name="name_order"
+                                attrs="{'readonly':[('state_new','in',(1,2,3,4))]}"
+                                class="oe_inline" />
+                            
+                            <field 
+                                name="date_order" 
+                                class="oe_inline"
+                                readonly="1"/>
+
+                            <field 
+                                name="partner_id" 
+                                domain="[('customer','=',True)]" 
+                                context="{'search_default_customer':1, 'show_address': 1}" 
+                                options="{'always_reload': True,'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                class="oe_inline"
+
+                                />
+                        </group>
+                        <group>
+
+
+                            
+
+                            <field 
+                                name="vendor_assign_order"
+                                class="oe_inline"
+                                string="Vendor Name"
+                                readonly="1"
+                                
+                                />
+
+                            <field 
+                                name="rfs_date"
+                                string="RFS"
+                                class="oe_inline"
+                                readonly="1"
+                            />
+
+                           
+
+                            
+                            <field 
+                                name="assign_to"
+                                string="Person"
+                                options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                class="oe_inline"
+                                domain="[('is_manager_other_company','=',2)]"
+
+                                />
+
+
+                            <field 
+                                name="percentage_task" 
+                                widget="progressbar" 
+                                readonly="1"
+                                attrs="{'invisible':[('state_new','=',1)]}"
+                                />
+                            <field 
+                                name="note" 
+                                string="Description"
+                                class="oe_inline"
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}"
+                            />
+                                
+
+                            
+                            
+                            <!--
+                            <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+                            -->
+
+                            <!--
+                            <field 
+                                name="validity_date" 
+                                class="oe_inline"
+                                attrs="{'invisible': [('state', 'in', ['sale', 'done'])]}"/>
+                            -->
+
+                            <field 
+                                name="validity_date" 
+                                class="oe_inline"
+                                invisible="1" />
+
+                            <!--
+                            <field 
+                                name="confirmation_date" 
+                                class="oe_inline"
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}"
+                                />
+                            -->
+
+                            <field 
+                                name="confirmation_date" 
+                                class="oe_inline"
+                                invisible="1"
+                                />
+
+
+
+                            <!--
+                            <field name="pricelist_id" groups="product.group_sale_pricelist"/>
+                            -->
+
+                            
+
+                            <!--
+                            <field 
+                                name="payment_term_id" 
+                                class="oe_inline"
+                                options="{'no_create': True}"
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}"/>
+                            -->
+
+                            <field 
+                                name="payment_term_id" 
+                                class="oe_inline"
+                                options="{'no_create': True}"
+                                invisible="1"
+                                />
+                            
+                            <field name="company_id" invisible="1"/>
+                            <field name="pricelist_id" invisible="1" />
+                            <field name="currency_id" invisible="1"/>
+
+                        </group>
+                        
+                    
+                    <notebook>
+
+
+                        <page 
+                            string="Order Lines" >
+                            <field 
+                                string="Order Detail" 
+                                name="order_line"
+                                readonly="1" >
+                                
+                                <!--
+                                <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
+                                -->
+
+                                <tree 
+                                    string="Sales Order Lines" 
+                                    decoration-info="invoice_status=='to invoice'">
+
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"
+                                        attrs="{'readonly': ['|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', [])]}"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                       />
+                                    <field name="layout_category_id" groups="sale.group_sale_layout"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"
+                                        string="Ordered Qty"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
+                                    />
+
+
+                                    <!--
+                                    <field name="qty_delivered" invisible="context.get('hide_sale')"
+                                        attrs="{'readonly': [('qty_delivered_updateable', '=', False)]}"
+                                        />
+                                    -->
+
+                                    <field name="qty_delivered" invisible="1" />
+
+                                    <!--
+                                    <field name="qty_invoiced"
+                                        invisible="context.get('hide_sale')"/>
+                                    -->
+                                    <field name="qty_invoiced" invisible="1"/>
+
+
+                                    <field name="qty_to_invoice" invisible="1"/>
+                                    <field name="product_uom"
+                                        attrs="{'readonly': [('state', 'in', ('sale','done', 'cancel'))]}"
+                                        context="{'company_id': parent.company_id}"
+                                        groups="product.group_uom" options='{"no_open": True}'/>
+                                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags"/>
+                                    <field name="price_unit"
+                                        attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                                        attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                    <field name="price_subtotal" widget="monetary" groups="sale.group_show_price_subtotal"/>
+                                    <field name="price_total" widget="monetary" groups="sale.group_show_price_total"/>
+                                    <field name="qty_delivered_updateable" invisible="1"/>
+                                    <field name="procurement_ids" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="invoice_status" invisible="1"/>
+                                    <field name="customer_lead" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+
+
+                            </field>
+
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="amount_total" />
+                                    <button name="button_dummy"
+                                        states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+                            </group>
+                            <!--
+                            <h3>
+                                <field name="spelled_out"/>
+
+                            </h3>
+                        -->
+
+                        </page>
+
+                        
+                    </notebook>
+                </sheet>
+               
+
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+        <!--SEARCH-->
+        <record model="ir.ui.view" id="sale_order_thc_vendor_search_view">
+            <field name="name">sale.order.thc.vendor.search.view</field>
+            <field name="model">sale.order</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer">
+                   
+                   <field name="partner_id" string="Customer Name" />
+                   <field name="name" string="Purchase Order Number"/>
+
+                   <!--
+                   <group 
+                        expand="0" 
+                        name="group_by" 
+                        string="Group By">
+                        <filter 
+                            name="salesperson" 
+                            string="Salesperson" 
+                            domain="[]" 
+                            context="{'group_by' : 'user_id'}" />
+                       
+                       <filter 
+                            name="group_company" 
+                            string="Company" 
+                            context="{'group_by': 'parent_id'}"/>
+                       
+                       <filter 
+                            name="group_country" 
+                            string="Country" 
+                            context="{'group_by': 'country_id'}"/>
+                   </group>
+                    -->
+                </search>
+            </field>
+        </record>
+
+        <record id="sale_order_thc_vendor_action" model="ir.actions.act_window">
+            <field name="name">Purchase Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="sale_order_thc_vendor_search_view"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')),('assign_to_choise','=',2),('state_new','in',(2,3,4,5))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create a Purchase Order.
+                </p>
+            </field>
+        </record>
+
+
+         <record id="action_sale_order_thc_vendor_form_view1" model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="sale_order_thc_vendor_view_kanban"/>
+            <field name="act_window_id" ref="sale_order_thc_vendor_action"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_sale_order_thc_vendor_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="sale_order_thc_vendor_tree_view"/>
+            <field name="act_window_id" ref="sale_order_thc_vendor_action"/>
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_sale_order_thc_vendor_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sale_order_thc_vendor_form_view"/>
+            <field name="act_window_id" ref="sale_order_thc_vendor_action"/>
+        </record> 
+
+
+        <menuitem action="sale_order_thc_vendor_action" icon="STOCK_JUSTIFY_FILL" sequence="5"
+            id="sale_order_thc_vendor_menu_view" parent="sub_menu_purchasing_data_transhybrid"
+        />
+
+    </data>
+</openerp>

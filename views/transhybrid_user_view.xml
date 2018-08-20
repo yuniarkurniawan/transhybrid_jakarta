@@ -159,6 +159,11 @@
                                     attrs="{'invisible':[('user_condition','=',1)], 'required':[('user_condition','=',2)]}"
                                     string="Vendor" />
 
+                                <field 
+                                    widget="radio"
+                                    options="{'horizontal': true}"
+                                    attrs="{'invisible':[('user_condition','=',1)], 'required':[('user_condition','=',2)]}"
+                                    name="is_manager_other_company"/>
                             
                             <field name="user_address" string="Address" class="oe_inline" />
                             

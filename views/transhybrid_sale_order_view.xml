@@ -44,7 +44,7 @@
                                 -->
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-7">
                                         <field 
                                             name="percentage_task" 
                                             widget="gauge" 
@@ -52,7 +52,21 @@
                                             style="width:120px;height:90px;cursor:pointer;" 
                                             />
 
-                                       <h3><field name="assign_to"/></h3>
+                                        <t t-if="record.assign_to_choise.raw_value === 1">
+                                                <h5>
+                                                    <field name="assign_to_choise"/> - <field name="assign_to"/>
+                                                </h5>
+                                                                                        
+                                        </t>
+
+                                        <t t-if="record.assign_to_choise.raw_value === 2">
+                                                <h5>
+                                                    <field name="vendor_assign_order"/> - <field name="assign_to_by_vendor"/>
+                                                </h5>                                    
+                                        </t>
+
+
+
                                     </div>
                                 </div>
 
@@ -188,6 +202,7 @@
                             <field 
                                 name="rfs_date"
                                 string="RFS"
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}"
                                 class="oe_inline"
                                 required="1"
                             />

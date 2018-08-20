@@ -4,6 +4,7 @@ import dateutil.parser
 import hashlib
 
 import datetime
+import time
 import dateutil.parser
 import pytz
 import json
@@ -36,8 +37,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 	@http.route("/po/<poId>/product",auth="none",csrf=False,type='http')
 	def get_purchase_order_by_productId(self,poId,**values):
 
-
-		print "aaaaaaaaaaaaaaaaaaaaaa"
 		headers = {'Content-Type': 'application/json'}
 		saleOrderModel = request.env['sale.order']
 
@@ -115,6 +114,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 	@http.route("/po/",auth="none",csrf=False,type='http')
 	def get_purchase_order_by_user(self,**values):
+
 
 		headers = {'Content-Type': 'application/json'}
 		saleOrderModel = request.env['sale.order']
@@ -238,8 +238,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		headers = {'Content-Type': 'application/json'}
 		saleOrderLineModel = request.env['sale.order.line']
 
-
-		print "bbbbbbbbbbbbbbbbbbbbbb"
 		output = {}
 		listSaleOrderLineService = []
 		totalCountOrderLineService = 0	
@@ -296,7 +294,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 	@http.route("/order/add-photo",auth='none',csrf=False,type='http')
 	def addPhotoPurchaseOrder(self,**post):
 
-		print " ======= ::: MASUK SINI...!"
 		headerData = request.httprequest.headers		
 		headers = {'Content-Type': 'application/json'}
 
@@ -307,78 +304,98 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		serviceId = post.get('service_id')
 		step = post.get('step')
 
-		print "POID : ", poId
-		print "Service id :", serviceId
-		print "STEP : ", step
-
+		todays = datetime.datetime.today()
+		
 		post_file = []
 		for field_name, field_value in post.items():
 			
 			tmpString = field_name.strip().lower()
 			if("image" in tmpString):
-				print "ADA TEU"
 				post_file.append(field_value)					
 			
 
-
 		out = {}
 		
-		try:
+		#try:
 			
 
+		tmpPercentage = 0
+
+		if(step==1):
 			tmpPercentage = 0
-
-			if(step==1):
-				tmpPercentage = 0
-			elif(step==2):
-				tmpPercentage = 25
-			elif(step==3):
-				tmpPercentage = 50
-			elif(step==4):
-				tmpPercentage = 75
-			else:
-				tmpPercentage = 100
-
-
-			listNamaImage = []
-			dataService = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
-			for outData in dataService:
-				listNamaImage.append(str(outData.service_id.name))
-				listNamaImage.append(" Product : ")
-				listNamaImage.append(str(outData.sale_order_line_id.product_id.name))
-				listNamaImage.append(" Di ")
-				listNamaImage.append(str(outData.address))
-
-				outData.sudo().state = int(step)
-				outData.sudo().percentage = tmpPercentage
-				outData.sudo().progress_bar = tmpPercentage
+		elif(step==2):
+			tmpPercentage = 10
+		elif(step==3):
+			tmpPercentage = 20
+		elif(step==4):
+			tmpPercentage = 25
+		elif(step==5):
+			tmpPercentage = 30
+		elif(step==6):
+			tmpPercentage = 45
+		elif(step==7):
+			tmpPercentage = 60
+		elif(step==8):
+			tmpPercentage = 80
+		elif(step==9):
+			tmpPercentage = 90
+		else:
+			tmpPercentage = 100
 
 
-			for field_value_upload_files in post_file:
-				
-				add_photo_value = {
-						'sale_order_line_id' : int(poId),
-						'name'				 : ''.join(listNamaImage),
-						'image'				 : base64.encodestring(field_value_upload_files.read()),
-						'filename'			 : field_value_upload_files.filename,
-						'order_line_service' : serviceId,					
-					}
-				
+		listNamaImage = []
+		listDescription = []
 
-				saleOrderLineImageModel.sudo().create(add_photo_value)
-				
+		listDescription.append(datetime.datetime.strftime(todays, "%Y-%m-%d %H:%M:%S"))
+		listDescription.append("\n\n\n")
+		listDescription.append("\r\r\r")
+		listDescription.append("TEST")
 
-			output = {
-				'code': 200,
-				'message':'Upload Image Succes',
-			}
+		dataService = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+		for outData in dataService:
+			
 
+			outData.sudo().state = int(step)
+			outData.sudo().percentage = tmpPercentage
+			outData.sudo().progress_bar = tmpPercentage
+
+
+		for field_value_upload_files in post_file:
+			
+			add_photo_value = {
+					'sale_order_line_id' : int(poId),
+					'address'			 : outData.address,
+					'name'				 : outData.service_id.name,
+					'image'				 : base64.encodestring(field_value_upload_files.read()),
+					'filename'			 : field_value_upload_files.filename,
+					'description'		 : '\n'.join(listDescription),
+					'order_line_service' : serviceId,					
+				}
+			
+
+			saleOrderLineImageModel.sudo().create(add_photo_value)
+			
+
+		output = {
+			'code': 200,
+			'message':'Upload Image Succes',
+		}
+
+		'''
 		except:
 
 			output = {
 				'code': 400,
 				'message':'Upload Image Is Fail',
 			}
-		
+		'''
 
 		return Response(json.dumps(output),headers=headers)
+
+
+	'''
+	@http.route("/coba/firebase",auth='none',csrf=False,type='http')
+	def addPhotoPurchaseOrder(self,**post):
+
+		pass
+	'''

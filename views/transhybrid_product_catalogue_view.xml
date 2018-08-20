@@ -93,7 +93,11 @@
                                     default_focus="1" 
                                     placeholder="Product Catalogue Name" />
                             </h1>
-                                <field name="product_code" placeholder="Product Code" />
+                                <field 
+                                    name="product_code" 
+                                    class="oe_inline"
+                                    readonly="1"
+                                    placeholder="Product Code" />
                                
                                 
                             
@@ -154,8 +158,21 @@
 
                             <page string="General Information">
                                 <group>
-                                    <field name="product_type" string="Product Type" class="oe_inline" />
-                                    <field name="list_price" string="Price" class="oe_inline"/>
+                                    <field 
+                                        name="product_type" 
+                                        string="Product Type" 
+                                        class="oe_inline" />
+                                    <field 
+                                        name="code"
+                                        class="oe_inline"
+                                    />
+                                    
+                                    <field 
+                                        name="list_price" 
+                                        string="Price" 
+                                        required="1"
+                                        class="oe_inline"/>
+                                        
                                     <field name="standard_price" string="Cost" class="oe_inline"/>
                                     <field name="sale_ok" invisible="1" />   
                                     <field 

@@ -5,11 +5,12 @@ class TranshybridCustomerModel(models.Model):
 
 	_name     = "res.partner"
 	_inherit  = "res.partner"
+	_order = "id desc"
 
 	is_registered		=	fields.Boolean('Is Registered',default=False)
 	customer_code		= 	fields.Char('Customer Code')
 
-
+	fcm_regid 			=	fields.Char('FCM Regid')
 
 	@api.model
 	def create(self,vals):

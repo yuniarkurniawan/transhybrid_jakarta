@@ -1,13 +1,13 @@
 {
-    'name': "Transhybrid",
+    'name': "PT. Primedia Armoekadata",
     'version': '1.0',
     'external_dependencies': {'python': ['xlwt']},
     'depends': ['base', 'account','base_iban', 'base_vat', 'web','crm','sale'],
-    'author': 'Transhybrid',
+    'author': 'PT. Primedia Armoekadata',
     'category': '-',
     'summary': '-',
-    'description': "Transhybrid",
-    "website": "http://www.transhybrid.net.id",
+    'description': "PT. Primedia Armoekadata",
+    "website": "http://www.ekadata.net.id",
     'data': [
         'views/base_view.xml',
         'menu/transhybrid_menu.xml',
@@ -23,6 +23,7 @@
         'views/purchase_order_line_view.xml',
         'views/purchase_order_line_image_view.xml',
         'views/transhybrid_sale_order_view.xml',
+        'views/transhybrid_sale_order_for_vendor_view.xml',
 
         'views/transhybrid_sale_order_line_view.xml',
         #'views/transhybrid_sale_order_line_service_image_view.xml',

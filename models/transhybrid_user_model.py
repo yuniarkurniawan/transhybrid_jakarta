@@ -13,11 +13,13 @@ class TranshybridUserModel(models.Model):
 	
 		
 	user_condition 	= 	fields.Selection([
-									(1,'PT. Transhybrid'),
+									(1,'PT. Primedia Armoekadata'),
 									(2,'Others')],'Company',default=1)
 
 	user_company		=	fields.Many2one('res.partner',domain=[('supplier', '=', 1)])
-
+	is_manager_other_company = fields.Selection([
+									(1,'Yes'),
+									(2,'No')],'Is Manager',default=1)
 
 
 	@api.one

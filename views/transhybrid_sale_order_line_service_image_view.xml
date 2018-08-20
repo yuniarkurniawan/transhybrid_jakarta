@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <separator string="Images 55" colspan="8"/>
+                        <separator string="Images" colspan="8"/>
                             <notebook>                            
                                 <page>
                                     

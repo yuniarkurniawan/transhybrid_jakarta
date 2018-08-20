@@ -1,4 +1,6 @@
 from odoo import models, fields, api,  _
+from datetime import datetime, date
+
 
 class TranshybridProductCatalogueModel(models.Model):
 
@@ -25,7 +27,8 @@ class TranshybridProductCatalogueModel(models.Model):
 
 	note						=	fields.Text('Note Product')
 	benchmark					=	fields.Text('Benchmark Product')
-	product_code				=	fields.Char('Product Code',required=True)
+	product_code				=	fields.Char('Product Code')
+	code 						=	fields.Char('Code',required=True)
 
 	product_templete_line_ids	=	fields.One2many('product.thc.service','product_id')
 	
@@ -40,7 +43,9 @@ class TranshybridProductCatalogueModel(models.Model):
 	def create(self, values):
 
 		productModel = self.env['product.product']
+		values['product_code'] = self.generate_product_catalogue_number(values['code'])
 		idTemplate = super(TranshybridProductCatalogueModel,self).create(values)
+
 
 		tmpId = ""
 		dataProductPool = productModel.search([('product_tmpl_id','=',idTemplate.id)])
@@ -52,6 +57,53 @@ class TranshybridProductCatalogueModel(models.Model):
 			outDataService.product_product = tmpId
 
 		return idTemplate
+
+
+	@api.multi
+	def generate_product_catalogue_number(self,tmpParamProductCode):
+
+		now = datetime.now()
+		generatedNumberModel = self.env['transhybrid.generated.number']
+		listPoNumber = []
+
+		tmpYear = now.year
+		tmpYear = str(tmpYear)
+		tmpYear = tmpYear[2:4]
+
+		tmpMonth = now.month 
+		dataPool = generatedNumberModel.search([('is_product','=',True),('year','=',int(tmpYear)),('month','=',int(tmpMonth))])
+
+
+		listPoNumber.append(str(tmpParamProductCode))
+		listPoNumber.append(str(tmpYear))
+		listPoNumber.append(str(tmpMonth).zfill(2))
+
+		if(len(dataPool)==0):
+			
+			# data kosong
+			dataGenerateValue = {
+				'is_product' : True,
+				'year'  : int(tmpYear),
+				'month' : int(tmpMonth),
+				'last_number' : 1
+			}
+			
+			listPoNumber.append(str(1).zfill(5))
+			generatedNumberModel.create(dataGenerateValue)
+		
+		else:
+
+			# data tidak kosong
+			tmpOutNumber = 0
+			for outData in dataPool:
+				tmpOutNumber = outData.last_number
+
+				tmpOutNumber+=1	
+				listPoNumber.append(str(tmpOutNumber).zfill(5))
+				outData.last_number = tmpOutNumber
+
+		
+		return ''.join(listPoNumber) 
 
 
 

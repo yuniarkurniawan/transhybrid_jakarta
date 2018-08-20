@@ -219,15 +219,18 @@
                                                             t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
                                                     </div>
                                                     <div class="oe_kanban_details">
+                                                        <field 
+                                                            name="upload_date" 
+                                                            class="oe_inline"/>
                                                         <field name="name"/>
-                                                        
+                                                        <field name="address"/>
+
                                                     </div>
-                                                    <div class="oe_kanban_details">
-                                                        <field name="order_line_service"/>
-                                                    </div>
+                                                    
                                                 </div>
                                                 
                                             </t>
+
                                         </templates>
                                             
                                     </kanban>

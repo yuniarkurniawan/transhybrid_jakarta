@@ -7,7 +7,18 @@
             <field name="arch" type="xml">
                 <form string="Images">
                     <sheet>
-                        <field name="image" widget="image" class="oe_avatar"/>
+                        <field 
+                            name="image" 
+                            widget="image" 
+                            style="height:1240px;width:1300px;"
+                            />
+
+                        <field 
+                                name="description"
+                                class="oe_inline"
+                                string="Description"
+                            />
+                        <!--
                         <div class="oe_title">
                             <label class="oe_edit_only" for="name" string="Image Name"/>
                             <field name="name" placeholder="Image Name" required="True"/>
@@ -15,7 +26,13 @@
                                 name="order_line_service" 
                                 options="{'no_quick_create': True, 'no_create_edit' : True,'no_open':True}" 
                                 />
+                            <field 
+                                name="description"
+                                class="oe_inline"
+                                string="Description"
+                            />
                         </div>
+                    -->
                     </sheet>
                 </form>
             </field>
