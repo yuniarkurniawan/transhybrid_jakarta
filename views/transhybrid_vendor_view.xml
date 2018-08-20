@@ -118,14 +118,17 @@
                     <div class="oe_title">
                         <field name="is_company" invisible="1"/>
                         <field name="commercial_partner_id" invisible="1"/>
-                        <field name="company_type" widget="radio"
+                        <field name="company_type" 
+                            widget="radio"
                             class="oe_edit_only"
                             options="{'horizontal': true}"/>
                         <h1>
                             <field name="name" default_focus="1" placeholder="Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
                         </h1>
                         <div class="o_row">
-                            <field name="parent_id"
+                            <field 
+                                invisible="1"
+                                name="parent_id"
                                 placeholder="Company"
                                 domain="[('is_company', '=', True)]" context="{'default_is_company': True, 'default_supplier': supplier, 'default_customer': customer}"
                                 attrs="{'invisible': ['|', '&amp;', ('is_company','=', True),('parent_id', '=', False),('company_name', '!=', False),('company_name', '!=', '')]}"/>
