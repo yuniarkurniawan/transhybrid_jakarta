@@ -92,6 +92,8 @@
                                     name="name" 
                                     default_focus="1" 
                                     placeholder="Product Catalogue Name" />
+
+
                             </h1>
                                 <field 
                                     name="product_code" 
@@ -99,7 +101,7 @@
                                     readonly="1"
                                     placeholder="Product Code" />
                                
-                                
+                               
                             
                         </div>
 
@@ -168,12 +170,23 @@
                                     />
                                     
                                     <field 
+                                        name="list_price_compute"
+                                        string="Price"
+                                        class="oe_inline"
+                                        />
+                                    <field 
                                         name="list_price" 
                                         string="Price" 
-                                        required="1"
+                                        invisible="1"
                                         class="oe_inline"/>
                                         
-                                    <field name="standard_price" string="Cost" class="oe_inline"/>
+                                    <field 
+                                        name="standard_price" 
+                                        string="Cost" 
+                                        readonly="1"
+                                        invisible="1"
+                                        class="oe_inline"/>
+                                    
                                     <field name="sale_ok" invisible="1" />   
                                     <field 
                                         name="taxes_id"
@@ -191,8 +204,10 @@
                             </page>
 
                             <page string="Service" >
-                                <field string="Purchase Order Detail" name="product_templete_line_ids" >
-                                    <tree string="Service" editable="bottom">
+                                <field 
+                                    string="Item Service" 
+                                    name="product_templete_line_ids" >
+                                    <tree string="Service">
                                         <field name="name" string="Name" />
                                         <field name="description" string="Description" />
                                     </tree>

@@ -39,6 +39,7 @@
                                     context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
                                 	class="oe_inline"
                                     attrs="{'readonly': [('state_new', 'in', (2,3,4))]}"
+                                    invisible="1"
                                 />
 
 
@@ -58,6 +59,11 @@
                                 	invisible="1" />
 
                                 <field 
+                                    name="price_unit_compute"
+                                    string="Total Price"/>
+                                
+                                <field 
+                                    invisible="1"
                                 	name="price_unit"
                                     attrs="{'readonly': [('state_new', 'in', (2,3))]}"
                                     class="oe_inline"/>
@@ -77,6 +83,7 @@
                                 	class="oe_inline" />
 
                                 <field 
+                                    invisible="1"
                                 	name="price_subtotal" 
                                 	widget="monetary" 
                                 	groups="sale.group_show_price_subtotal"
@@ -142,26 +149,47 @@
 											attrs="{'readonly':[('state_parent','in',(2,3,4))]}" 
                                             style="width:10%%"
 											 />
-										<field 
-                                            name="total_item_service" 
-                                            string="Total Service"
-                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}"
-                                            invisible="1"  
+
+                                        <field 
+                                            name="item_service_id"
+                                            string="Item Service"
+                                            options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                            domain="[('product_service_id','=',service_id)]"
+                                            attrs="{'readonly':[('state_parent','in',(2,3,4))]}" 
+                                            style="width:10%%"
                                             />
+
+
+                                        <field 
+                                            name="assign_to_choise"
+                                            string="Assign To"/>
+
+                                        <field 
+                                            name="assign_to"
+                                            string="PIC Assign"
+                                            options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+
+                                            />
+
+										
 										
                                         <field 
                                             name="pic" 
-                                            string="PIC"
+                                            string="PIC Lapangan"
                                             required="1"
                                             attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
 										
+                                        <!--
                                         <field 
                                             name="pic_phone" 
                                             string="Phone"
                                             required="1"
                                             attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
-                                        
-
+                                        -->
+                                        <field 
+                                            name="price_service"
+                                            string="Price"
+                                            sum="Total Price"/> 
 
                                         <field 
                                             name="address" 
@@ -171,6 +199,21 @@
                                             />
                                         
                                         <field 
+                                            name="item_service_progress"
+                                            widget="selection"
+                                            string="Progress"
+                                            domain="[('item_service_detail_id','=',item_service_id)]"
+
+                                            />
+                                        
+                                        <field 
+                                            name="state_parent" 
+                                            string="State"
+                                            invisible="1"
+                                            />
+
+                                        <!--
+                                        <field 
                                             name="state" 
                                             string="State"
                                             class="oe_inline"
@@ -178,18 +221,13 @@
                                             options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
 
                                             />
-
-                                        <field 
-                                            name="state_parent" 
-                                            string="State"
-                                            invisible="1"
-                                            />
-                                        
+                                                                                
+                                        -->
                                         <field name="percentage" invisible="1"/>
                                         <field 
                                             name="progress_bar" 
                                             widget="progressbar" 
-                                            string="Progress"
+                                            string="Graph"
                                              />
                                         
 									</tree>

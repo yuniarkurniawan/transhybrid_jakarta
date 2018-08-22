@@ -14,23 +14,31 @@ class TranshybridSaleOrderModel(models.Model):
 
     name_order          =   fields.Char('Sale Order Name')
 
+    '''
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
                                     (2,'Vendor')],'Assign To',default=1)
-    
+    '''
+
     vendor_name_order   =   fields.Char('Vendor PO Number')
+    
+    '''
     vendor_assign_order =   fields.Many2one('res.partner',domain=[('supplier', '=', 1)])
     assign_to_by_vendor =   fields.Many2one('res.users',string='Assign To')
-    
+    '''
 
     #user_company        =   fields.Integer(related='assign_to_by_vendor.user_company')
+    
+    '''
     is_manager_other_company = fields.Selection([
                                     (1,'Yes'),
                                     (2,'No')],'Is Manager',related="assign_to_by_vendor.is_manager_other_company")
-
+    '''
     
-    
+    '''
     assign_to           =   fields.Many2one('res.users',string='Assign To')
+    '''
+
     state_new           =   fields.Selection([(1,'Prospect'),
                                             (2,'Deal'),
                                             (3,'In Progress'),
@@ -265,7 +273,21 @@ class TranshybridSaleOrderLineModel(models.Model):
     service_id                      =   fields.Many2one('product.thc.service')
     sale_order_line_service_ids     =   fields.One2many('sale.order.line.service.model','sale_order_line_id')
     sale_order_line_image_ids       =   fields.One2many('sale.order.line.image.model','sale_order_line_id','Sale Order Line Image')
+    price_unit_compute              =   fields.Float('Price Unit Compute',compute='_compute_price_unit')
+    
 
+
+    @api.depends('sale_order_line_service_ids')
+    def _compute_price_unit(self):
+
+        tmpNewPrice = 0
+        for row in self:
+            for outData in row.sale_order_line_service_ids:
+                tmpNewPrice+=outData.price_service
+
+
+            row.price_unit_compute = tmpNewPrice
+            row.price_unit = tmpNewPrice
 
 
     @api.onchange('total_service')
@@ -281,9 +303,9 @@ class TranshybridSaleOrderLineModel(models.Model):
                 
                 listDetailServicePickup.append((0,0,{
                         'service_id' : outData.service_id.id,
-                        'total_item_service' : 1,
+                        #'total_item_service' : 1,
                         'address':outData.address,
-                        'pic_phone':outData.pic_phone,
+                        #'pic_phone':outData.pic_phone,
                         'pic':outData.pic,  
                         'state':outData.state,                  
                     }))
@@ -294,7 +316,7 @@ class TranshybridSaleOrderLineModel(models.Model):
 
                 listDetailServicePickup.append((0,0,{
                         'service_id' : self.service_id.id,
-                        'total_item_service' : 1,   
+                        #'total_item_service' : 1,   
                         'state':1,                  
                     }))
 
@@ -310,7 +332,7 @@ class TranshybridSaleOrderLineModel(models.Model):
 
                     listDetailServicePickup.append((0,0,{
                             'service_id' : self.service_id.id,
-                            'total_item_service' : 1,   
+                            #'total_item_service' : 1,   
                             'state':1,                  
                         }))
 
@@ -337,14 +359,27 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
 
     sale_order_line_id          =   fields.Many2one('sale.order.line','Sale Order Line',ondelete='cascade',required=True)
-    service_id                  =   fields.Many2one('product.thc.service')
+    
+    service_id                  =   fields.Many2one('product.thc.service',required=True)
+    item_service_id             =   fields.Many2one('product.thc.service.detail',required=True)
+    item_service_progress       =   fields.Many2one('product.thc.service.detail.progress')
+
+
+
+    assign_to_choise    =   fields.Selection([
+                                    (1,'Internal'),
+                                    (2,'Vendor')],'Assign To',default=1,required=True)
+
+    assign_to           =   fields.Many2one('res.users',string='Assign To',required=True)
+    price_service       =   fields.Float('Price Service',required=True)
+
     # fields.Float(related='substation.longitude',string='Longitude',readonly=True)
     product_product             =   fields.Many2one(related="service_id.product_product",string="Product")
     address                     =   fields.Text('Address')
 
     pic                         =   fields.Char('PIC')
     pic_phone                   =   fields.Char('PIC Phone')
-    total_item_service          =   fields.Float('Total',required=True)
+    total_item_service          =   fields.Float('Total')
 
     state                       =   fields.Selection([(1,'New'),
                                             (2,'PO Start'),
@@ -371,6 +406,30 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     percentage                  =   fields.Float('Percentage')
     progress_bar                =   fields.Float(related='percentage')
     sale_order_line_serive_image_ids    =   fields.One2many('sale.order.line.service.image.model','sale_order_line_service_id','Sale Order Line Service Image')
+
+
+
+    @api.onchange('item_service_progress')
+    def onchange_progress_task(self):
+
+        print " ============= "
+        val = {}
+        tmpPercentage = 0
+
+        if(self.item_service_progress):
+            
+            for outData in self.item_service_progress:
+                tmpPercentage = outData.progress_percentage
+            
+            val = {
+                'percentage':tmpPercentage,
+                'progress_bar':tmpPercentage,
+            }
+            
+
+        return {
+            'value': val            
+        }
 
 
 
@@ -421,6 +480,8 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     @api.onchange('state')
     def onchange_percentage_task(self):
+
+        print "MMMMMMMMMMMMMMMMMMMMMMMMMM"
 
         val = {}
 

@@ -52,18 +52,22 @@
                                             style="width:120px;height:90px;cursor:pointer;" 
                                             />
 
+                                        <!--
                                         <t t-if="record.assign_to_choise.raw_value === 1">
                                                 <h5>
                                                     <field name="assign_to_choise"/> - <field name="assign_to"/>
                                                 </h5>
                                                                                         
                                         </t>
+                                        -->
 
+                                        <!--
                                         <t t-if="record.assign_to_choise.raw_value === 2">
                                                 <h5>
                                                     <field name="vendor_assign_order"/> - <field name="assign_to_by_vendor"/>
                                                 </h5>                                    
                                         </t>
+                                        -->
 
 
 
@@ -90,7 +94,7 @@
                     <field name="name" string="Order Number"/>
                     <field name="date_order"/>
                     <field name="partner_id"/>
-                    <field name="assign_to"/>
+                    <!--<field name="assign_to"/>-->
                     <!--<field name="user_id"/>-->
                     <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
                     <field name="currency_id" invisible="1"/>
@@ -183,6 +187,14 @@
                                 attrs="{'readonly':[('state_new','in',(2,3,4))]}"/>
 
                             <field 
+                                name="rfs_date"
+                                string="RFS"
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}"
+                                class="oe_inline"
+                                required="1"
+                            />
+
+                            <field 
                                 name="partner_id" 
                                 domain="[('customer','=',True)]" 
                                 context="{'search_default_customer':1, 'show_address': 1}" 
@@ -191,14 +203,18 @@
 
                                 />
                         </group>
+                        
+                        <!--
                         <group>
-
+                        -->
+                            <!--
                             <field 
                                 name="assign_to_choise"
                                 class="oe_inline"
                                 attrs="{'readonly':[('state_new','in',(2,3,4))]}"
                                 required="1"/>
-
+                            -->
+                            <!--
                             <field 
                                 name="rfs_date"
                                 string="RFS"
@@ -206,8 +222,9 @@
                                 class="oe_inline"
                                 required="1"
                             />
+                        -->
 
-                            
+                            <!--
                             <field 
                                 name="assign_to"
                                 string="Person"
@@ -216,7 +233,7 @@
                                 class="oe_inline"
 
                                 />
-
+                            
 
                             <field 
                                 name="vendor_name_order"
@@ -240,12 +257,15 @@
                                 options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
                                 domain="[('user_company','=',vendor_assign_order)]"
                                 attrs="{'readonly':[('state_new','in',(2,3,4))],'invisible':[('assign_to_choise','=',1),('vendor_assign_order','!=','')], 'required':[('assign_to_choise','=',2)]}"/>
+                            -->
 
 
-                                <!--                        <field string="Nomor Referensi" name="ref_number" attrs="{'invisible':[('show_ref_number','=',False)],'required':[('show_ref_number','=',True)],'readonly':[('state','!=','draft')]}" class="oe_inline"/>-->
+                                <!--                        
+                                    <field string="Nomor Referensi" name="ref_number" attrs="{'invisible':[('show_ref_number','=',False)],'required':[('show_ref_number','=',True)],'readonly':[('state','!=','draft')]}" class="oe_inline"/>-->
 
-                            
+                        <!--   
                         </group>
+                        -->
 
                         <group>
                             
@@ -331,7 +351,7 @@
                             <field 
                                 string="Order Detail" 
                                 name="order_line"
-                                attrs="{'readonly':[('state_new','in',(4))]}" >
+                                attrs="{'readonly':[('state_new','in',(2,3,4))]}" >
                                 
                                 <!--
                                 <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
@@ -348,7 +368,10 @@
                                        />
                                     <field name="layout_category_id" groups="sale.group_sale_layout"/>
                                     <field name="name"/>
-                                    <field name="product_uom_qty"
+                                    
+                                    <field 
+                                        invisible="1"
+                                        name="product_uom_qty"
                                         string="Ordered Qty"
                                         context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'uom':product_uom, 'company_id': parent.company_id}"
                                     />
@@ -375,8 +398,13 @@
                                         context="{'company_id': parent.company_id}"
                                         groups="product.group_uom" options='{"no_open": True}'/>
                                     <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags"/>
-                                    <field name="price_unit"
+                                    
+                                    <field 
+                                        string="Price"
+                                        name="price_unit"
                                         attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                                    
+
                                     <field name="tax_id" widget="many2many_tags" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
                                         attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
                                     <field name="discount" groups="sale.group_discount_per_so_line"/>

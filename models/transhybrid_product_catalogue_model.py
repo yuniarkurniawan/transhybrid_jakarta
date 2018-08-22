@@ -29,10 +29,27 @@ class TranshybridProductCatalogueModel(models.Model):
 	benchmark					=	fields.Text('Benchmark Product')
 	product_code				=	fields.Char('Product Code')
 	code 						=	fields.Char('Code',required=True)
+	
+	list_price_compute     		=   fields.Float('Compute New Price',compute='_compute_list_new_price',store=True)
 
 	product_templete_line_ids	=	fields.One2many('product.thc.service','product_id')
 	
 
+	@api.multi
+	@api.depends('product_templete_line_ids')
+	def _compute_list_new_price(self):
+
+		tmpNewPrice = 0
+		for row in self:
+			for rowOrderline in row.product_templete_line_ids:
+				for rowPrice in rowOrderline.product_service_line_ids:
+					print "CC"
+					tmpNewPrice+=rowPrice.price
+
+			row.list_price = tmpNewPrice
+			row.list_price_compute = tmpNewPrice
+
+    
 	@api.onchange('volume_solution','price_solution','volume_deployment','price_deployment','volume_operation_maintenance','price_operation_maintenance')
 	def get_revenue_year_value(self):
 		
@@ -44,20 +61,30 @@ class TranshybridProductCatalogueModel(models.Model):
 
 		productModel = self.env['product.product']
 		values['product_code'] = self.generate_product_catalogue_number(values['code'])
+		
+		'''
+		tmpListPrice = 0
+		for outDataServiceItem in values['product_templete_line_ids']:
+			for outDataSercviceItemPrice in outDataServiceItem[2]['product_service_line_ids']:
+				tmpListPrice+=outDataSercviceItemPrice[2]['price']
+
+		values['list_price'] = tmpListPrice
+		'''
+
 		idTemplate = super(TranshybridProductCatalogueModel,self).create(values)
-
-
+		
 		tmpId = ""
+		tmpListPrice = 0
 		dataProductPool = productModel.search([('product_tmpl_id','=',idTemplate.id)])
 		for outData in dataProductPool:
 			tmpId = outData.id
-		
+			
 
 		for outDataService in idTemplate.product_templete_line_ids:
 			outDataService.product_product = tmpId
 
 		return idTemplate
-
+		
 
 	@api.multi
 	def generate_product_catalogue_number(self,tmpParamProductCode):
@@ -106,7 +133,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		return ''.join(listPoNumber) 
 
 
-
+	'''
 	@api.multi
 	def write(self, vals):
 
@@ -114,6 +141,8 @@ class TranshybridProductCatalogueModel(models.Model):
 		productTemplateModel = self.env['product.template']
 		productThcServiceModel = self.env['product.thc.service']
 
+		tmpPrice = 0
+		tmpHargaBaru = 0
 		if("product_templete_line_ids" in vals):
 
 			tmpIdProduct = ""
@@ -133,6 +162,11 @@ class TranshybridProductCatalogueModel(models.Model):
 					
 					#[0, False, {u'name': u'TESTING', u'description': False}]					
 
+					#if('product_service_line_ids' in outData[2]):
+					#	for outPrice in outData[2]['product_service_line_ids']:
+					#		tmpPrice+=outPrice[2]['price']
+					
+
 					listMe = []
 					new_dict = {}
 					new_dict['name'] = outData[2]['name']
@@ -148,13 +182,29 @@ class TranshybridProductCatalogueModel(models.Model):
 				
 				else:
 
+					
+					#if(outData[0]==1):
+					#	if('product_service_line_ids' in outData[2]):
+					#		for pricing in outData[2]['product_service_line_ids']:
+					#			tmpHargaBaru+=pricing[2]['price']
+
+					#print "KALO INI....!", outData
+					
 					listNewData.append(outData)
 				
 				
 			vals['product_templete_line_ids'] = listNewData
 
-		return super(TranshybridProductCatalogueModel, self).write(vals)
+		
+		#for price in self:
+		#	tmpPrice+=price.list_price
+		
+		#print "HARGA ::: ", tmpPrice - tmpHargaBaru
+		#vals['list_price'] = tmpPrice - tmpHargaBaru
+		
 
+		return super(TranshybridProductCatalogueModel, self).write(vals)
+	'''
 
 class TranshybridProductServiceModel(models.Model):
 
@@ -166,5 +216,30 @@ class TranshybridProductServiceModel(models.Model):
 	product_id 					= 	fields.Many2one('product.template',ondelete="cascade")
 	product_product			 	=	fields.Many2one('Product.product')
 	name 						=  	fields.Char('Name',required=True)
+	product_service_line_ids	=	fields.One2many('product.thc.service.detail','product_service_id')
 	description					=  	fields.Text('Description')
 	
+
+class TranshybridProductServiceDetailModel(models.Model):	
+
+	_name = 'product.thc.service.detail'
+	_description = "Product Thc Service Detail Model"
+	_order = "id asc"
+
+	product_service_id 		=	fields.Many2one('product.thc.service',ondelete="cascade")
+	name 					=	fields.Char('Name',required=True)
+	price 					=	fields.Float('Price',required=True)
+	product_service_line_progress_ids = fields.One2many('product.thc.service.detail.progress','item_service_detail_id')
+	description 			=	fields.Text('Description')
+
+
+class TranshybridProductServiceDetailProgressModel(models.Model):
+	
+	_name = 'product.thc.service.detail.progress'
+	_description = "Product Thc Service Detail Progress Model"
+	_order = "id asc"
+
+	item_service_detail_id = fields.Many2one('product.thc.service.detail',ondelete="cascade")
+	name 	=	fields.Char('Name',required=True)
+	progress_percentage = fields.Integer('Progress Percentage',required=True)
+	description 	=	fields.Text('Description')

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+    	<record model="ir.ui.view" id="product_thc_service_detail_form_view">
+            <field name="name">product.thc.service.detail.form.view</field>
+            <field name="model">product.thc.service.detail</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field 
+                                name="name" 
+                                string="Name" 
+                                class="oe_inline" />
+                            <field 
+                                name="price"
+                                string="Price"
+                                class="oe_inline"
+                                />
+                            <field 
+                                name="description" 
+                                string="Description" 
+                                class="oe_inline" />
+                        </group>     
+
+                        <notebook>
+
+                            <page string="Progress Percentage">
+                            	<field 
+                            		string="Progress Percentage" 
+                            		name="product_service_line_progress_ids" >
+                                    <tree string="Service" editable="bottom">
+                                        <field 
+                                        	name="name" 
+                                        	string="Name" />
+                                        <field 
+                                        	name="progress_percentage"
+                                        	string="Percentage"/>
+                                        <field 
+                                        	name="description" 
+                                        	string="Description" />
+                                    </tree>
+                                </field>   
+
+                        	</page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record> 
+
+    </data>
+</openerp>

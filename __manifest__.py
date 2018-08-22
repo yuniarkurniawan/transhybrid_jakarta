@@ -18,12 +18,14 @@
         'views/transhybrid_customer_view.xml',
         'views/transhybrid_vendor_view.xml',
         'views/transhybrid_product_catalogue_view.xml',
+        'views/transhybrid_product_catalogue_service_view.xml',
+        'views/transhybrid_product_catalogue_service_progress_view.xml',
         'views/transhybrid_crm_lead_view.xml',
 
         'views/purchase_order_line_view.xml',
         'views/purchase_order_line_image_view.xml',
         'views/transhybrid_sale_order_view.xml',
-        'views/transhybrid_sale_order_for_vendor_view.xml',
+        #'views/transhybrid_sale_order_for_vendor_view.xml',
 
         'views/transhybrid_sale_order_line_view.xml',
         #'views/transhybrid_sale_order_line_service_image_view.xml',

@@ -1,5 +1,11 @@
 <odoo>
   
+  <template id="assets_backend" name="custom_css" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+           <link rel="stylesheet" href="/transhybrid_jakarta/static/src/css/wide_popup_form.css"/>
+      </xpath>
+  </template>
+
   <template id="danawa_leftmenu" inherit_id="web.menu_secondary" name="Danawa Left Menu">
        <xpath expr="//div[@class='o_sub_menu_footer']" position="replace">
            <div class="o_sub_menu_footer">

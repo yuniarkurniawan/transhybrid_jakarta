@@ -211,7 +211,16 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				#new_dict_in['date'] = self.get_converting_to_iso(outData.create_date)
 				new_dict_in['total'] = outData.amount_total
 				#new_dict_in['confirmation_date'] = self.get_converting_to_iso(outData.confirmation_date)
-				new_dict_in['assign_to'] = outData.assign_to.name
+				
+				if(outData.assign_to):
+					new_dict_in['assign_to'] = outData.assign_to.name
+				else:
+					new_dict_in['assign_to'] = "-"
+
+				new_dict_in['no_po'] = outData.name
+				new_dict_in['rfs'] = outData.rfs_date
+				new_dict_in['progress_percentage'] = outData.percentage_task
+
 
 				listSaleOrder.append(new_dict_in)
 

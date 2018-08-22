@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+
+    	<record model="ir.ui.view" id="product_thc_service_form_view">
+            <field name="name">product.thc.service.form.view</field>
+            <field name="model">product.thc.service</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" string="Name" class="oe_inline" />
+                            <field name="description" string="Description" class="oe_inline" />
+                        </group>     
+
+                        <notebook>
+
+                            <page string="Item Service Detail">
+                            	<field 
+                            		string="Service Item" 
+                            		name="product_service_line_ids" >
+                                    <tree string="Service">
+                                        <field 
+                                        	name="name" 
+                                        	string="Name" />
+                                        <field 
+                                        	name="price"
+                                        	string="Price"/>
+                                        <field 
+                                        	name="description" 
+                                        	string="Description" />
+                                    </tree>
+                                </field>   
+
+                        	</page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record> 
+
+    </data>
+</openerp>
