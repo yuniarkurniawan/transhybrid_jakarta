@@ -133,7 +133,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		return ''.join(listPoNumber) 
 
 
-	'''
+	
 	@api.multi
 	def write(self, vals):
 
@@ -204,7 +204,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		
 
 		return super(TranshybridProductCatalogueModel, self).write(vals)
-	'''
+	
 
 class TranshybridProductServiceModel(models.Model):
 

@@ -34,6 +34,16 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return tmpDate
 
 
+	def date_to_string(self,paramDate):
+
+		tmpDate = ""
+
+		tmpOutMe = datetime.datetime.strptime(paramDate,'%Y-%m-%d %H:%M:%S')
+		tmpDate = datetime.datetime.strftime(tmpOutMe,'%d-%B-%Y')		
+
+		return tmpDate
+
+
 	@http.route("/po/<poId>/product",auth="none",csrf=False,type='http')
 	def get_purchase_order_by_productId(self,poId,**values):
 
@@ -112,7 +122,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return Response(json.dumps(output),headers=headers)
 
 
-	@http.route("/po/",auth="none",csrf=False,type='http')
+	@http.route("/list/purchase_order",auth="none",csrf=False,type='http',method='GET')
 	def get_purchase_order_by_user(self,**values):
 
 
@@ -156,34 +166,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				
 				return Response(json.dumps(output),headers=headers)
 
-
-			saleOrderData = saleOrderModel.sudo().search([('assign_to','=',dataUserToken.res_id.id),('state_new','in',(1,2,3))])
-			for outData in saleOrderData:
-
-				totalCountPo+=1
-
-				new_dict_in = {}	
-				new_dict_in['id'] = outData.id
-				new_dict_in['name'] = outData.partner_id.name
-				new_dict_in['date'] = self.get_converting_to_iso(outData.create_date)
-				new_dict_in['total'] = outData.amount_total
-				new_dict_in['confirmation_date'] = self.get_converting_to_iso(outData.confirmation_date)
-				new_dict_in['assign_to'] = outData.assign_to.name
-
-				listSaleOrder.append(new_dict_in)
-
-
-			output = {
-				'result':listSaleOrder,
-				'code':200,
-				'message':'OK',
-				'meta':{
-					'limit':5,
-					'offset':5,
-					'count':totalCountPo
-				}
-			}
-
 		except:
 			
 			output = {
@@ -200,45 +182,320 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		'''
 
 
-		saleOrderData = saleOrderModel.sudo().search([('state_new','in',(1,2,3))])
-		for outData in saleOrderData:
+		try:
+			
+			saleOrderData = saleOrderModel.sudo().search([('state_new','in',(2,3))])
+			for outData in saleOrderData:
 
-				totalCountPo+=1
+					totalCountPo+=1
 
-				new_dict_in = {}	
-				new_dict_in['id'] = outData.id
-				new_dict_in['name'] = outData.partner_id.name
-				#new_dict_in['date'] = self.get_converting_to_iso(outData.create_date)
-				new_dict_in['total'] = outData.amount_total
-				#new_dict_in['confirmation_date'] = self.get_converting_to_iso(outData.confirmation_date)
-				
-				if(outData.assign_to):
-					new_dict_in['assign_to'] = outData.assign_to.name
-				else:
-					new_dict_in['assign_to'] = "-"
+					new_dict_in = {}	
+					new_dict_in['po_id'] = outData.id
+					new_dict_in['po_number'] = outData.name
+					new_dict_in['company_name'] = outData.partner_id.name
 
-				new_dict_in['no_po'] = outData.name
-				new_dict_in['rfs'] = outData.rfs_date
-				new_dict_in['progress_percentage'] = outData.percentage_task
+					new_dict_in['order_date'] = self.date_to_string(outData.date_order)
+					new_dict_in['rfs_date'] = self.date_to_string(outData.rfs_date)
+
+					tmpTotalOrderProduct = 0
+					for outDataDetailProduct in outData.order_line:
+						tmpTotalOrderProduct+=1
+
+					new_dict_in['order_product'] = tmpTotalOrderProduct
+
+					listSaleOrder.append(new_dict_in)
 
 
-				listSaleOrder.append(new_dict_in)
+			output = {
+				'result':listSaleOrder,
+				'code':200,
+				'message':'OK',
+				'meta':{
+					'limit':5,
+					'offset':5,
+					'count':totalCountPo
+				}
+			}
+		
+		
+		except:
 
+			output = {
+				'result':listSaleOrder,
+				'code': 400,
+				'message':'Data Not Found',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+		
+
+		return Response(json.dumps(output),headers=headers)
+
+
+	@http.route("/prepare_upload_image/<itemServiceId>",auth="none",csrf=False,type='http')
+	def get_prepare_upload_image(self,itemServiceId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+		productServiceDetailPorgressModel = request.env['product.thc.service.detail.progress']
+
+
+		listOutData = []
+		new_dict_up = {}
+
+		listProgressData = productServiceDetailPorgressModel.sudo().search([('item_service_detail_id','=',int(itemServiceId))])
+		for outData in listProgressData:
+
+			new_dict = {}
+			new_dict['id'] = outData.id
+			new_dict['progress_name'] = outData.name
+
+			listOutData.append(new_dict)
+
+		
+		new_dict_up['list_progress'] = listOutData
+		new_dict_up['item_service_detail_id'] = int(itemServiceId)
 
 		output = {
-			'result':listSaleOrder,
-			'code':200,
+			'result':new_dict_up,
+			'code': 200,
 			'message':'OK',
 			'meta':{
-				'limit':5,
-				'offset':5,
-				'count':totalCountPo
+				'limit':0,
+				'offset':0,
+				'count':0
 			}
 		}
 
 
+		return Response(json.dumps(output),headers=headers)
+
+
+
+	@http.route("/detail_service/<serviceId>",auth="none",csrf=False,type='http')
+	def get_detail_service(self,serviceId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+		saleOrderLineServiceModel = request.env['sale.order.line.service.model']
+		productServiceDetailPorgressModel = request.env['product.thc.service.detail.progress']
+
+		listOutData = []
+
+		saleOrderLineServiceData = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+		for outData in saleOrderLineServiceData:
+			
+			new_dict = {}
+			
+			new_dict['company_name'] = outData.sale_order_line_id.order_id.partner_id.name
+			new_dict['service_name'] = outData.service_id.name
+			new_dict['item_service_name'] = outData.item_service_id.name
+
+			new_dict['item_service_id'] = outData.item_service_id.id
+
+			new_dict['rfs_date'] = self.date_to_string(outData.sale_order_line_id.order_id.rfs_date)
+
+			listOutdataServiceDetail = []
+			for outDataServiceDetail in outData.sale_order_line_service_detail_ids:
+				
+				new_dict_in = {}
+				new_dict_in['upload_date'] = self.date_to_string(outDataServiceDetail.create_date)
+				new_dict_in['description'] = outDataServiceDetail.description
+				new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
+
+
+
+				'''
+				# ==== BEGIN GETTING PROGRESS BAR
+				listProgress = []
+				progressData = productServiceDetailPorgressModel.sudo().search([('item_service_detail_id','=',outData.item_service_id.id)])
+				for outProgress in progressData:
+
+					new_dict_progress = {}
+					new_dict_progress['progres_id'] = outProgress.id
+					new_dict_progress['progress_name'] = outProgress.name
+					new_dict_progress['progress_percentage'] = outProgress.progress_percentage
+
+					listProgress.append(new_dict_progress)
+				
+				new_dict_in['list_progress'] = listProgress
+				# ==== END GETTING PROGRESS BAR
+				'''
+
+
+				listOutDataImage = []
+				for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
+
+					new_dict_in_image = {}
+
+					new_dict_in_image['address_image'] = self.get_base_path_image_data()
+					listOutDataImage.append(new_dict_in_image)
+
+				
+				new_dict_in['images'] = listOutDataImage
+				listOutdataServiceDetail.append(new_dict_in)
+
+
+
+			new_dict['list_detail_images'] = listOutdataServiceDetail
+			listOutData.append(new_dict)
+
+
+
+		output = {
+				'result':listOutData,
+				'code':200,
+				'message':'OK',
+				'meta':{
+					'limit':5,
+					'offset':5,
+					'count':1
+				}
+			}
+
 
 		return Response(json.dumps(output),headers=headers)
+
+
+	def get_base_path_image_data(self):
+
+		path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+		path = path.split('/')
+		panjang = len(path)
+
+
+		listAddres = []     
+		for out in path:
+	
+			if(str(out) == path[-1]):
+				break
+
+			listAddres.append(str(out))
+			listAddres.append("/")
+
+
+		listAddres.append("static/upload_progress_image/")
+
+		return ''.join(listAddres)
+
+
+
+	@http.route("/detail_purchase_order/<purchaseOrderId>",auth="none",csrf=False,type='http')
+	def get_detail_purchase_order(self,purchaseOrderId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+		saleOrderModel = request.env['sale.order']
+		listOutData = []
+		totalCountPo = 1
+		
+		try:
+			
+			saleOrderData = saleOrderModel.sudo().search([('id','=',int(purchaseOrderId))])
+			for outData in saleOrderData:
+				
+				new_dict = {}
+
+				new_dict['po_number'] = outData.name
+				new_dict['company_name'] = outData.partner_id.name
+				new_dict['order_date'] = self.date_to_string(outData.date_order)
+					
+				new_dict['rfs_date'] = self.date_to_string(outData.rfs_date)
+
+				listProdcutDetailPurchaseOrder = []
+				for outDataDetailProduct in outData.order_line:
+
+					new_dict_in = {}
+					new_dict_in['product_id'] = outDataDetailProduct.id
+					new_dict_in['product_name'] = outDataDetailProduct.name
+
+
+					listService = []
+					for outDataDetailProductService in outDataDetailProduct.sale_order_line_service_ids:
+
+						new_dict_in_service = {}
+						new_dict_in_service['service_id'] = outDataDetailProductService.id
+						new_dict_in_service['service_name'] = outDataDetailProductService.service_id.name
+						new_dict_in_service['item_service_name'] = outDataDetailProductService.item_service_id.name
+
+						new_dict_in_service['address'] = outDataDetailProductService.address
+						new_dict_in_service['progress'] = outDataDetailProductService.percentage
+
+						listService.append(new_dict_in_service)
+
+					new_dict_in['detail_service'] = listService
+
+					listProdcutDetailPurchaseOrder.append(new_dict_in)
+
+
+				new_dict['product_detail'] = listProdcutDetailPurchaseOrder
+				listOutData.append(new_dict)
+
+
+			output = {
+				'result':listOutData,
+				'code':200,
+				'message':'OK',
+				'meta':{
+					'limit':5,
+					'offset':5,
+					'count':totalCountPo
+				}
+			}
+
+		
+		except:
+			
+			output = {
+				'result':listOutData,
+				'code': 400,
+				'message':'Data Not Found',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+
+		
+
+		return Response(json.dumps(output),headers=headers)
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	@http.route("/product/<orderLineId>",auth="none",csrf=False,type='http')

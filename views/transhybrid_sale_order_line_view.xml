@@ -234,7 +234,7 @@
 								</field>									
 							</page>
 
-                            
+                            <!--
 							<page 
                                 string="Images"
                                 attrs="{'invisible':[('state_new','in',(1,2))]}">
@@ -275,7 +275,7 @@
 
 								</field>
 							</page>
-		                  					
+		                  	-->		
         
 						</notebook>
 												

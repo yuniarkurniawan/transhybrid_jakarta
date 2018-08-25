@@ -1,6 +1,6 @@
 from odoo import models, fields, api,  _
 from odoo.tools.safe_eval import safe_eval
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import re
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
@@ -46,7 +46,8 @@ class TranshybridSaleOrderModel(models.Model):
                                             (5,'Cancel'),
                                             ],'State', default=1)
 
-    rfs_date            =   fields.Date('RFS Date')
+    rfs_date            =   fields.Datetime('RFS Date',default=fields.Datetime.now)
+    
 
     deal_date           =   fields.Date('Deal Date')
     in_progres_date     =   fields.Date('Progress Date')
@@ -364,7 +365,8 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     item_service_id             =   fields.Many2one('product.thc.service.detail',required=True)
     item_service_progress       =   fields.Many2one('product.thc.service.detail.progress')
 
-
+    company_name                =   fields.Many2one(related="sale_order_line_id.order_id.partner_id",string="Company")
+    rsf_date                    =   fields.Datetime(related="sale_order_line_id.order_id.rfs_date",string="RFS Date")
 
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
@@ -375,7 +377,7 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     # fields.Float(related='substation.longitude',string='Longitude',readonly=True)
     product_product             =   fields.Many2one(related="service_id.product_product",string="Product")
-    address                     =   fields.Text('Address')
+    address                     =   fields.Text('Address',required=True)
 
     pic                         =   fields.Char('PIC')
     pic_phone                   =   fields.Char('PIC Phone')
@@ -405,8 +407,8 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     percentage                  =   fields.Float('Percentage')
     progress_bar                =   fields.Float(related='percentage')
-    sale_order_line_serive_image_ids    =   fields.One2many('sale.order.line.service.image.model','sale_order_line_service_id','Sale Order Line Service Image')
-
+    sale_order_line_service_detail_ids =    fields.One2many('sale.order.line.service.detail.model','sale_order_line_service_id','Sale Order Line Service')
+    
 
 
     @api.onchange('item_service_progress')
@@ -481,8 +483,6 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     @api.onchange('state')
     def onchange_percentage_task(self):
 
-        print "MMMMMMMMMMMMMMMMMMMMMMMMMM"
-
         val = {}
 
         if(self.state):
@@ -533,17 +533,49 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
 
 
+class TranshybridSaleOrderLineServiceDetailModel(models.Model):
+    
+    _name = 'sale.order.line.service.detail.model'
+    _description = 'Sale Order Line Service Detail Model'
+    _order = 'id asc'
+
+    
+    sale_order_line_service_id = fields.Many2one('sale.order.line.service.model',ondelete="cascade")
+    description = fields.Text('Description')
+    progress =  fields.Many2one('product.thc.service.detail.progress')
+    sale_order_line_serive_image_ids    =   fields.One2many('sale.order.line.service.image.model','sale_order_line_service_detail_id','Sale Order Line Service Image')
+
+
+
 class TranshybridSaleOrderLineServiceImageModel(models.Model):
 
     _name = 'sale.order.line.service.image.model'
     _description = 'Sale Order Line Serive Image Model'
     _order = 'id asc'
 
-
-    sale_order_line_service_id  =   fields.Many2one('sale.order.line.service.model',ondelete="cascade") 
+    sale_order_line_service_detail_id  =   fields.Many2one('sale.order.line.service.detail.model',ondelete="cascade") 
     name                        =   fields.Char('Name')
     image                       =   fields.Binary('Image')
     filename                    =   fields.Char('Filename')
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
