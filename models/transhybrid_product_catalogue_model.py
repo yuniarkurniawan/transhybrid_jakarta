@@ -43,7 +43,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		for row in self:
 			for rowOrderline in row.product_templete_line_ids:
 				for rowPrice in rowOrderline.product_service_line_ids:
-					print "CC"
+					#print "CC"
 					tmpNewPrice+=rowPrice.price
 
 			row.list_price = tmpNewPrice
@@ -133,7 +133,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		return ''.join(listPoNumber) 
 
 
-	
+	'''
 	@api.multi
 	def write(self, vals):
 
@@ -204,7 +204,7 @@ class TranshybridProductCatalogueModel(models.Model):
 		
 
 		return super(TranshybridProductCatalogueModel, self).write(vals)
-	
+	'''
 
 class TranshybridProductServiceModel(models.Model):
 
@@ -214,11 +214,33 @@ class TranshybridProductServiceModel(models.Model):
 
 
 	product_id 					= 	fields.Many2one('product.template',ondelete="cascade")
-	product_product			 	=	fields.Many2one('Product.product')
+	
+	#product_product			 	=	fields.Many2one('Product.product')
+	product_product 			= 	fields.Many2one(compute='_product_product_id', comodel_name='product.product', string='Product', store=True)
+
+
+
 	name 						=  	fields.Char('Name',required=True)
 	product_service_line_ids	=	fields.One2many('product.thc.service.detail','product_service_id')
 	description					=  	fields.Text('Description')
 	
+
+	@api.depends('product_id')
+	def _product_product_id(self):
+
+		productModel = self.env['product.product']		
+		tmpId = ""
+
+		for row in self:
+
+			dataProductPool = productModel.search([('product_tmpl_id','=',row.product_id.id)],limit=1)
+			for outData in dataProductPool:
+				tmpId = outData.id
+
+			row.product_product = tmpId
+
+			
+
 
 class TranshybridProductServiceDetailModel(models.Model):	
 

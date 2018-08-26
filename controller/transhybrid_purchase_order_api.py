@@ -10,6 +10,7 @@ import pytz
 import json
 import os
 import base64
+import shutil
 
 class TranshybridPurchaseOrderModelApi(http.Controller):
 
@@ -328,14 +329,17 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
 
 					new_dict_in_image = {}
+					
+					if(outDataImage.address_image_name):
+						new_dict_in_image['address_image'] = self.get_base_path_image_data() + str(outDataImage.address_image_name)
+					else:
+						new_dict_in_image['address_image'] = ""
 
-					new_dict_in_image['address_image'] = self.get_base_path_image_data()
 					listOutDataImage.append(new_dict_in_image)
 
 				
 				new_dict_in['images'] = listOutDataImage
 				listOutdataServiceDetail.append(new_dict_in)
-
 
 
 			new_dict['list_detail_images'] = listOutdataServiceDetail
@@ -381,6 +385,231 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 
+	@http.route("/detail_service_upload_image/<serviceId>",auth='none',csrf=False,type='http')
+	def upload_service_image(self,serviceId,**post):
+
+		headerData = request.httprequest.headers		
+		headers = {'Content-Type': 'application/json'}
+
+		saleOrderLineServiceImageModel = request.env['sale.order.line.service.image.model']
+		generatedNumberModel = request.env['transhybrid.generated.number']
+
+		now = datetime.datetime.now()
+		tmpYear = now.year
+		tmpYear = str(tmpYear)
+		tmpYear = tmpYear[2:4]
+		tmpMonth = now.month
+		listPoNumber = []
+
+		description = post.get('description')
+		#serviceId = post.get('service_id')
+		
+
+		dataPool = generatedNumberModel.sudo().search([('is_image','=',True),('year','=',int(tmpYear)),('month','=',int(tmpMonth))])
+		tmpGenerateNumber = ""
+
+		if(len(dataPool)==0):
+
+			# data kosong
+			dataGenerateValue = {
+				'is_image' : True,
+				'year' : int(tmpYear),
+				'month' : int(tmpMonth),
+				'last_number' : 1
+			}
+
+			listPoNumber.append(str(1).zfill(5))
+			generatedNumberModel.sudo().create(dataGenerateValue)
+
+		else:
+
+			# data tidak kosong
+			tmpOutNumber = 0
+			for outData in dataPool:
+				
+				tmpOutNumber = outData.last_number
+				tmpOutNumber+=1
+				listPoNumber.append(str(tmpOutNumber).zfill(5))
+				outData.sudo().last_number = tmpOutNumber
+
+		tmpGenerateNumber = ''.join(listPoNumber)
+
+            
+		#poId = post.get('po_id')
+		#serviceId = post.get('service_id')
+		#progressId = post.get('progress_id')
+
+		post_file = []
+		for field_name, field_value in post.items():
+			
+			tmpString = field_name.strip().lower()
+			if("image" in tmpString):
+				post_file.append(field_value)					
+			
+
+		now = datetime.datetime.now()
+		
+		tmpTahun = str(now.year)
+		tmpBulan = str(now.month)
+		tmpHari = str(now.day)
+
+		filename = ""
+
+		for field_value_upload_files in post_file:
+			
+			listFileName = []
+			
+			listFileName.append(tmpTahun)
+			listFileName.append("_")
+			listFileName.append(tmpBulan)
+			listFileName.append("_")
+			listFileName.append(tmpHari)
+			listFileName.append("_")
+			listFileName.append(tmpGenerateNumber)
+			listFileName.append(".png")
+
+			filename = ''.join(listFileName)
+
+			add_photo_value = {
+					'sale_order_line_service_detail_id' : int(serviceId),
+					#'name'				 : filename,
+					'name'				 : field_value_upload_files.filename,
+					'image'				 : base64.encodestring(field_value_upload_files.read()),
+					'filename'			 : field_value_upload_files.filename,	
+					'address_image_name' : filename,				
+				}
+			
+			
+		idImage = saleOrderLineServiceImageModel.sudo().create(add_photo_value)
+		dataImagePool = saleOrderLineServiceImageModel.sudo().search([('id','=',int(idImage))])
+		for outPool in dataImagePool:
+
+			outPool.sudo().sale_order_line_service_detail_id.description = description
+			imgdata = base64.decodestring(outPool.image)
+			
+			with open(filename, 'wb') as f:
+			    f.write(imgdata)
+
+
+			dst = str(self.get_base_path_image_data())
+			shutil.move(filename, dst)
+
+			listFileName[:] = []
+
+
+
+		output = {
+			'code': 200,
+			'message':'Upload Image Succes',
+		}
+
+		return Response(json.dumps(output),headers=headers)
+
+
+
+
+	'''
+	@http.route("/detail_purchase_order/<purchaseOrderId>",auth="none",csrf=False,type='http')
+	def get_detail_purchase_order(self,purchaseOrderId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+		saleOrderModel = request.env['sale.order']
+		listOutData = []
+		totalCountPo = 1
+		
+		try:
+			
+			saleOrderData = saleOrderModel.sudo().search([('id','=',int(purchaseOrderId))])
+			for outData in saleOrderData:
+				
+				new_dict = {}
+
+				new_dict['po_number'] = outData.name
+				new_dict['company_name'] = outData.partner_id.name
+				new_dict['order_date'] = self.date_to_string(outData.date_order)	
+				new_dict['rfs_date'] = self.date_to_string(outData.rfs_date)
+
+
+				for outDataDetailProduct in outData.order_line:
+
+					listHasilKoleksiData = []
+					
+					
+					new_dict_in = {}
+					new_dict_in['product_id'] = outDataDetailProduct.id
+					new_dict_in['product_name'] = outDataDetailProduct.name
+
+
+					listService = []
+					
+					for outDataDetailProductService in outDataDetailProduct.sale_order_line_service_ids:
+
+						new_dict_in_service = {}
+						new_dict_in_service['service_id'] = outDataDetailProductService.id
+						new_dict_in_service['service_name'] = outDataDetailProductService.service_id.name
+						new_dict_in_service['item_service_name'] = outDataDetailProductService.item_service_id.name
+
+						new_dict_in_service['address'] = outDataDetailProductService.address
+						new_dict_in_service['progress'] = str(outDataDetailProductService.percentage) + " %"
+
+						listService.append(new_dict_in_service)
+					
+
+					new_dict_in['detail_service'] = listService
+					listHasilKoleksiData.append(new_dict_in)
+
+
+					
+
+					listNamaProduct = []
+					listNamaProduct.append('product_detail_')
+					
+					tmpSentence = str(outDataDetailProduct.name)
+					tmpSentence = tmpSentence.replace(" ","")
+					tmpSentence = tmpSentence.lower()
+
+					listNamaProduct.append(tmpSentence)
+					outName = ''.join(listNamaProduct)
+
+					new_dict[outName] = listHasilKoleksiData
+					listNamaProduct[:]=[]
+
+
+				listOutData.append(new_dict)
+
+			output = {
+				'result':listOutData,
+				'code':200,
+				'message':'OK',
+				'meta':{
+					'limit':5,
+					'offset':5,
+					'count':totalCountPo
+				}
+			}
+
+		
+		except:
+			
+			output = {
+				'result':listOutData,
+				'code': 400,
+				'message':'Data Not Found',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+
+		
+
+		return Response(json.dumps(output),headers=headers)
+	'''
+
+
+
+	
 	@http.route("/detail_purchase_order/<purchaseOrderId>",auth="none",csrf=False,type='http')
 	def get_detail_purchase_order(self,purchaseOrderId,**values):
 
@@ -419,7 +648,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 						new_dict_in_service['item_service_name'] = outDataDetailProductService.item_service_id.name
 
 						new_dict_in_service['address'] = outDataDetailProductService.address
-						new_dict_in_service['progress'] = outDataDetailProductService.percentage
+						new_dict_in_service['progress'] = str(outDataDetailProductService.percentage) + " %"
 
 						listService.append(new_dict_in_service)
 
@@ -461,7 +690,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		return Response(json.dumps(output),headers=headers)
 		
-
+	
 
 
 
@@ -555,6 +784,8 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		
 
 		return Response(json.dumps(output),headers=headers)
+
+
 
 
 	@http.route("/order/add-photo",auth='none',csrf=False,type='http')

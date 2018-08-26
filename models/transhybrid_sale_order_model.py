@@ -297,6 +297,7 @@ class TranshybridSaleOrderLineModel(models.Model):
         val = {}
         listDetailServicePickup = []
 
+
         # JIKA SUDAH ADA ORDER LINE SEBELUMNYA
         if(self.sale_order_line_service_ids):
             
@@ -304,11 +305,14 @@ class TranshybridSaleOrderLineModel(models.Model):
                 
                 listDetailServicePickup.append((0,0,{
                         'service_id' : outData.service_id.id,
-                        #'total_item_service' : 1,
+                        'item_service_id' : outData.item_service_id.id,
+                        'assign_to_choise' : outData.assign_to_choise,
+
+                        'assign_to':outData.assign_to.id,
+                        'price_service':outData.price_service,
                         'address':outData.address,
-                        #'pic_phone':outData.pic_phone,
                         'pic':outData.pic,  
-                        'state':outData.state,                  
+                                          
                     }))
 
 
@@ -318,7 +322,7 @@ class TranshybridSaleOrderLineModel(models.Model):
                 listDetailServicePickup.append((0,0,{
                         'service_id' : self.service_id.id,
                         #'total_item_service' : 1,   
-                        'state':1,                  
+                                          
                     }))
 
                 index+=1
@@ -334,7 +338,7 @@ class TranshybridSaleOrderLineModel(models.Model):
                     listDetailServicePickup.append((0,0,{
                             'service_id' : self.service_id.id,
                             #'total_item_service' : 1,   
-                            'state':1,                  
+                                             
                         }))
 
                     index+=1
@@ -414,7 +418,6 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     @api.onchange('item_service_progress')
     def onchange_progress_task(self):
 
-        print " ============= "
         val = {}
         tmpPercentage = 0
 
@@ -555,8 +558,9 @@ class TranshybridSaleOrderLineServiceImageModel(models.Model):
 
     sale_order_line_service_detail_id  =   fields.Many2one('sale.order.line.service.detail.model',ondelete="cascade") 
     name                        =   fields.Char('Name')
-    image                       =   fields.Binary('Image')
+    image                       =   fields.Binary('Image',attachment=True)
     filename                    =   fields.Char('Filename')
+    address_image_name          =   fields.Char('Address File')
     
 
 
