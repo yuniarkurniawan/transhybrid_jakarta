@@ -140,7 +140,7 @@
 							
 							<page string="Service" >
 								<field string="Detail Service" name="sale_order_line_service_ids" >
-									<tree string="Detail" >
+									<tree string="Detail" editable="bottom">
 										<field 
 											name="service_id" 
 											string="Service"

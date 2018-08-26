@@ -351,7 +351,7 @@
                             <field 
                                 string="Order Detail" 
                                 name="order_line"
-                                 >
+                                attrs="{'readonly':[('state_new','in',(2,3,4,5))]}" >
                                 
                                 <!--
                                 <tree string="Sales Order Lines" editable="bottom" decoration-info="invoice_status=='to invoice'">
