@@ -375,7 +375,8 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 					new_dict_in_image = {}
 					
 					if(outDataImage.address_image_name):
-						new_dict_in_image['address_image'] = self.get_base_path_image_data() + str(outDataImage.address_image_name)
+						#new_dict_in_image['address_image'] = self.get_base_path_image_data() + str(outDataImage.address_image_name)
+						new_dict_in_image['address_image'] = self.get_address_base_progress_image() + str(outDataImage.address_image_name)
 					else:
 						new_dict_in_image['address_image'] = ""
 
@@ -404,6 +405,23 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 		return Response(json.dumps(output),headers=headers)
+
+
+	def get_address_base_progress_image(self):
+		
+		path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+		path = path.split('/')
+		panjang = len(path)
+
+		listAddres = []
+		base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
+		
+		listAddres.append(str(base_url))
+		listAddres.append("/")
+		listAddres.append(str(path[panjang-2]))
+		listAddres.append("/static/upload_progress_image/")
+
+		return ''.join(listAddres)
 
 
 	def get_base_path_image_data(self):
