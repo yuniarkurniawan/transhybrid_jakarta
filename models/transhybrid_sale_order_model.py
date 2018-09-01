@@ -579,7 +579,7 @@ class TranshybridSaleOrderLineServiceDetailModel(models.Model):
 
     service_name = fields.Char(related="sale_order_line_service_id.service_id.name")
     item_service_name = fields.Char(related="sale_order_line_service_id.item_service_id.name")
-    #company_name  =   fields.Many2one(related="sale_order_line_service_id.sale_order_line_id.order_id.partner_id",string="Customer")
+    company_name  =   fields.Many2one(related="sale_order_line_service_id.sale_order_line_id.order_id.partner_id",string="Customer")
     #progress_bar_percentage = fields.Integer(related="sale_order_line_service_id.progress_bar_percentage",string="Percentage")
 
     description = fields.Text('Description')

@@ -171,7 +171,7 @@
 	                    <notebook>
 	                    	<page string="List Uploads" >
                         		<field 
-                        			string="Order Detail" 
+                        			string="List Uploads" 
                         			name="sale_order_line_service_detail_ids" 
                         			>
                         			<tree create="false" edit="false" delete="false">
