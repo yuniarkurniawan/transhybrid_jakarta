@@ -275,6 +275,77 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return Response(json.dumps(output),headers=headers)
 	'''
 
+
+	@http.route("/prepare_upload_image/<serviceId>",auth="none",csrf=False,type='http')
+	def get_prepare_upload_image(self,serviceId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+
+		saleOrderLineServiceModel  = request.env['sale.order.line.service.model']
+		productServiceDetailPorgressModel = request.env['product.thc.service.detail.progress']
+		productThcServicedetailModel = request.env['product.thc.service.detail']
+
+		listOutData = []
+		new_dict_up = {}
+
+		output = {}
+		tmpItemServiceId = ""
+		tmpServiceId = ""
+
+
+		try:
+			outDataPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+			for outSaleLineService in outDataPool:
+				tmpItemServiceId = outSaleLineService.item_service_id.id
+				tmpServiceId = outSaleLineService.service_id.id
+
+
+			listProgressData = productServiceDetailPorgressModel.sudo().search([('item_service_detail_id','=',int(tmpItemServiceId))])
+			for outData in listProgressData:
+
+				new_dict = {}
+				new_dict['id'] = outData.id
+				new_dict['progress_name'] = outData.name
+
+				listOutData.append(new_dict)
+
+
+
+			new_dict_up['service_id'] = serviceId
+			new_dict_up['service_ct_id'] = tmpServiceId
+			new_dict_up['list_progress'] = listOutData
+			new_dict_up['item_service_detail_id'] = int(tmpItemServiceId)
+
+			output = {
+				'result':new_dict_up,
+				'code': 200,
+				'message':'OK',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+
+		except:
+
+			output = {
+				'result':new_dict_up,
+				'code': 200,
+				'message':'OK',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+
+
+		return Response(json.dumps(output),headers=headers)
+
+
+
+	'''
 	@http.route("/prepare_upload_image/<itemServiceId>",auth="none",csrf=False,type='http')
 	def get_prepare_upload_image(self,itemServiceId,**values):
 
@@ -317,6 +388,8 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 		return Response(json.dumps(output),headers=headers)
+	'''
+
 
 
 	@http.route("/detail_service/<serviceId>",auth="none",csrf=False,type='http')
