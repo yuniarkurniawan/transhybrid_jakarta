@@ -2,6 +2,7 @@ from odoo import models, fields, api,  _
 from odoo.tools.safe_eval import safe_eval
 from datetime import datetime, date, timedelta
 import re
+from odoo.exceptions import ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
@@ -308,6 +309,8 @@ class TranshybridSaleOrderLineModel(models.Model):
                         'item_service_id' : outData.item_service_id.id,
                         'assign_to_choise' : outData.assign_to_choise,
 
+                        'price_service':outData.price_service,
+
                         'assign_to':outData.assign_to.id,
                         'price_service':outData.price_service,
                         'address':outData.address,
@@ -369,7 +372,11 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     item_service_id             =   fields.Many2one('product.thc.service.detail',required=True)
     item_service_progress       =   fields.Many2one('product.thc.service.detail.progress')
 
-    company_name                =   fields.Many2one(related="sale_order_line_id.order_id.partner_id",string="Company")
+    progress_bar_percentage     =   fields.Integer(related='item_service_progress.progress_percentage',string="Progress")
+
+    po_name                     =   fields.Char(related="sale_order_line_id.order_id.name_order",string="Po Number")
+    company_name                =   fields.Many2one(related="sale_order_line_id.order_id.partner_id",string="Customer")
+    po_order_date               =   fields.Datetime(related="sale_order_line_id.order_id.date_order",string="Order Date")
     rsf_date                    =   fields.Datetime(related="sale_order_line_id.order_id.rfs_date",string="RFS Date")
 
     assign_to_choise    =   fields.Selection([
@@ -411,8 +418,28 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     percentage                  =   fields.Float('Percentage')
     progress_bar                =   fields.Float(related='percentage')
-    sale_order_line_service_detail_ids =    fields.One2many('sale.order.line.service.detail.model','sale_order_line_service_id','Sale Order Line Service')
+    sale_order_line_service_detail_ids =    fields.One2many('sale.order.line.service.detail.model','sale_order_line_service_id','Sale Order Line Service',required=True)
     
+
+    @api.onchange('item_service_id')
+    def onchange_price_service_item(self):
+
+        val = {}
+
+        tmpPriceService = 0
+
+        if(self.item_service_id):
+            tmpPriceService = self.item_service_id.price
+
+            val = {
+                'price_service' : tmpPriceService
+            }
+
+
+        return {
+            'value': val            
+        }
+            
 
 
     @api.onchange('item_service_progress')

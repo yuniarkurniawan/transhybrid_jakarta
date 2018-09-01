@@ -37,6 +37,7 @@
         'views/transhybrid_time_token_expired_configuration_view.xml',
         'views/progressbar_view.xml',
         'views/transhybrid_sale_order_customer_report_view.xml',
+        'views/transhybrid_sale_order_line_service_report_view.xml',
 
         #'wizard/transhybrid_purchase_order_excel_tmpl_view.xml',
         #'wizard/transhybrid_purchase_order_excel_wizard_view.xml',

@@ -1,5 +1,6 @@
 from odoo import models, fields, api,  _
 from datetime import datetime, date
+from odoo.exceptions import ValidationError
 
 
 class TranshybridProductCatalogueModel(models.Model):
@@ -33,7 +34,12 @@ class TranshybridProductCatalogueModel(models.Model):
 	list_price_compute     		=   fields.Float('Compute New Price',compute='_compute_list_new_price',store=True)
 
 	product_templete_line_ids	=	fields.One2many('product.thc.service','product_id')
-	
+	#flag_template_line_ids 		=	fields.Char('Flag Tempalte',compute='_compute_flag_template_ids')
+	#flag_childs = fields.Char('Label XXX', compute='_compute_flag_childs')
+
+
+	#@api.depends(product_templete_line_ids)
+
 
 	@api.multi
 	@api.depends('product_templete_line_ids')
@@ -55,13 +61,48 @@ class TranshybridProductCatalogueModel(models.Model):
 		
 		self.revenue_year = (self.volume_solution * self.price_solution) + (self.volume_deployment * self.price_deployment) + (self.volume_operation_maintenance * self.price_operation_maintenance)
 
+	'''
+	@api.model
+	def write(self,vals):
+
+		if(len(vals['product_templete_line_ids'])<=0):
+			raise ValidationError(_('Service cannot be empty.'))
+		else:
+			for out in vals['product_templete_line_ids']:
+				if(len(out[2]['product_service_line_ids'])<=0):
+					raise ValidationError(_('Item service detail cannot be empty.'))
+				else:
+					for outIn in out[2]['product_service_line_ids']:
+						if(len(outIn[2]['product_service_line_progress_ids'])<=0):
+							raise ValidationError(_('Progress percentage cannot be empty.'))
+
+
+		return super(TranshybridProductCatalogueModel, self).write(vals)  
+	'''
+
 
 	@api.model
 	def create(self, values):
 
+		if(len(values['product_templete_line_ids'])<=0):
+			raise ValidationError(_('Service cannot be empty.'))
+		else:
+			for out in values['product_templete_line_ids']:
+				if(len(out[2]['product_service_line_ids'])<=0):
+					raise ValidationError(_('Item service detail cannot be empty.'))
+				else:
+					for outIn in out[2]['product_service_line_ids']:
+						if(len(outIn[2]['product_service_line_progress_ids'])<=0):
+							raise ValidationError(_('Progress percentage cannot be empty.'))
+
+
+
+			
+
 		productModel = self.env['product.product']
 		values['product_code'] = self.generate_product_catalogue_number(values['code'])
 		
+
 		'''
 		tmpListPrice = 0
 		for outDataServiceItem in values['product_templete_line_ids']:

@@ -337,6 +337,8 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			new_dict['service_name'] = outData.service_id.name
 			new_dict['item_service_name'] = outData.item_service_id.name
 
+			new_dict['service_id'] = outData.id
+			new_dict['service_ct_id'] = outData.service_id.id
 			new_dict['item_service_id'] = outData.item_service_id.id
 
 			new_dict['rfs_date'] = self.date_to_string(outData.sale_order_line_id.order_id.rfs_date)
