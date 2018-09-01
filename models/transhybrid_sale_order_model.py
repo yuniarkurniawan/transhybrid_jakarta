@@ -92,7 +92,8 @@ class TranshybridSaleOrderModel(models.Model):
             for rowOrderline in row.order_line:
                 for rowService in rowOrderline.sale_order_line_service_ids:
                     tmpTotalSevice+=1
-                    tmpProgresBar+=rowService.percentage
+                    #tmpProgresBar+=rowService.percentage
+                    tmpProgresBar+=rowService.progress_bar_percentage
 
 
             if(tmpTotalSevice!=0):
@@ -571,10 +572,39 @@ class TranshybridSaleOrderLineServiceDetailModel(models.Model):
 
     
     sale_order_line_service_id = fields.Many2one('sale.order.line.service.model',ondelete="cascade")
+    
+    #po_name = fields.Char(related="sale_order_line_service_id.sale_order_line_id.order_id.name_order",string="Po Number")
+    #po_order_date               =   fields.Datetime(related="sale_order_line_service_id.sale_order_line_id.order_id.date_order",string="Order Date")
+    #rsf_date                    =   fields.Datetime(related="sale_order_line_service_id.sale_order_line_id.order_id.rfs_date",string="RFS Date")
+
+    #service_name = fields.Char(related="sale_order_line_service_id.service_id.name")
+    #item_service_name = fields.Char(related="sale_order_line_service_id.item_service_id.name")
+    #company_name  =   fields.Many2one(related="sale_order_line_service_id.sale_order_line_id.order_id.partner_id",string="Customer")
+    #progress_bar_percentage = fields.Integer(related="sale_order_line_service_id.progress_bar_percentage",string="Percentage")
+
     description = fields.Text('Description')
     progress =  fields.Many2one('product.thc.service.detail.progress')
+    progress_bar = fields.Integer(related="progress.progress_percentage")
     sale_order_line_serive_image_ids    =   fields.One2many('sale.order.line.service.image.model','sale_order_line_service_detail_id','Sale Order Line Service Image')
 
+
+    @api.multi
+    def name_get(self):
+        
+        res = []
+        
+        for record in self:
+            listName = []
+
+            listName.append(str(record.service_name))
+            listName.append(" - ")
+            listName.append(str(record.item_service_name))
+            listName.append(" - ")
+            listName.append(str(record.company_name.name))
+
+            res.append((record.id, ''.join(listName)))
+
+        return res
 
 
 class TranshybridSaleOrderLineServiceImageModel(models.Model):

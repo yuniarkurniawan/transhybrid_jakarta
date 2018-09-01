@@ -30,6 +30,7 @@
         'views/transhybrid_sale_order_line_view.xml',
         'views/transhybrid_sale_order_line_service_view.xml',
         'views/transhybrid_sale_order_line_service_detail_view.xml',
+        #'views/transhybrid_sale_order_line_service_detail_report_view.xml',
 
         'views/transhybrid_sale_order_line_image_view.xml',
         'views/transhybrid_email_server_configuration_view.xml',

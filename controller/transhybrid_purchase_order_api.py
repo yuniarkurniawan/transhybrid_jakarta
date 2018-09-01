@@ -529,6 +529,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		headerData = request.httprequest.headers		
 		headers = {'Content-Type': 'application/json'}
 
+		saleOrderLineServiceModel = request.env['sale.order.line.service.model']
 		saleOrderLineServiceImageModel = request.env['sale.order.line.service.image.model']
 		saleOrderLineServiceDetailModel = request.env['sale.order.line.service.detail.model']
 
@@ -596,6 +597,12 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		}
 
 		dataServiceDetail = saleOrderLineServiceDetailModel.sudo().create(dataServiceDetailValue)
+		
+		# UPDATE PROGRESS BAR
+		modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+		for serviceData in modelPool:
+			serviceData.item_service_progress = progressId
+
 
 
 		filename = ""

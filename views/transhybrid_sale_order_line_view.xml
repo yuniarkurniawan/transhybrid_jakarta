@@ -225,7 +225,7 @@
                                         -->
                                         <field name="percentage" invisible="1"/>
                                         <field 
-                                            name="progress_bar" 
+                                            name="progress_bar_percentage" 
                                             widget="progressbar" 
                                             string="Graph"
                                              />
