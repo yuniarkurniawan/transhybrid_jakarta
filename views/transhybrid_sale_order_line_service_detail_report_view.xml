@@ -3,17 +3,18 @@
     <data>
 
     	<!-- TREE VIEW -->
-        <record id="sale_order_line_service_thc_tree_view" model="ir.ui.view">
-            <field name="name">sale.order.line.service.thc.tree.view</field>
-            <field name="model">sale.order.line.service.model</field>
+        <record id="sale_order_line_service_detail_model_thc_tree_view" model="ir.ui.view">
+            <field name="name">sale.order.line.service.detail.model.thc.tree.view</field>
+            <field name="model">sale.order.line.service.detail.model</field>
             <field name="priority">2</field>
             <field name="arch" type="xml">
-                <tree create="0" delete="0">
+                <tree string="Sales Orders">
+                    <field name="create_date" string="Upload Date"/>
                 	<field name="po_name" string="Purchase Order"/>
                 	<field name="po_order_date" string="Date Order"/>
                     <field name="rsf_date" string="RFS Date"/>
-                    <field name="service_id" string="Service"/>
-                    <field name="item_service_id" string="Item Service"/>
+                    <field name="service_name" string="Service"/>
+                    <field name="item_service_name" string="Item Service"/>
                     <field name="company_name" string="Customer"/>
                     <field name="progress_bar_percentage" widget="progressbar" string="Progress"/>
                 </tree>
@@ -21,10 +22,10 @@
         </record>
 
 
-    	<!-- KANBAN VIEW  -->
-        <record model="ir.ui.view" id="sale_order_line_service_model_thc_view_kanban">
-            <field name="name">sale.order.line.service.model.thc.view.kanban</field>
-            <field name="model">sale.order.line.service.model</field>
+    	<!-- KANBAN VIEW
+        <record model="ir.ui.view" id="sale_order_line_service_detail_model_thc_view_kanban">
+            <field name="name">sale.order.line.service.detail.model.thc.view.kanban</field>
+            <field name="model">sale.order.line.service.detail.model</field>
             <field name="arch" type="xml">
                 <kanban class="o_kanban_mobile">
                     <field name="service_id"/>
@@ -75,74 +76,37 @@
 
                     </templates>
 
-
-                    <!--
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <strong><span><t t-esc="record.partner_id.value"/></span></strong>
-                                    </div>
-                                    <div class="col-xs-6 pull-right text-right">
-                                        <strong><field name="amount_total" widget="monetary"/></strong>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-6 text-muted">
-                                        <span><t t-esc="record.name.value"/> <t t-esc="record.date_order.value"/></span>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <span class="pull-right text-right">
-                                            <field name="state_new" widget="kanban_label_selection" />
-                                        </span>
-                                    </div>                                    
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-7">
-                                        <field 
-                                            name="percentage_task" 
-                                            widget="gauge" 
-                                            string="Progress"
-                                            style="width:120px;height:90px;cursor:pointer;" 
-                                            />
-
-                                    </div>
-                                </div>
-                            </div>
-                        </t>
-                    </templates>
-                -->
                 </kanban>
             </field>
         </record>
-
+        -->
 
 
         <!-- FORM VIEW -->
-        <record id="sale_order_line_service_model_thc_form_view" model="ir.ui.view">
-            <field name="name">sale.order.line.service.model.thc.form.view</field>
-            <field name="model">sale.order.line.service.model</field>
+        <record id="sale_order_line_service_detail_model_thc_form_view" model="ir.ui.view">
+            <field name="name">sale.order.line.service.detail.model.thc.form.view</field>
+            <field name="model">sale.order.line.service.detail.model</field>
             <field name="arch" type="xml">
                 <form 
                 	string="Sales Order" class="o_sale_order" create="false" delete="false" edit="false">
-
-                    <sheet>
+                	<sheet>
                 		<group>
 
+                			
                 			<field 
-		                    	name="service_id" 
+		                    	name="service_name" 
 		                    	string="Service"
 		                    	class="oe_inline"
 		                    />
 
 		                    <field 
-		                    	name="item_service_id" 
+		                    	name="item_service_name" 
 		                    	string="Item Service"
 		                    	class="oe_inline"
 		                    />
 		                    
-		                	<field 
+		                	
+                			<field 
                 				name="po_name" 
                 				string="Purchase Order"
                 				class="oe_inline"
@@ -159,34 +123,59 @@
 		                    	string="RFS Date"
 		                    	class="oe_inline"
 		                    />
-		                    
-		                    
+		                    		                    
 		                    <field 
 		                    	name="company_name" 
 		                    	string="Customer"
 		                    	class="oe_inline"
 		                    />
 
+                            <field 
+                                name="progress_bar_percentage"
+                                widget="progressbar"
+                                string="Progress"
+                                
+                                />
+
 		                </group>
 
-	                    <notebook>
-	                    	<page string="List Uploads" >
-                        		<field 
-                        			string="List Uploads" 
-                        			name="sale_order_line_service_detail_ids" 
-                        			>
-                        			<tree create="false" edit="false" delete="false">
+                        <notebook>
 
-                        				<field name="create_date" string="Upload Date"/>
-                                        <field name="description" string="Description"/>
-                                        <field 
-                                            name="progress_bar" 
-                                            string="Progress Bar" 
-                                            widget="progressbar"/>
-                        			</tree>
-                        		</field>
-	                    	</page>
-	                    </notebook>                		
+                            <page string="List Images">
+                                    
+                                    <field 
+                                        name="sale_order_line_serive_image_ids" 
+                                        mode="kanban">
+                                        <kanban string="Upload Images">
+
+                                            <field name="name"/>
+                                            <field name="image" />
+
+                                            <templates>
+                                                <t t-name="kanban-box">
+
+                                                    <div class="oe_kanban_global_click">
+                                                        <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                        <div>
+                                                            <img
+                                                                style="height:240px;width:300px;" 
+                                                                t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                        </div>
+                                                        <div class="oe_kanban_details">
+                                                            <field name="name"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+
+
+                                        </kanban>
+                                    </field>
+                                    
+                                
+                            </page>
+                            
+                        </notebook>                		
                 	</sheet>
                 </form>
             </field>
@@ -196,19 +185,19 @@
 
 
         <!--  SEARCH VIEW -->
-        <record model="ir.ui.view" id="sale_order_line_service_thc_search_view">
-            <field name="name">sale.order.line.service.thc.search.view</field>
-            <field name="model">sale.order.line.service.model</field>
+        <record model="ir.ui.view" id="sale_order_line_service_detail_model_thc_search_view">
+            <field name="name">sale.order.line.service.detail.model.thc.search.view</field>
+            <field name="model">sale.order.line.service.detail.model</field>
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Search Customer">
                    
-                   <field name="po_name"/>
-                	<field name="po_order_date"/>
-                    <field name="rsf_date" />
-                    <field name="service_id" />
-                    <field name="item_service_id" />
-                    <field name="company_name" />
+                    <field name="po_name" string="Purchase Order"/>
+                    <field name="po_order_date" string="Date Order"/>
+                    <field name="rsf_date" string="RFS Date"/>
+                    <field name="service_name" string="Service"/>
+                    <field name="item_service_name" string="Item Service"/>
+                    <field name="company_name" string="Customer"/>
 
                    <!--
                    <group 
@@ -239,33 +228,34 @@
 
 
         <!-- ACTION VIEW -->
-        <record id="sale_order_line_service_thc_action" model="ir.actions.act_window">
+        <record id="sale_order_line_service_detail_thc_action" model="ir.actions.act_window">
             <field name="name">Service</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">sale.order.line.service.model</field>
+            <field name="res_model">sale.order.line.service.detail.model</field>
             <field name="view_type">form</field>
-            <!--<field name="view_mode">tree,kanban,form</field>-->
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="sale_order_line_service_thc_search_view"/>
+            <field 
+                name="search_view_id" 
+                ref="sale_order_line_service_detail_model_thc_search_view"/>
             <field name="context">{}</field>
             <field name="domain">[]</field>
             
         </record>
 
-        <record id="action_sale_order_line_service_thc_tree_view1" 
+        <record id="action_sale_order_line_service_detail_thc_tree_view1" 
         	model="ir.actions.act_window.view">
             <field eval="0" name="sequence"/>
             <field name="view_mode">tree</field>
-            <field name="view_id" ref="sale_order_line_service_thc_tree_view"/>
-            <field name="act_window_id" ref="sale_order_line_service_thc_action"/>
+            <field name="view_id" ref="sale_order_line_service_detail_model_thc_tree_view"/>
+            <field name="act_window_id" ref="sale_order_line_service_detail_thc_action"/>
         </record>
 
-        <record id="action_sale_order_line_service_thc_form_view1" 
+        <record id="action_sale_order_line_service_detail_thc_form_view1" 
         	model="ir.actions.act_window.view">
             <field eval="0" name="sequence"/>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="sale_order_line_service_model_thc_form_view"/>
-            <field name="act_window_id" ref="sale_order_line_service_thc_action"/>
+            <field name="view_id" ref="sale_order_line_service_detail_model_thc_form_view"/>
+            <field name="act_window_id" ref="sale_order_line_service_detail_thc_action"/>
         </record>
 
         <!--
@@ -279,9 +269,9 @@
 		-->
 
         <menuitem 
-        	action="sale_order_line_service_thc_action" 
-        	icon="STOCK_JUSTIFY_FILL" sequence="4"
-            id="sale_order_line_service_thc_menu_view" 
+        	action="sale_order_line_service_detail_thc_action" 
+        	icon="STOCK_JUSTIFY_FILL" sequence="2"
+            id="sale_order_line_service_detail_thc_menu_view" 
             parent="sub_menu_reporting_data_transhybrid"
         />
     	

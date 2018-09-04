@@ -54,6 +54,9 @@
         'data/res.country.state.csv',
         'data/account_chart_template_data.yml',
 
+        'report/transhybrid_po_service_item_report_pdf_template_view.xml',
+        'report/transhybrid_po_service_item_report_view.xml',
+
 
         'security/user_data_security.xml',
         
