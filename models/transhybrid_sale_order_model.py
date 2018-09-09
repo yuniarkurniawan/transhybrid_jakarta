@@ -15,30 +15,30 @@ class TranshybridSaleOrderModel(models.Model):
 
     name_order          =   fields.Char('Sale Order Name')
 
-    '''
+    
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
                                     (2,'Vendor')],'Assign To',default=1)
-    '''
+    
 
     vendor_name_order   =   fields.Char('Vendor PO Number')
     
-    '''
+    
     vendor_assign_order =   fields.Many2one('res.partner',domain=[('supplier', '=', 1)])
     assign_to_by_vendor =   fields.Many2one('res.users',string='Assign To')
-    '''
+    
 
     #user_company        =   fields.Integer(related='assign_to_by_vendor.user_company')
     
-    '''
+    
     is_manager_other_company = fields.Selection([
                                     (1,'Yes'),
                                     (2,'No')],'Is Manager',related="assign_to_by_vendor.is_manager_other_company")
-    '''
     
-    '''
+    
+    
     assign_to           =   fields.Many2one('res.users',string='Assign To')
-    '''
+    
 
     state_new           =   fields.Selection([(1,'Prospect'),
                                             (2,'Deal'),
@@ -572,6 +572,7 @@ class TranshybridSaleOrderLineServiceDetailModel(models.Model):
 
     
     sale_order_line_service_id = fields.Many2one('sale.order.line.service.model',ondelete="cascade")
+    upload_date = fields.Date('Upload Date')
     
     #po_name = fields.Char(related="sale_order_line_service_id.sale_order_line_id.order_id.name_order",string="Po Number")
     #po_order_date               =   fields.Datetime(related="sale_order_line_service_id.sale_order_line_id.order_id.date_order",string="Order Date")

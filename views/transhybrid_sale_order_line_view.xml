@@ -202,6 +202,7 @@
                                             name="item_service_progress"
                                             widget="selection"
                                             string="Progress"
+                                            readonly="1"
                                             domain="[('item_service_detail_id','=',item_service_id)]"
 
                                             />
@@ -228,6 +229,7 @@
                                             name="progress_bar_percentage" 
                                             widget="progressbar" 
                                             string="Graph"
+                                            readonly="1"
                                              />
                                         
 									</tree>

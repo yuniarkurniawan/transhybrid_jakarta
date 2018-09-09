@@ -12,7 +12,7 @@
                         <group>
 
                             <field 
-                                name="create_date"
+                                name="upload_date"
                                 class="oe_inline"
                                 string="Upload Date"/>
                             <field 

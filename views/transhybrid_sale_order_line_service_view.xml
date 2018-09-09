@@ -39,7 +39,7 @@
                             <page string="List Image">                                
                                 <field name="sale_order_line_service_detail_ids">
                                     <tree>
-                                        <field name="create_date" string="Date"/>
+                                        <field name="upload_date" string="Upload Date"/>
                                         <field name="description" string="Description"/>
                                         <field name="progress" string="Progress"/>
 

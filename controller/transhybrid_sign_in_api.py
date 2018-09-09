@@ -10,7 +10,7 @@ import json
 import os
 import base64
 
-APPTOKEN = 'Project Transhybrid'
+APPTOKEN = 'Project Transhybrid Ekadata'
 
 class TranshybridSignInApi(http.Controller):
 

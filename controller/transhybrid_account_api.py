@@ -27,7 +27,7 @@ import random
 a_month_ago = datetime.datetime.today() - datetime.timedelta(days=30)
 first_day_of_month = datetime.datetime.today().replace(day=1)
 
-APPTOKEN = 'Project Transhybrid'
+APPTOKEN = 'Project Transhybrid Ekadata'
 
 
 class TranshybridAccountApi(http.Controller):

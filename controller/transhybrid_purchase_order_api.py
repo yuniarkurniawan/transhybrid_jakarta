@@ -45,6 +45,15 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return tmpDate
 
 
+	def date_to_string_other(self,paramDate):
+
+		tmpOutMe = datetime.datetime.strptime(paramDate,'%Y-%m-%d')
+		tmpDate = datetime.datetime.strftime(tmpOutMe,'%d-%B-%Y')		
+
+		return tmpDate
+
+
+
 	@http.route("/po/<poId>/product",auth="none",csrf=False,type='http')
 	def get_purchase_order_by_productId(self,poId,**values):
 
@@ -420,7 +429,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			for outDataServiceDetail in outData.sale_order_line_service_detail_ids:
 				
 				new_dict_in = {}
-				new_dict_in['upload_date'] = self.date_to_string(outDataServiceDetail.create_date)
+				new_dict_in['upload_date'] = self.date_to_string_other(outDataServiceDetail.upload_date)
 				new_dict_in['description'] = outDataServiceDetail.description
 				new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
 
@@ -521,10 +530,226 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return ''.join(listAddres)
 
 
-
-	#@http.route("/detail_service_upload_image/<serviceId>",auth='none',csrf=False,type='http')
 	@http.route("/detail_service_upload_image",auth='none',csrf=False,type='http')
 	def upload_service_image(self,**post):
+
+		headerData = request.httprequest.headers		
+		headers = {'Content-Type': 'application/json'}
+
+		saleOrderLineServiceModel = request.env['sale.order.line.service.model']
+		saleOrderLineServiceImageModel = request.env['sale.order.line.service.image.model']
+		saleOrderLineServiceDetailModel = request.env['sale.order.line.service.detail.model']
+
+		generatedNumberModel = request.env['transhybrid.generated.number']
+
+		now = datetime.datetime.now()
+
+		piss = datetime.datetime.strftime(now,'%Y-%m-%d %H:%M:%S')
+		uploadDate = datetime.datetime.strftime(now,'%Y-%m-%d')
+		
+
+		date_1 = datetime.datetime.strptime(uploadDate, "%Y-%m-%d")
+		end_date = date_1 + datetime.timedelta(days=10)
+		print "END DATE : ", end_date
+		uploadDate = end_date
+
+
+		tmpYear = now.year
+		tmpYear = str(tmpYear)
+		tmpYear = tmpYear[2:4]
+		tmpMonth = now.month
+		listPoNumber = []
+
+		description = post.get('description')
+		progressId = post.get('progress_id')
+		serviceId = post.get('service_id')
+		
+		output = {}
+
+
+		dataPool = generatedNumberModel.sudo().search([('is_image','=',True),('year','=',int(tmpYear)),('month','=',int(tmpMonth))])
+		tmpGenerateNumber = ""
+
+		if(len(dataPool)==0):
+
+			# data kosong
+			dataGenerateValue = {
+				'is_image' : True,
+				'year' : int(tmpYear),
+				'month' : int(tmpMonth),
+				'last_number' : 1
+			}
+
+			listPoNumber.append(str(1).zfill(5))
+			generatedNumberModel.sudo().create(dataGenerateValue)
+
+		else:
+
+			# data tidak kosong
+			tmpOutNumber = 0
+			for outData in dataPool:
+				
+				tmpOutNumber = outData.last_number
+				tmpOutNumber+=1
+				listPoNumber.append(str(tmpOutNumber).zfill(5))
+				outData.sudo().last_number = tmpOutNumber
+
+		tmpGenerateNumber = ''.join(listPoNumber)
+
+            
+		post_file = []
+		for field_name, field_value in post.items():
+			
+			tmpString = field_name.strip().lower()
+			if("image" in tmpString):
+				post_file.append(field_value)
+
+
+
+		now = datetime.datetime.now()
+			
+		tmpTahun = str(now.year)
+		tmpBulan = str(now.month)
+		tmpHari = str(now.day)
+
+
+		# YANG MEMBEDAKAN ADALAH TANGGAL DAN SERVICE IDNYA UNTUK BISA ONE2MANY KE IMAGE
+		dataPoolService = saleOrderLineServiceDetailModel.sudo().search([('sale_order_line_service_id','=',serviceId),('upload_date','=',uploadDate)])
+		
+		if(len(dataPoolService)<=0):
+
+			# INPUT IMAGE BARU DENGAN TANGGAL YANG BARU			
+
+			dataServiceDetailValue = {
+				'sale_order_line_service_id' : serviceId,
+				'progress' : progressId,
+				'upload_date': uploadDate,
+				'description' : description
+			}
+
+			dataServiceDetail = saleOrderLineServiceDetailModel.sudo().create(dataServiceDetailValue)
+			
+			# UPDATE PROGRESS BAR
+			modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+			for serviceData in modelPool:
+				serviceData.item_service_progress = progressId
+
+
+
+			filename = ""
+			listDataImageInputData = []
+
+			for field_value_upload_files in post_file:
+				
+				listFileName = []
+				
+				listFileName.append(tmpTahun)
+				listFileName.append("_")
+				listFileName.append(tmpBulan)
+				listFileName.append("_")
+				listFileName.append(tmpHari)
+				listFileName.append("_")
+				listFileName.append(tmpGenerateNumber)
+				listFileName.append(".png")
+
+				filename = ''.join(listFileName)
+
+				listDataImageInputData.append((0,0,{
+						'sale_order_line_service_detail_id' : dataServiceDetail.id,
+						'name'				 : field_value_upload_files.filename,
+						'image'				 : base64.encodestring(field_value_upload_files.read()),
+						'filename'			 : field_value_upload_files.filename,	
+						'address_image_name' : filename,	
+					}))
+
+			dataServiceDetail.sudo().sale_order_line_serive_image_ids = listDataImageInputData	
+			
+			dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id','=',dataServiceDetail.id)])
+			for outPool in dataImagePool:
+
+				imgdata = base64.decodestring(outPool.image)
+				
+				with open(filename, 'wb') as f:
+				    f.write(imgdata)
+
+
+				dst = str(self.get_base_path_image_data())
+				shutil.move(filename, dst)
+
+				listFileName[:] = []
+
+
+		else:
+
+			
+			# UPDATE IMAGE BARU
+			for outMe in dataPoolService:
+
+				# UPDATE PROGRESS BAR
+				modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+				for serviceData in modelPool:
+					serviceData.item_service_progress = progressId
+
+
+				filename = ""
+				listDataImageInputData = []
+
+				for field_value_upload_files in post_file:
+					
+					listFileName = []
+					
+					listFileName.append(tmpTahun)
+					listFileName.append("_")
+					listFileName.append(tmpBulan)
+					listFileName.append("_")
+					listFileName.append(tmpHari)
+					listFileName.append("_")
+					listFileName.append(tmpGenerateNumber)
+					listFileName.append(".png")
+
+					filename = ''.join(listFileName)
+
+					listDataImageInputData.append((0,0,{
+							'sale_order_line_service_detail_id' : outMe.id,
+							'name'				 : field_value_upload_files.filename,
+							'image'				 : base64.encodestring(field_value_upload_files.read()),
+							'filename'			 : field_value_upload_files.filename,	
+							'address_image_name' : filename,	
+						}))
+
+				outMe.sudo().sale_order_line_serive_image_ids = listDataImageInputData	
+				
+				
+				dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id','=',outMe.id)],limit=1,order="id desc")
+				for outPool in dataImagePool:
+
+					imgdata = base64.decodestring(outPool.image)
+					
+					with open(filename, 'wb') as f:
+					    f.write(imgdata)
+
+
+					dst = str(self.get_base_path_image_data())
+					shutil.move(filename, dst)
+
+					listFileName[:] = []
+				
+
+		output = {
+			'code': 200,
+			'message':'Upload Image Succes',
+		}
+		
+
+		return Response(json.dumps(output),headers=headers)
+
+
+
+
+	'''
+
+	@http.route("/detail_service_upload_image",auth='none',csrf=False,type='http')
+	def upload_service_image_original(self,**post):
 
 		headerData = request.httprequest.headers		
 		headers = {'Content-Type': 'application/json'}
@@ -655,11 +880,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		}
 
 		return Response(json.dumps(output),headers=headers)
-
-
-
-
-	'''
 
 	@http.route("/detail_service_upload_image",auth='none',csrf=False,type='http')
 	def upload_service_image(self,**post):
