@@ -314,7 +314,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 				new_dict = {}
 				new_dict['id'] = outData.id
-				new_dict['progress_name'] = outData.name
+				new_dict['progress_name'] = outData.name + " (" + str(outData.progress_percentage) + ") %"
 
 				listOutData.append(new_dict)
 
