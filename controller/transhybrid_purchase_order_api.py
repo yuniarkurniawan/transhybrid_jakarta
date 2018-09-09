@@ -548,10 +548,12 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		uploadDate = datetime.datetime.strftime(now,'%Y-%m-%d')
 		
 
+		'''
 		date_1 = datetime.datetime.strptime(uploadDate, "%Y-%m-%d")
 		end_date = date_1 + datetime.timedelta(days=10)
 		print "END DATE : ", end_date
 		uploadDate = end_date
+		'''
 
 
 		tmpYear = now.year
