@@ -342,6 +342,14 @@
                             <field name="pricelist_id" invisible="1" />
                             <field name="currency_id" invisible="1"/>
 
+                            <field 
+                                name="vendor_assign_order"
+                                class="oe_inline"
+                                string="Vendor Name"
+                                invisible="1"
+                                options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                />
+
                         </group>
                         
                     

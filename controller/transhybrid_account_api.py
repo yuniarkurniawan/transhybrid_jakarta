@@ -120,10 +120,10 @@ class TranshybridAccountApi(http.Controller):
 	def check_username(self,**values):
 
 		headerData = request.httprequest.headers		
-		headerToken =  headerData.get('Apptoken')
-		
+				
 		body = request.jsonrequest
 		email = body['email']
+
 
 		if(self.check_empty_input_user(email)):
 			return {
@@ -132,41 +132,29 @@ class TranshybridAccountApi(http.Controller):
 				}
 
 
-		if(self.check_app_token(headerToken)):
+		resUserModel = request.env['res.users']
+		validEmailUser = resUserModel.sudo().search([('login', '=', email)])
 
-			resUserModel = request.env['res.users']
-			
-
-			validEmailUser = resUserModel.sudo().search([
-								('login', '=', email)
-								])
-
-			if(validEmailUser):
-
-				return {
-					'code' : 200,
-					'message' : 'OK',
-					'is_registered': True
-				}			
-			else:
-				return {
-					'code': 404,
-					'message': 'User Is Not Found'
-				}
-		else:
+		if(validEmailUser):
 
 			return {
-					'code': 404,
-					'message': 'API Key Is Not Same'
-				}
+				'code' : 200,
+				'message' : 'OK',
+				'is_registered': True
+			}			
+		else:
+			return {
+				'code': 404,
+				'message': 'User Is Not Found'
+			}
+
 
 	
 	@http.route("/account/request_otp/", auth='none',csrf=False, type='json')
 	def request_otp(self,**values):
 
 		headerData = request.httprequest.headers		
-		headerToken =  headerData.get('Apptoken')
-
+		
 		tmpHostEmail = ""
 		tmpPortEmail = ""
 		
@@ -223,95 +211,90 @@ class TranshybridAccountApi(http.Controller):
 
 
 
-		if(self.check_app_token(headerToken)):
 
-			resUserModel = request.env['res.users']
-			resUserTokenModel = request.env['res.users.token']
+		resUserModel = request.env['res.users']
+		resUserTokenModel = request.env['res.users.token']
 
-			body = request.jsonrequest
-			phone = body['phone']
-			
-			phone = str(phone)
-			tmpCheck = phone.isdigit()
+		body = request.jsonrequest
+		phone = body['phone']
+		
+		phone = str(phone)
+		tmpCheck = phone.isdigit()
 
-			dataPool = False
-			dataPhonePool = resUserModel.sudo().search([('partner_id.phone','=',phone)])
-			if(dataPhonePool):
-				dataPool = dataPhonePool
-			else:
-				dataPool = resUserModel.sudo().search([('login','=',phone)])
+		dataPool = False
+		dataPhonePool = resUserModel.sudo().search([('partner_id.phone','=',phone)])
+		if(dataPhonePool):
+			dataPool = dataPhonePool
+		else:
+			dataPool = resUserModel.sudo().search([('login','=',phone)])
 
 
-			if(dataPool):
+		if(dataPool):
 
-				for dataUser in dataPool:
+			for dataUser in dataPool:
 
-					r = random.randint(1111,9999)
-					tokenNumber = "%04d" % r
+				r = random.randint(1111,9999)
+				tokenNumber = "%04d" % r
 
-					# --------- begin email
+				# --------- begin email
 
-					tmpMessageEmail = "Your token number is " + tokenNumber
+				tmpMessageEmail = "Your token number is " + tokenNumber + ". Please verify it not more than 3 minutes."
+				
+
+				msg = MIMEMultipart()
+				msg['From'] = tmpPengirimEmail
+				msg['To'] = ''.join(dataUser.login)
+				msg['Date'] = email.Utils.formatdate(localtime=True)
+				msg['Subject'] = "Token Number"
+				msg.attach(MIMEText(tmpMessageEmail)) 
+
+				
+				try:
+
+					# ---------- begin email
+					tmpPesan = "Your token number is " + tokenNumber
+					server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
+
+					server.ehlo()
+					server.starttls()
+					server.login(tmpPengirimEmail, tmpPasswordEmail)
+					 
+					server.sendmail(tmpPengirimEmail, dataUser.login, msg.as_string())
+					server.quit()
+
+					# --------- end email
+
+					resUserTokenModel.sudo().create({'res_id':dataUser.id,'token_data':tokenNumber})
 					
+					return {
+						'code':200,
+						'message':'OK',
+						'expired_time': TIME_OTP,
+					}
 
-					msg = MIMEMultipart()
-					msg['From'] = tmpPengirimEmail
-					msg['To'] = ''.join(dataUser.login)
-					msg['Date'] = email.Utils.formatdate(localtime=True)
-					msg['Subject'] = "Token Number"
-					msg.attach(MIMEText(tmpMessageEmail)) 
+				except:
 
-					
-					try:
-
-						# ---------- begin email
-						tmpPesan = "Your token number is " + tokenNumber
-						server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
-
-						server.ehlo()
-						server.starttls()
-						server.login(tmpPengirimEmail, tmpPasswordEmail)
-						 
-						server.sendmail(tmpPengirimEmail, dataUser.login, msg.as_string())
-						server.quit()
-
-						# --------- end email
-
-						resUserTokenModel.sudo().create({'res_id':dataUser.id,'token_data':tokenNumber})
-						
-						return {
-							'code':200,
-							'message':'OK',
-							'expired_time': TIME_OTP,
-						}
-
-					except:
-
-						return {
-							'code':404,
-							'message':'Email Is Not Valid'
-						}
-					
-			else:
-
-				return {
-					'code': 404,
-					'message': 'User Is Not Found'
-				}
+					return {
+						'code':404,
+						'message':'Email Is Not Valid'
+					}
+				
 		else:
 
+			#p4@w5sW0rD_3k4d@T4
 			return {
-					'code': 404,
-					'message': 'API Key Is Not Same'
-				}
+				'code': 404,
+				'message': 'User Is Not Found'
+			}
+
+
 		
 	
 	@http.route("/account/verify/",auth='none',csrf=False, type='json')		
 	def verify_otp(self,**values):
 
 		headerData = request.httprequest.headers		
-		headerToken =  headerData.get('Apptoken')
-		
+				
 		body = request.jsonrequest
 		phone = body['phone']
 		otp = body['otp']
@@ -326,7 +309,7 @@ class TranshybridAccountApi(http.Controller):
 		if(self.check_empty_input_user(otp)):
 			return {
 					'code': 404,
-					'message': 'Phone Can Not Be Empty'
+					'message': 'OTP Can Not Be Empty'
 				}
 
 
@@ -354,93 +337,86 @@ class TranshybridAccountApi(http.Controller):
 
 
 
-		if(self.check_app_token(headerToken)):
-
-			resUserModel = request.env['res.users']
-			resUserTokenModel = request.env['res.users.token']
-			
-			dataPool = False
-			dataPhonePool = resUserModel.sudo().search([('partner_id.phone','=',phone)])
-			if(dataPhonePool):
-				dataPool = dataPhonePool
-			else:
-				dataPool = resUserModel.sudo().search([('login','=',phone)])
+		resUserModel = request.env['res.users']
+		resUserTokenModel = request.env['res.users.token']
+		
+		dataPool = False
+		dataPhonePool = resUserModel.sudo().search([('partner_id.phone','=',phone)])
+		if(dataPhonePool):
+			dataPool = dataPhonePool
+		else:
+			dataPool = resUserModel.sudo().search([('login','=',phone)])
 
 
-			if(dataPool):
+		if(dataPool):
 
-				for dataUser in dataPool:
-					dataUserToken = resUserTokenModel.sudo().search([('res_id','=',dataUser.id)],limit=1,order="id desc")
+			for dataUser in dataPool:
+				dataUserToken = resUserTokenModel.sudo().search([('res_id','=',dataUser.id)],limit=1,order="id desc")
+				
+				if(dataUserToken):
 					
-					if(dataUserToken):
+					dateOne = datetime.datetime.strptime(dataUserToken.time_token,"%Y-%m-%d %H:%M:%S")
+					temp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+					dateTwo = datetime.datetime.strptime(temp,"%Y-%m-%d %H:%M:%S")
+
+					totalSecond = dateTwo - dateOne
+					totalSecond = totalSecond.seconds
+
+					if(dataUserToken.token_data==int(otp)):
 						
-						dateOne = datetime.datetime.strptime(dataUserToken.time_token,"%Y-%m-%d %H:%M:%S")
-						temp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-						dateTwo = datetime.datetime.strptime(temp,"%Y-%m-%d %H:%M:%S")
+						
+						if(totalSecond<=TIME_OTP):		
 
-						totalSecond = dateTwo - dateOne
-						totalSecond = totalSecond.seconds
-
-						if(dataUserToken.token_data==int(otp)):
+							return {
+							  'code': 200,
+							  'message': 'Token Verify Success'
+							}
+						else:
 							
-							
-							if(totalSecond<=TIME_OTP):		
+							# dikembalikan ke login screen
+							return {
+								'code': 400,
+								'message': 'Has Timed Out After 3 Minutes'
+							}
 
-								return {
-								  'code': 200,
-								  'message': 'Token Verify Success'
-								}
-							else:
-								
-								# dikembalikan ke login screen
-								return {
-									'code': 400,
-									'message': 'Has Timed Out After 3 Minutes'
+					else:
+
+						if(totalSecond<=TIME_OTP):
+
+							# masih dihalaman yang sama
+							return {
+									'code': 403,
+									'message': 'Token Is Not Valid'
 								}
 
 						else:
 
-							if(totalSecond<=TIME_OTP):
+							# dikembalikan ke login screen
+							return {
+									'code': 400,
+									'message': 'Token Is Not Valid'
+								}
+				else:
 
-								# masih dihalaman yang sama
-								return {
-										'code': 403,
-										'message': 'Token Is Not Valid'
-									}
-
-							else:
-
-								# dikembalikan ke login screen
-								return {
-										'code': 400,
-										'message': 'Token Is Not Valid'
-									}
-					else:
-
-						return {
-							'code':400,
-							'message': 'Token Is Not Valid'
-						}
-						
-			else:
-
-				return {
-					'code': 404,
-					'message': 'User Is Not Found'
-				}
+					return {
+						'code':400,
+						'message': 'Token Is Not Valid'
+					}
+					
 		else:
 
 			return {
-					'code': 404,
-					'message': 'API Key Is Not Same'
-				}
+				'code': 404,
+				'message': 'User Is Not Found'
+			}
+
+
 
 	@http.route("/account/resetPassword/",auth='none',csrf=False,type='json')
 	def reset_password(self,**values):
 
 		headerData = request.httprequest.headers		
-		headerToken =  headerData.get('Apptoken')
-		
+				
 		body = request.jsonrequest
 		username = body['username']
 		password = body['password']
@@ -459,46 +435,39 @@ class TranshybridAccountApi(http.Controller):
 				}
 
 
-		if(self.check_app_token(headerToken)):
 
-			resUserModel = request.env['res.users']
-			changePasswordUserModel = request.env['change.password.user']
+
+		resUserModel = request.env['res.users']
+		changePasswordUserModel = request.env['change.password.user']
+		
+		
+
+		if(len(password)<5):
+			return {
+				"code": 422,
+				"message":"Password Minimum Length Must Be 5 Characters"
+			}
+
+
+		dataUser = resUserModel.sudo().search([
+							('login', '=', username)
+							])
+
+
+		if(dataUser):
+			dataUser.sudo(dataUser.id).password = password
 			
-			
-
-			if(len(password)<5):
-				return {
-					"code": 422,
-					"message":"Password Minimum Length Must Be 5 Characters"
-				}
-
-
-			dataUser = resUserModel.sudo().search([
-								('login', '=', username)
-								])
-
-
-			if(dataUser):
-				dataUser.sudo(dataUser.id).password = password
-				
-				return{
-					"code": 200,
-					"message": "Reset Password Success"
-				}
-
-			else:
-
-				return {
-				  "code": 404,
-				  "message": "User Is Not Found"
-				}
+			return{
+				"code": 200,
+				"message": "Reset Password Success"
+			}
 
 		else:
 
 			return {
-					"code": 404,
-					"message": "API Key Is Not Same"
-				}
+			  "code": 404,
+			  "message": "User Is Not Found"
+			}
 
 
 	def get_position_employee(self,paramUid):

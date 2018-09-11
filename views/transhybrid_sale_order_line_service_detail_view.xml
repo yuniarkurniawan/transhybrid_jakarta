@@ -19,10 +19,12 @@
                                 name="description"
                                 class="oe_inline"/>
 
+                            <field name="progress"/>
                             <field 
-                                name="progress"
+                                name="progress_bar"
                                 class="oe_inline"
-                                string="Progress"
+                                string="Last Progress"
+                                widget="progressbar"
                                 />
                         </group>
 

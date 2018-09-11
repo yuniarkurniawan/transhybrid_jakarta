@@ -272,6 +272,17 @@ class TranshybridSaleOrderLineModel(models.Model):
                                             (4,'Monitoring'),
                                             ],'State', default=1)
 
+    po_order_date                   =   fields.Datetime(related="order_id.date_order",string="Order Date")
+    po_rfs_date                     =   fields.Datetime(related="order_id.rfs_date",string="Order Date")
+    po_customer_name                =   fields.Many2one(related="order_id.partner_id",string="Customer Name")
+
+    po_state                    =     fields.Selection([('draft','Quotation'),
+                                            ('sent','Quotation Sent'),
+                                            ('sale','Sales Order'),
+                                            ('done','Locked'),
+                                            ('cancel','Cancelled')
+                                            ],'State',related="order_id.state")
+
     total_service                   =   fields.Integer('Total Service')
     service_id                      =   fields.Many2one('product.thc.service')
     sale_order_line_service_ids     =   fields.One2many('sale.order.line.service.model','sale_order_line_id')
@@ -368,17 +379,33 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
 
     sale_order_line_id          =   fields.Many2one('sale.order.line','Sale Order Line',ondelete='cascade',required=True)
-    
+    product_order_line          =   fields.Many2one(related="sale_order_line_id.product_id",string="Product")
+
+
     service_id                  =   fields.Many2one('product.thc.service',required=True)
     item_service_id             =   fields.Many2one('product.thc.service.detail',required=True)
     item_service_progress       =   fields.Many2one('product.thc.service.detail.progress')
 
     progress_bar_percentage     =   fields.Integer(related='item_service_progress.progress_percentage',string="Progress")
 
-    po_name                     =   fields.Char(related="sale_order_line_id.order_id.name_order",string="Po Number")
+    po_id                       =   fields.Integer(related="sale_order_line_id.order_id.id",store=True)
+    po_name                     =   fields.Char(related="sale_order_line_id.order_id.name_order",string="Po Number",store=True)
     company_name                =   fields.Many2one(related="sale_order_line_id.order_id.partner_id",string="Customer")
     po_order_date               =   fields.Datetime(related="sale_order_line_id.order_id.date_order",string="Order Date")
     rsf_date                    =   fields.Datetime(related="sale_order_line_id.order_id.rfs_date",string="RFS Date")
+    
+    po_state                    =     fields.Selection([('draft','Quotation'),
+                                            ('sent','Quotation Sent'),
+                                            ('sale','Sales Order'),
+                                            ('done','Locked'),
+                                            ('cancel','Cancelled')
+                                            ],'State',related="sale_order_line_id.order_id.state")
+
+
+
+    
+
+
 
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
