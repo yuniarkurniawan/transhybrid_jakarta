@@ -39,6 +39,7 @@
                     
                         <group>
                             <field name="state" invisible="1" />
+                            <field name="state_new" invisible="1"/>
                             <field 
                                 string="PO. Number" 
                                 name="name_order"
