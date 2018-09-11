@@ -202,6 +202,7 @@
                                 name="vendor_assign_order"
                                 class="oe_inline"
                                 string="Vendor Name" 
+                                options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
                                 required="1"                               
                                 />
 
