@@ -568,7 +568,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		
 		output = {}
 
-
+		
 		dataPool = generatedNumberModel.sudo().search([('is_image','=',True),('year','=',int(tmpYear)),('month','=',int(tmpMonth))])
 		tmpGenerateNumber = ""
 
@@ -613,10 +613,12 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		tmpTahun = str(now.year)
 		tmpBulan = str(now.month)
 		tmpHari = str(now.day)
+		
 
 
 		# YANG MEMBEDAKAN ADALAH TANGGAL DAN SERVICE IDNYA UNTUK BISA ONE2MANY KE IMAGE
-		dataPoolService = saleOrderLineServiceDetailModel.sudo().search([('sale_order_line_service_id','=',serviceId),('upload_date','=',uploadDate)])
+		dataPoolService = saleOrderLineServiceDetailModel.sudo().search([('sale_order_line_service_id.id','=',serviceId),('upload_date','=',uploadDate)])
+		
 		
 		if(len(dataPoolService)<=0):
 
@@ -666,7 +668,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 			dataServiceDetail.sudo().sale_order_line_serive_image_ids = listDataImageInputData	
 			
-			dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id','=',dataServiceDetail.id)])
+			dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id.id','=',dataServiceDetail.id)])
 			for outPool in dataImagePool:
 
 				imgdata = base64.decodestring(outPool.image)
@@ -687,9 +689,12 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			# UPDATE IMAGE BARU
 			for outMe in dataPoolService:
 
+				print " IIIIDDD :: ", outMe.id
+
 				# UPDATE PROGRESS BAR
 				modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
 				for serviceData in modelPool:
+					print " ======================== "
 					serviceData.item_service_progress = progressId
 
 
@@ -719,10 +724,26 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 							'address_image_name' : filename,	
 						}))
 
+
+				outMe.sudo().progress = progressId
 				outMe.sudo().sale_order_line_serive_image_ids = listDataImageInputData	
 				
+				'''
+					all_desc_value = {
+					'description_of_bridge' : ''.join(listOutPrintBridge),
+					'description_of_tracks' : ''.join(listOutPrintRoads),
+					'description_of_routine': ''.join(listOutPrintRoutine),
+					'description_of_land_status':''.join(listOutPrintStatus),
+				} 
+
+
+				outTask.sudo().write(all_desc_value)
+
+				'''
+
+
 				
-				dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id','=',outMe.id)],limit=1,order="id desc")
+				dataImagePool = saleOrderLineServiceImageModel.sudo().search([('sale_order_line_service_detail_id.id','=',outMe.id)],limit=1,order="id desc")
 				for outPool in dataImagePool:
 
 					imgdata = base64.decodestring(outPool.image)
