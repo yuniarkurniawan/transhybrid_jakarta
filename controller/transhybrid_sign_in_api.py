@@ -61,12 +61,18 @@ class TranshybridSignInApi(http.Controller):
 	@http.route("/signin/",auth='none',csrf=False, type='json')
 	def signIn(self,**values):
 
-		headers = {'Content-Type': 'application/json'}
+		headers = {'Content-Type': 'application/json','Status':400}
 		resUsersModel = request.env['res.users']
 		resUserTokenModel = request.env['res.users.token']
 
 		body = request.jsonrequest
 
+		'''
+		haduh = request.httprequest
+		print " ===========",haduh
+		print(type(haduh))
+		print(haduh.status_code)
+		'''
 
 		try:
 			username = body['username']
@@ -74,13 +80,16 @@ class TranshybridSignInApi(http.Controller):
 		except:
 			
 			output = {
-				'result':{
-					'code':404,
-					'message':'Username And Password Can Not Be Empty'
-				}
+				'code': 401,
+				'status':401,
+				'message':'Username And Password Can Not Be Empty',
 			}
 
+			Response.status = "400"
 			return output
+			#return output
+			#return Response(json.dumps(output),headers=headers)
+
 
 
 		headerData = request.httprequest.headers		
@@ -123,7 +132,7 @@ class TranshybridSignInApi(http.Controller):
 				listAvatar.append(str(uid.image))
 				outAvatar = ''.join(listAvatar)
 				
-				
+				Response.status = "200"
 				return{
 					"username": username,
 					"name": uid.name,
@@ -134,7 +143,7 @@ class TranshybridSignInApi(http.Controller):
 				}
 				
 			else:
-
+				Response.status = "404"
 				return {
 						  "code": 404,
 						  "message": "User Is Not Found"
@@ -143,6 +152,7 @@ class TranshybridSignInApi(http.Controller):
 
 		else:
 
+			Response.status = "404"
 			return {
 				  "code": 404,
 				  "message": "User And Password Is Not Found"

@@ -178,6 +178,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				}
 			}
 			
+			Response.status = "401"
 			return Response(json.dumps(output),headers=headers)
 
 		try:
@@ -205,7 +206,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 					listSaleOrder.append(new_dict_in)
 
-
+			Response.status = "200"
 			output = {
 				'result':listSaleOrder,
 				'code':200,
@@ -220,6 +221,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		
 		except:
 
+			Response.status = "400"
 			output = {
 				'result':listSaleOrder,
 				'code': 400,
@@ -253,6 +255,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		if(len(dataUserToken)==0):
 			
+			Response.status = "401"
 			output = {
 				'result':{
 					'code':401,
@@ -309,6 +312,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				listOutData.append(new_dict)
 
 
+			Response.status = "200"
 			output = {
 				'result':listOutData,
 				'code':200,
@@ -323,6 +327,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		
 		except:
 			
+			Response.status = "400"
 			output = {
 				'result':listOutData,
 				'code': 400,
@@ -356,6 +361,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		if(len(dataUserToken)==0):
 			
+			Response.status = "401"
 			output = {
 				'result':{
 					'code':401,
@@ -416,7 +422,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			listOutData.append(new_dict)
 
 
-
+		Response.status = "200"
 		output = {
 				'result':listOutData,
 				'code':200,
@@ -457,6 +463,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		if(len(dataUserToken)==0):
 			
+			Response.status = "401"
 			output = {
 				'result':{
 					'code':401,
@@ -491,6 +498,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			new_dict_up['list_progress'] = listOutData
 			new_dict_up['item_service_detail_id'] = int(tmpItemServiceId)
 
+			Response.status = "200"
 			output = {
 				'result':new_dict_up,
 				'code': 200,
@@ -504,6 +512,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		except:
 
+			Response.status = "200"
 			output = {
 				'result':new_dict_up,
 				'code': 200,
