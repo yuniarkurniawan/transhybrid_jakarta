@@ -13,10 +13,14 @@
                 	<field name="name" string="Order Number"/>
                     <field name="date_order"/>
                     <field name="partner_id"/>
+                    <field 
+                        name="long_days_work_order"
+                        string="Working Duration" />
+                    
                     <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="state" invisible="1"/>
-                    <field name="state_new"/>
+                    <field name="state_new" invisible="1"/>
                     <field name="percentage_task" widget="progressbar" string="Progress"/>
                 </tree>
             </field>

@@ -150,6 +150,108 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		return listingOrderId
 
+	def get_list_purchase_order_monitoring_by_user_login(self,paramUserId):
+
+		saleOrderModel = request.env['sale.order']
+		saleOrderDataPool = saleOrderModel.sudo().search([('state_new','=',4)])
+
+		listingOrderId = []
+		for outDataOrder in saleOrderDataPool:
+			for outDataOrderLine in outDataOrder.order_line:
+				for outDataService in outDataOrderLine.sale_order_line_service_ids:
+					if(outDataService.assign_to.id==int(paramUserId)):
+						listingOrderId.append(outDataOrder.id)
+
+
+		return listingOrderId
+
+
+	@http.route("/monitoring/purchase_order",auth="none",csrf=False,type='http',method='GET')
+	def get_purchase_order_monitoring_by_user(self,**values):
+
+		print "Monitoring"
+		headers = {'Content-Type': 'application/json'}
+		saleOrderModel = request.env['sale.order']
+		resUsersModel = request.env['res.users']
+
+		headerData = request.httprequest.headers		
+		headerTokenUser = headerData.get('token')
+
+		listSaleOrder = []
+		totalCountPo = 0
+
+		
+		resUserTokenModel = request.env['res.users.token']
+		dataUserToken = resUserTokenModel.sudo().search([('token_data','=',str(headerTokenUser))])
+		
+		if(len(dataUserToken)==0):
+			
+			output = {
+				'result':{
+					'code':401,
+					'message':'User Unauthorized'
+				}
+			}
+			
+			Response.status = "401"
+			return Response(json.dumps(output),headers=headers)
+
+		try:
+			
+			listing = self.get_list_purchase_order_monitoring_by_user_login(int(dataUserToken.res_id))
+
+			saleOrderData = saleOrderModel.sudo().search([('state_new','=',4),('id','in',listing)])
+			for outData in saleOrderData:
+
+					totalCountPo+=1
+
+					new_dict_in = {}	
+					new_dict_in['po_id'] = outData.id
+					new_dict_in['po_number'] = outData.name
+					new_dict_in['company_name'] = outData.partner_id.name
+
+					new_dict_in['order_date'] = self.date_to_string(outData.date_order)
+					new_dict_in['rfs_date'] = self.date_to_string(outData.rfs_date)
+
+					tmpTotalOrderProduct = 0
+					for outDataDetailProduct in outData.order_line:
+						tmpTotalOrderProduct+=1
+
+					new_dict_in['order_product'] = tmpTotalOrderProduct
+
+					listSaleOrder.append(new_dict_in)
+
+			Response.status = "200"
+			output = {
+				'result':listSaleOrder,
+				'code':200,
+				'message':'OK',
+				'meta':{
+					'limit':5,
+					'offset':5,
+					'count':totalCountPo
+				}
+			}
+		
+		
+		except:
+
+			Response.status = "400"
+			output = {
+				'result':listSaleOrder,
+				'code': 400,
+				'message':'Data Not Found',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+		
+
+		return Response(json.dumps(output),headers=headers)
+
+
 
 	@http.route("/list/purchase_order",auth="none",csrf=False,type='http',method='GET')
 	def get_purchase_order_by_user(self,**values):

@@ -5,6 +5,7 @@ import re
 from odoo.exceptions import ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
+import dateutil.parser
 
 API_KEY = "AIzaSyB22AKzqTK5SNaVcKasEyrtXhMLiGn5UUM"
 
@@ -43,7 +44,7 @@ class TranshybridSaleOrderModel(models.Model):
     state_new           =   fields.Selection([(1,'Prospect'),
                                             (2,'Deal'),
                                             (3,'In Progress'),
-                                            (4,'Monitoring'),
+                                            (4,'Closing'),
                                             (5,'Cancel'),
                                             ],'State', default=1)
 
@@ -52,13 +53,46 @@ class TranshybridSaleOrderModel(models.Model):
 
     deal_date           =   fields.Date('Deal Date')
     in_progres_date     =   fields.Date('Progress Date')
-    monitoring_date     =   fields.Date('Monitoring Date')
+    monitoring_date     =   fields.Datetime('Monitoring Date')
 
     percentage_task     =   fields.Float('Progress',compute='_compute_total_progress')
     spelled_out         =   fields.Text('Spelled Out',compute='_compute_spelled_out')
+    long_days_work_order  = fields.Char('Work Order Days')
 
     _sql_constraints = [('po_number_unique', 'unique(name_order)', 'Purchase Order Name Can Not Be Same.')]
 
+
+
+    def calculate_working_days(self,paramDateAwal,paramDateAkhir):
+
+        listOut = []
+
+        dateSatu = dateutil.parser.parse(paramDateAwal)
+        dateDua = dateutil.parser.parse(paramDateAkhir)
+
+        akhir = dateDua - dateSatu
+        days, hours, minutes = akhir.days, akhir.seconds // 3600, akhir.seconds // 60 % 60
+
+        listing = []
+        if(days!=0):
+            
+            if(days>=1):
+                listing.append(str(days))
+                listing.append(" days / ")
+            
+
+        if(hours!=0):
+            listing.append(str(hours))
+            if(hours>1):
+                listing.append(" hours ")
+            else:
+                listing.append(" hour ")
+
+        if(minutes!=0):
+            listing.append(str(minutes))
+            listing.append(" minutes")
+
+        return ''.join(listing)
 
 
     def push_pyfcm_multi(self, to_regids, message_title, message_body, data=False):
@@ -241,13 +275,21 @@ class TranshybridSaleOrderModel(models.Model):
     def action_monitoring(self):
 
         if(self.id):
+
+            tmpWorkingDays = self.calculate_working_days(self.date_order,date.today().strftime('%Y-%m-%d'))
+
             self.write({
                 'state_new':4,
                 'monitoring_date':date.today().strftime('%Y-%m-%d'),
+                'long_days_work_order': tmpWorkingDays,
             })
 
             for outData in self.order_line:
                 outData.state_new = 4
+
+
+
+
 
     '''
     @api.multi
@@ -441,13 +483,14 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     state_parent                =   fields.Selection([(1,'Prospect'),
                                             (2,'Deal'),
                                             (3,'In Progress'),
-                                            (4,'Monitoring'),
+                                            (4,'Closing'),
                                             ],'State',related="sale_order_line_id.state_new")
 
     percentage                  =   fields.Float('Percentage')
     progress_bar                =   fields.Float(related='percentage')
     sale_order_line_service_detail_ids =    fields.One2many('sale.order.line.service.detail.model','sale_order_line_service_id','Sale Order Line Service',required=True)
     
+
 
     @api.onchange('item_service_id')
     def onchange_price_service_item(self):

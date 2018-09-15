@@ -46,5 +46,17 @@
 			/>
 
 	
+
+		<!-- INVISIBLE MENU ITEM
+		<record id="make_invisible_transhybrid" model="res.groups">
+		    <field name="name">Invisible</field>
+		</record>
+
+		<record model="ir.ui.menu" id="mail.mail_channel_action_client_chat">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible_transhybrid')])]"/>
+		</record>
+	-->
+
+
 	</data>
 </openerp>

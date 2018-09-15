@@ -33,14 +33,16 @@
         #'views/transhybrid_sale_order_line_service_detail_report_view.xml',
 
         'views/transhybrid_sale_order_line_image_view.xml',
-        'views/transhybrid_email_server_configuration_view.xml',
+        #'views/transhybrid_email_server_configuration_view.xml',
         
-        'views/transhybrid_time_token_expired_configuration_view.xml',
+        #'views/transhybrid_time_token_expired_configuration_view.xml',
         'views/progressbar_view.xml',
         
         'views/transhybrid_sale_order_customer_report_view.xml',
         'views/transhybrid_sale_order_line_service_report_view.xml',
         'views/transhybrid_sale_order_monitoring_view.xml',
+        'views/transhybrid_sale_order_line_service_assign_to_report_view.xml',
+        #'views/transhybrid_example_pivot_view.xml',
         #'views/transhybrid_sale_order_line_product_report_view.xml',
 
         #'wizard/transhybrid_purchase_order_excel_tmpl_view.xml',

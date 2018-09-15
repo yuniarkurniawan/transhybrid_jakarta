@@ -96,12 +96,18 @@
                     <field name="partner_id"/>
                     <!--<field name="assign_to"/>-->
                     <!--<field name="user_id"/>-->
+                    <field 
+                        name="long_days_work_order"
+                        string="Working Duration" />
+                    
                     <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
                     <field name="currency_id" invisible="1"/>
                     <!--<field name="invoice_status"/>-->
                     <field name="state" invisible="1"/>
                     <field name="state_new"/>
+                    <!--
                     <field name="percentage_task" widget="progressbar" string="Progress"/>
+                    -->
                 </tree>
             </field>
         </record>
@@ -135,8 +141,19 @@
                                     attrs="{'invisible':[('state_new','in',(1,3,4,5))]}"
                                     />
 
+                            <!--
                             <button 
-                                    string="Monitoring" 
+                                    string="Closing" 
+                                    name="action_monitoring" 
+                                    class="oe_highlight"
+                                    confirm="Are You Sure To Monitor This Purchase Order ?" 
+                                    type="object"
+                                    attrs="{'invisible':['|',('percentage_task','&lt;',100),('state_new','in',(4,5))]}"
+                                    />
+                            -->
+
+                            <button 
+                                    string="Closing" 
                                     name="action_monitoring" 
                                     class="oe_highlight"
                                     confirm="Are You Sure To Monitor This Purchase Order ?" 
@@ -144,11 +161,12 @@
                                     attrs="{'invisible':['|',('percentage_task','&lt;',100),('state_new','in',(4,5))]}"
                                     />
 
+
                             <button 
                                 name="action_cancel" 
                                 string="Cancel" 
                                 type="object" 
-                                attrs="{'invisible':[('state_new','=',5)]}"
+                                attrs="{'invisible':[('state_new','in',(4,5))]}"
                                 />
                             
                         <field name="state_new" widget="statusbar" statusbar_visible="1,2,3,4,5"/>
@@ -277,6 +295,12 @@
                                 readonly="1"
                                 attrs="{'invisible':[('state_new','=',1)]}"
                                 />
+
+                            <field 
+                                name="monitoring_date"
+                                class="oe_inline"
+                                readonly="1"/>
+
                             <field 
                                 name="note" 
                                 string="Description"

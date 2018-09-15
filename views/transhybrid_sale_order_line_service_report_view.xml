@@ -10,12 +10,12 @@
             <field name="arch" type="xml">
                 <tree create="0" delete="0">
                 	<field name="po_name" string="Purchase Order"/>
+                    <field name="company_name" string="Customer"/>
                 	<field name="po_order_date" string="Date Order"/>
                     <field name="rsf_date" string="RFS Date"/>
                     <field name="product_order_line" string="Product" />
                     <field name="service_id" string="Service"/>
                     <field name="item_service_id" string="Item Service"/>
-                    <field name="company_name" string="Customer"/>
                     <field name="progress_bar_percentage" widget="progressbar" string="Progress"/>
                 </tree>
             </field>
