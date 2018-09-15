@@ -61,24 +61,26 @@ class TranshybridSignInApi(http.Controller):
 	@http.route("/signin/",auth='none',csrf=False, type='json')
 	def signIn(self,**values):
 
+		headers = {'Content-Type': 'application/json'}
 		resUsersModel = request.env['res.users']
 		resUserTokenModel = request.env['res.users.token']
 
 		body = request.jsonrequest
-		username = body['username']
-		password = body['password']
 
-		if(self.check_empty_input_user(username)):
-			return {
-					'code': 404,
-					'message': 'Username Can Not Be Empty'
-				}
 
-		if(self.check_empty_input_user(password)):
-			return {
-					'code': 404,
-					'message': 'Password Can Not Be Empty'
+		try:
+			username = body['username']
+			password = body['password']
+		except:
+			
+			output = {
+				'result':{
+					'code':404,
+					'message':'Username And Password Can Not Be Empty'
 				}
+			}
+
+			return output
 
 
 		headerData = request.httprequest.headers		
