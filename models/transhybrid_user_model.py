@@ -41,7 +41,7 @@ class TranshybridUserManagementToken(models.Model):
 	_order = "id desc"
 
 	res_id		=	fields.Many2one('res.users',string='Token')
-	token_data	=	fields.Integer('Token',size=4)
+	token_data	=	fields.Char('Token')
 	time_token	=	fields.Datetime('Token Time',default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
 	
 

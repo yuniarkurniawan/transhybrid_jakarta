@@ -10,9 +10,26 @@ import json
 import os
 import base64
 
+
+import os
+from random import SystemRandom
+import binascii
+
+
 APPTOKEN = 'Project Transhybrid Ekadata'
+DEFAULT_ENTROPY = 32
 
 class TranshybridSignInApi(http.Controller):
+
+
+	def token_bytes(self,nbytes=None):
+		if(nbytes is None):
+			nbytes = DEFAULT_ENTROPY
+
+		return os.urandom(nbytes)
+
+	def token_hex(self, nbytes=None):
+		return binascii.hexlify(self.token_bytes(nbytes)).decode('ascii')
 
 
 	def check_app_token(self,paramAppToken):
@@ -45,6 +62,7 @@ class TranshybridSignInApi(http.Controller):
 	def signIn(self,**values):
 
 		resUsersModel = request.env['res.users']
+		resUserTokenModel = request.env['res.users.token']
 
 		body = request.jsonrequest
 		username = body['username']
@@ -81,18 +99,33 @@ class TranshybridSignInApi(http.Controller):
 
 		if(uid):
 
-			
 			dataUser = resUsersModel.sudo().search([('id','=',uid.id)],limit=1,order="id desc")
 			if(dataUser):
+
+				tokenNumber = self.token_hex()
+				tokenNumber = str(tokenNumber)
+				
+				dataUserToken = resUserTokenModel.sudo().search([('res_id','=',int(dataUser.id))],limit=1,order="id desc")
+				if(dataUserToken):
+					# JIKA SUDAH ADA MAKA UPDATE
+					for outTokenNumber in dataUserToken:
+						outTokenNumber.token_data = tokenNumber
+
+				else:
+					# JIKA BELUM ADA INPUT BARU
+					resUserTokenModel.sudo().create({'res_id':dataUser.id,'token_data':tokenNumber})
+
 
 				listAvatar = []
 				listAvatar.append(str("data:image/png;base64,"))
 				listAvatar.append(str(uid.image))
 				outAvatar = ''.join(listAvatar)
 				
+				
 				return{
 					"username": username,
 					"name": uid.name,
+					"token":tokenNumber,
 					"avatar": outAvatar,
 					"code" : 200,
 					"message" : "OK",

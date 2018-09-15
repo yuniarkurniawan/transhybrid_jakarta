@@ -605,6 +605,7 @@ class TranshybridSaleOrderLineServiceDetailModel(models.Model):
     #po_order_date               =   fields.Datetime(related="sale_order_line_service_id.sale_order_line_id.order_id.date_order",string="Order Date")
     #rsf_date                    =   fields.Datetime(related="sale_order_line_service_id.sale_order_line_id.order_id.rfs_date",string="RFS Date")
 
+    upload_id    = fields.Char('Upload Random Id')
     service_name = fields.Char(related="sale_order_line_service_id.service_id.name")
     item_service_name = fields.Char(related="sale_order_line_service_id.item_service_id.name")
     company_name  =   fields.Many2one(related="sale_order_line_service_id.sale_order_line_id.order_id.partner_id",string="Customer")
