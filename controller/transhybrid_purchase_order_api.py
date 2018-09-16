@@ -211,6 +211,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 					new_dict_in['company_name'] = outData.partner_id.name
 
 					new_dict_in['order_date'] = self.date_to_string(outData.date_order)
+					new_dict_in['isClosedOrder'] = True
 					new_dict_in['rfs_date'] = self.date_to_string(outData.rfs_date)
 
 					tmpTotalOrderProduct = 0
