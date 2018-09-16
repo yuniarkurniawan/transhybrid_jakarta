@@ -395,13 +395,14 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 						if(dataUserToken.res_id.id!=int(outDataDetailProductService.assign_to.id)):
 							continue
 
+						print "Percentage : ", outDataDetailProductService.progress_bar_percentage
 						new_dict_in_service = {}
 						new_dict_in_service['service_id'] = outDataDetailProductService.id
 						new_dict_in_service['service_name'] = outDataDetailProductService.service_id.name
 						new_dict_in_service['item_service_name'] = outDataDetailProductService.item_service_id.name
 
 						new_dict_in_service['address'] = outDataDetailProductService.address
-						new_dict_in_service['progress'] = str(outDataDetailProductService.percentage) + " %"
+						new_dict_in_service['progress'] = str(outDataDetailProductService.progress_bar_percentage) + " %"
 
 						listService.append(new_dict_in_service)
 
@@ -783,6 +784,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
 			for serviceData in modelPool:
 				serviceData.item_service_progress = progressId
+
+				# DISINI
+				# serviceData.percentage = 
 
 
 
