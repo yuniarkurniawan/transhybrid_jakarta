@@ -396,7 +396,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 						if(dataUserToken.res_id.id!=int(outDataDetailProductService.assign_to.id)):
 							continue
 
-						print "Percentage : ", outDataDetailProductService.progress_bar_percentage
 						new_dict_in_service = {}
 						new_dict_in_service['service_id'] = outDataDetailProductService.id
 						new_dict_in_service['service_name'] = outDataDetailProductService.service_id.name
@@ -409,7 +408,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 					new_dict_in['detail_service'] = listService
 
-					listProdcutDetailPurchaseOrder.append(new_dict_in)
+
+					if(len(listService)>0):
+						listProdcutDetailPurchaseOrder.append(new_dict_in)
 
 
 				new_dict['product_detail'] = listProdcutDetailPurchaseOrder
