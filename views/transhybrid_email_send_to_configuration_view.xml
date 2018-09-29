@@ -1,0 +1,56 @@
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="transhybrid_email_sendto_configuration_tree_view">
+			<field name="name">transhybrid.email.sendto.configuration.tree.view</field>
+			<field name="model">transhybrid.configuration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Konfigurasi" editable="bottom">
+                    <field string="Email Send To" name="email_send_to" />
+					<field string="Description" name="email_send_to_description"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="transhybrid_email_sendto_configuration_search">
+			<field name="name">transhybrid.email.sendto.configuration.search</field>
+			<field name="model">transhybrid.configuration</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Pencarian Konfigurasi">
+					<!--<field string="Nama" name="name"/>-->
+				</search>
+			</field>
+		</record>
+        
+        <record id="transhybrid_email_sendto_configuration_action" model="ir.actions.act_window">
+			<field name="name">Email Send To</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">transhybrid.configuration</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>			
+			<!--<field name="search_view_id" ref="ig_configuration_search" />-->
+			<field name="context">{}</field>
+			<field name="domain">[('is_email_send_to','=',True)]</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+					You can create, update and delete Data.
+				</p>
+			</field>
+		</record>
+        
+		<record model="ir.actions.act_window.view" id="action_transhybrid_email_sendto_configuration_tree_view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="transhybrid_email_sendto_configuration_tree_view"/>
+			<field name="act_window_id" ref="transhybrid_email_sendto_configuration_action"/>
+		</record>
+		
+		<menuitem 
+			action="transhybrid_email_sendto_configuration_action" 
+			sequence="2"
+		    id="transhybrid_email_sendto_configuration_action_menu"
+		    parent="sub_menu_configuration_data_transhybrid" />
+		
+	</data>
+</odoo>

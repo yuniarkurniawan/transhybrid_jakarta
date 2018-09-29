@@ -25,3 +25,9 @@ class TranshybridConfiguration(models.Model):
 	is_time_token_configuration = fields.Boolean('Is Time Token')
 	time_token_description = fields.Text('Description')
 	# ----- end time token expired configuration
+
+
+	# ----- begin email send to configuration
+	email_send_to		=	fields.Char('Penerima Email',size=100)
+	is_email_send_to	=	fields.Boolean('Is Email Send to')
+	email_send_to_description = fields.Text('Description')

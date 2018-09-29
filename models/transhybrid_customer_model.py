@@ -22,6 +22,21 @@ class TranshybridCustomerModel(models.Model):
 
 
 	@api.multi
+	def name_get(self):
+
+		res = []
+		for record in self:
+
+			listName = []
+			listName.append(str(record.customer_code))
+			listName.append(" - ")
+			listName.append(str(record.name))
+			res.append((record.id, ''.join(listName)))
+
+		return res
+
+
+	@api.multi
 	def generate_customer_number(self):
 
 		now = datetime.now()

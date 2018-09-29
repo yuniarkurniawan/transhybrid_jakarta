@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+
+        <record id="default_email_send_to" model="transhybrid.configuration">
+            <field name="email_send_to">it@ekadata.net.id</field>
+            <field name="is_email_send_to">True</field>
+            <field name="email_send_to_description">Description</field>
+        </record>
+
+        <record id="default_email_sender" model="transhybrid.configuration">
+            <field name="email_user">Email Sender</field>
+            <field name="email_sender">user.testing.transhybrid.jkt@gmail.com</field>
+            <field name="email_password">p4@w5sW0rD_3k4d@T4</field>
+            <field name="is_email_server_configuration">True</field>
+            <field name="email_host">smtp.gmail.com</field>
+            <field name="email_port">587</field>
+            <field name="email_server_description">Description</field>
+        </record>
+
+
+	</data>
+</odoo>

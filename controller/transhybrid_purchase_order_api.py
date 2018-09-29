@@ -4,6 +4,8 @@ import dateutil.parser
 import hashlib
 
 import datetime
+#from datetime import datetime, date, timedelta
+
 import time
 import dateutil.parser
 import pytz
@@ -543,6 +545,235 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return Response(json.dumps(output),headers=headers)
 
 
+	def get_month_data(self,paramMonth):
+
+		tmpParamMonth = int(paramMonth)
+		tmpOutMonth =  ""
+
+		if(tmpParamMonth==1):
+			tmpOutMonth = "Januari"
+		elif(tmpParamMonth==2):
+			tmpOutMonth = "Februari"
+		elif(tmpParamMonth==3):
+			tmpOutMonth = "Maret"
+		elif(tmpParamMonth==4):
+			tmpOutMonth = "April"
+		elif(tmpParamMonth==5):
+			tmpOutMonth = "Mei"
+		elif(tmpParamMonth==6):
+			tmpOutMonth = "Juni"
+		elif(tmpParamMonth==7):
+			tmpOutMonth = "Juli"
+		elif(tmpParamMonth==8):
+			tmpOutMonth = "Agustus"
+		elif(tmpParamMonth==9):
+			tmpOutMonth = "September"
+		elif(tmpParamMonth==10):
+			tmpOutMonth = "Oktober"
+		elif(tmpParamMonth==11):
+			tmpOutMonth = "Nopember"
+		else:
+			tmpOutMonth = "Desember"
+
+		return tmpOutMonth
+
+
+	def get_day_data(self,paramDay):
+
+		
+		tmpOutDay =  ""
+
+		paramDay = paramDay.upper()
+		if(paramDay=='SATURDAY'):
+			tmpOutDay = "Sabtu"
+		elif(paramDay=='SUNDAY'):
+			tmpOutDay = "Minggu"
+		elif(paramDay=='MONDAY'):
+			tmpOutDay = "Senin"
+		elif(paramDay=='TUESDAY'):
+			tmpOutDay = "Selasa"
+		elif(paramDay=='WEDNESDAY'):
+			tmpOutDay = "Rabu"
+		elif(paramDay=='THURSDAY'):
+			tmpOutDay = "Kamis"
+		else:
+			tmpOutDay = "Jumat"
+		
+		return tmpOutDay	
+
+
+
+	@http.route("/prepare_upload_bapap/<serviceId>",auth="none",csrf=False,type='http')
+	def get_prepare_upload_balap(self,serviceId,**values):
+
+		headers = {'Content-Type': 'application/json'}
+		headerData = request.httprequest.headers		
+		headerTokenUser = headerData.get('token')
+
+
+		saleOrderLineServiceModel  = request.env['sale.order.line.service.model']
+		productServiceDetailPorgressModel = request.env['product.thc.service.detail.progress']
+		productThcServicedetailModel = request.env['product.thc.service.detail']
+
+
+		listOutData = []
+		new_dict_up = {}
+
+		output = {}
+		tmpItemServiceId = ""
+		tmpServiceId = ""
+
+		resUserTokenModel = request.env['res.users.token']
+		dataUserToken = resUserTokenModel.sudo().search([('token_data','=',str(headerTokenUser))])
+
+		if(len(dataUserToken)==0):
+			
+			Response.status = "401"
+			output = {
+				'result':{
+					'code':401,
+					'message':'User Unauthorized'
+				}
+			}
+			
+			return Response(json.dumps(output),headers=headers)
+
+
+		#try:
+			
+		tmpYear = datetime.date.today().strftime("%Y")
+		
+
+		tmpMonth = datetime.date.today().strftime("%m")
+		
+		tmpMonth = self.get_month_data(int(tmpMonth))
+		tmpDay = datetime.date.today().strftime("%d")
+		tmpDaySpell = datetime.date.today().strftime("%A")
+
+		
+		new_dict_up['hari'] = self.get_day_data(tmpDaySpell)
+		new_dict_up['tanggal'] = tmpDay
+		new_dict_up['bulan'] = tmpMonth
+		
+		new_dict_up['tahun'] = tmpYear
+		
+
+		new_dict_up['user_name'] = dataUserToken.res_id.name
+		new_dict_up['user_position'] = "Employee"
+		new_dict_up['user_phone'] = dataUserToken.res_id.user_phone
+
+		outServicePool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+		
+
+		for outService in outServicePool:
+
+			new_dict_up['product_name'] = outService.sale_order_line_id.product_id.name 
+			new_dict_up['customer_id'] = outService.sale_order_line_id.order_id.partner_id.customer_code
+			new_dict_up['service_name'] = outService.service_id.name
+			new_dict_up['item_service_name'] = outService.item_service_id.name
+
+			new_dict_up['destination'] = ""
+			new_dict_up['customer_name'] = outService.sale_order_line_id.order_id.partner_id.name
+			new_dict_up['customer_address'] = outService.sale_order_line_id.order_id.partner_id.street
+			
+			new_dict_up['customer_pic'] = outService.pic
+			new_dict_up['customer_position'] = ""
+			
+			if(outService.sale_order_line_id.order_id.partner_id.phone!=False):
+				new_dict_up['customer_phone'] = outService.sale_order_line_id.order_id.partner_id.phone
+			else:
+				new_dict_up['customer_phone'] = " - "
+
+			if(outService.sale_order_line_id.order_id.partner_id.fax!=False):
+				new_dict_up['customer_fax'] = outService.sale_order_line_id.order_id.partner_id.fax
+			else:
+				new_dict_up['customer_fax'] = " - "
+
+			if(outService.sale_order_line_id.order_id.partner_id.email!=False):
+				new_dict_up['customer_email'] = outService.sale_order_line_id.order_id.partner_id.email
+			else:
+				new_dict_up['customer_email'] = " - "
+
+
+			
+
+
+		# KETERANGAN BALAP
+		'''
+		new_dict_up['hari'] = 
+		new_dict_up['tanggal'] = 
+		new_dict_up['bulan'] = 
+		
+		new_dict_up['tahun'] = 
+		new_dict_up['product_name'] = 
+
+
+		# USER PELAKSANA
+		new_dict_up['user_name'] = dataUserToken.res_id.name
+		new_dict_up['user_position'] = "Employee"
+		new_dict_up['user_phone'] = dataUserToken.res_id.user_phone
+		new_dict_up['user_email'] = 
+
+
+		# JASA
+		new_dict_up['customer_id'] = 
+		new_dict_up['service_name'] = 
+		new_dict_up['item_service_name'] = 
+		new_dict_up['destination'] = 
+
+
+		# LOKASI PELANGGAN
+		new_dict_up['customer_name'] = 
+		new_dict_up['customer_address'] = 
+		new_dict_up['customer_pic'] = 
+		new_dict_up['customer_position']
+		new_dict_up['customer_phone'] =
+		new_dict_up['customer_fax'] = 
+		new_dict_up['customer_email'] = 
+
+
+		new_dict_up['service_id'] = serviceId
+		new_dict_up['service_ct_id'] = tmpServiceId
+		new_dict_up['list_progress'] = listOutData
+		new_dict_up['item_service_detail_id'] = int(tmpItemServiceId)
+		'''
+
+		Response.status = "200"
+		output = {
+			'result':new_dict_up,
+			'code': 200,
+			'message':'OK',
+			'meta':{
+				'limit':0,
+				'offset':0,
+				'count':0
+			}
+		}
+
+		'''
+		except:
+
+			#Response.status = "200"
+			Response.status = "400"
+			output = {
+				'result':new_dict_up,
+				'code': 200,
+				'message':'OK',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
+			}
+		'''
+
+		return Response(json.dumps(output),headers=headers)
+
+
+
+
+
+
 
 	@http.route("/prepare_upload_image/<serviceId>",auth="none",csrf=False,type='http')
 	def get_prepare_upload_image(self,serviceId,**values):
@@ -587,7 +818,11 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				tmpServiceId = outSaleLineService.service_id.id
 
 
+			#listProgressData = productServiceDetailPorgressModel.sudo().search([('item_service_detail_id','=',int(tmpItemServiceId))])
+			
+
 			listProgressData = productServiceDetailPorgressModel.sudo().search([('item_service_detail_id','=',int(tmpItemServiceId))])
+			
 			for outData in listProgressData:
 
 				new_dict = {}
@@ -617,7 +852,8 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 		except:
 
-			Response.status = "200"
+			#Response.status = "200"
+			Response.status = "400"
 			output = {
 				'result':new_dict_up,
 				'code': 200,

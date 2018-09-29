@@ -33,7 +33,8 @@
         #'views/transhybrid_sale_order_line_service_detail_report_view.xml',
 
         'views/transhybrid_sale_order_line_image_view.xml',
-        #'views/transhybrid_email_server_configuration_view.xml',
+        'views/transhybrid_email_server_configuration_view.xml',
+        'views/transhybrid_email_send_to_configuration_view.xml',
         
         #'views/transhybrid_time_token_expired_configuration_view.xml',
         'views/progressbar_view.xml',
@@ -49,7 +50,6 @@
         #'wizard/transhybrid_purchase_order_excel_wizard_view.xml',
 
 
-        'data/transhybrid_email_server_configuration_data.xml',
         'data/transhybrid_time_token_expired_data.xml',
         'data/l10n_id_chart_data.xml',
         'data/account.account.template.csv',
@@ -58,12 +58,13 @@
         'data/account.tax.template.csv',
         'data/res.country.state.csv',
         'data/account_chart_template_data.yml',
+        'data/init-data.xml',
 
         'report/transhybrid_po_service_item_report_pdf_template_view.xml',
         'report/transhybrid_po_service_item_report_view.xml',
 
 
-        'security/user_data_security.xml',
+        'security/security.xml',
         
     ],
     
