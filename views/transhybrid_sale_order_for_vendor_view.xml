@@ -302,6 +302,7 @@
                             <field 
                                 string="Order Detail" 
                                 name="order_line"
+                                context = "{'vendor': vendor_assign_order}"
                                 >
                                 
                                 <!--

@@ -299,6 +299,7 @@
                             <field 
                                 name="monitoring_date"
                                 class="oe_inline"
+                                attrs="{'invisible':[('state_new','in',(1,2,3))]}"
                                 readonly="1"/>
 
                             <field 

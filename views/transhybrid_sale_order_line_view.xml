@@ -98,6 +98,19 @@
                                 	class="oe_inline"
                                 	/>
 
+                                <!--
+                                <field 
+                                    name="po_order_is_vendor"
+                                    readonly="context.get('is_mine')"/>
+                                -->
+
+                                <field 
+                                    name="po_default_vendor"
+                                    class="oe_inline" 
+                                    invisible="1"/>
+                                
+
+                                
                                 <field name="qty_delivered_updateable" invisible="1"/>
                                 <field name="procurement_ids" invisible="1"/>
                                 <field name="state" invisible="1"/>
@@ -131,6 +144,7 @@
                                 <field 
 									name="total_service"
 									string="Total"
+                                    context = "{'vendor': po_default_vendor}"
 									class="oe_inline"
 									 />
 
@@ -162,11 +176,14 @@
 
                                         <field 
                                             name="assign_to_choise"
-                                            string="Assign To"/>
+                                            context = "{'vendor': parent.po_default_vendor}"
+                                            string="Assign To"
+                                            invisible="1"/>
 
                                         <field 
                                             name="assign_to"
                                             string="PIC Assign"
+                                            context = "{'vendor': parent.po_default_vendor}"
                                             options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
 
                                             />

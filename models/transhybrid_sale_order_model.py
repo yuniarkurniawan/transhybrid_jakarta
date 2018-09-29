@@ -6,6 +6,8 @@ from odoo.exceptions import ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 import dateutil.parser
+import os
+
 
 API_KEY = "AIzaSyB22AKzqTK5SNaVcKasEyrtXhMLiGn5UUM"
 
@@ -183,6 +185,20 @@ class TranshybridSaleOrderModel(models.Model):
         return ''.join(listPoNumber) 
 
 
+    @api.onchange('vendor_assign_order')
+    def get_vendor_pic(self):
+
+        listUserUnderPic = []
+        resUserModel = self.env['res.users']
+
+        if(self.vendor_assign_order):
+
+            dataUserPic = resUserModel.search([('user_condition','=',2),('user_company','=',self.vendor_assign_order.id),('is_manager_other_company','=',1)])
+            for dataUser in dataUserPic:
+                listUserUnderPic.append(dataUser.id)
+
+        return {'domain': {'assign_to_by_vendor': [('id', 'in', listUserUnderPic)]}}
+
 
     @api.model
     def create(self, values):
@@ -271,35 +287,77 @@ class TranshybridSaleOrderModel(models.Model):
                 })
 
 
+    def get_address_base_progress_image(self):
+        
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        path = path.split('/')
+        panjang = len(path)
+
+        listAddres = []
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        
+        listAddres.append(str(base_url))
+        listAddres.append("/")
+        listAddres.append(str(path[panjang-2]))
+        listAddres.append("/static/upload_progress_image/")
+
+        return ''.join(listAddres)
+
+
+    def get_base_path_image_data(self):
+
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        path = path.split('/')
+        panjang = len(path)
+
+
+        listAddres = []     
+        for out in path:
+    
+            if(str(out) == path[-1]):
+                break
+
+            listAddres.append(str(out))
+            listAddres.append("/")
+
+
+        listAddres.append("static/upload_progress_image/")
+
+        return ''.join(listAddres)
+
+
+
     @api.multi
     def action_monitoring(self):
 
         if(self.id):
 
             tmpWorkingDays = self.calculate_working_days(self.date_order,date.today().strftime('%Y-%m-%d'))
+            tmpBaseDirImage = self.get_base_path_image_data()
 
+            
             self.write({
                 'state_new':4,
                 'monitoring_date':date.today().strftime('%Y-%m-%d'),
                 'long_days_work_order': tmpWorkingDays,
             })
+            
 
             for outData in self.order_line:
                 outData.state_new = 4
+                
+                for outDataInOne in outData.sale_order_line_service_ids:
+                    for outDataInTwo in outDataInOne.sale_order_line_service_detail_ids:
+                        for outDataInThree in outDataInTwo.sale_order_line_serive_image_ids:
+                            tmpBaseDirImage = tmpBaseDirImage + str(outDataInThree.address_image_name)
+                                                        
+                            try:
+                                os.remove(tmpBaseDirImage)
+                            except:
+                                pass
+                            
+                            
 
-
-
-
-
-    '''
-    @api.multi
-    def write(self, vals):
-
-        if(self):
-            print " :::::::: "
-
-        return super(TranshybridSaleOrderModel, self).write(vals) 
-    '''
 
 
 class TranshybridSaleOrderLineModel(models.Model):
@@ -308,6 +366,13 @@ class TranshybridSaleOrderLineModel(models.Model):
     _inherit = 'sale.order.line'
 
 
+    @api.model
+    def _get_default_partner(self):
+
+        vendor = self.env.context.get('vendor')
+        return vendor
+        
+
     state_new   =   fields.Selection([(1,'Prospect'),
                                             (2,'Deal'),
                                             (3,'In Progress'),
@@ -315,6 +380,7 @@ class TranshybridSaleOrderLineModel(models.Model):
                                             ],'State', default=1)
 
     po_order_date                   =   fields.Datetime(related="order_id.date_order",string="Order Date")
+    po_default_vendor               =   fields.Many2one("res.partner", default=lambda self: self._get_default_partner(),string="Default Partner")
     po_rfs_date                     =   fields.Datetime(related="order_id.rfs_date",string="Order Date")
     po_customer_name                =   fields.Many2one(related="order_id.partner_id",string="Customer Name")
 
@@ -332,7 +398,7 @@ class TranshybridSaleOrderLineModel(models.Model):
     price_unit_compute              =   fields.Float('Price Unit Compute',compute='_compute_price_unit')
     
 
-
+    
     @api.depends('sale_order_line_service_ids')
     def _compute_price_unit(self):
 
@@ -351,7 +417,6 @@ class TranshybridSaleOrderLineModel(models.Model):
 
         val = {}
         listDetailServicePickup = []
-
 
         # JIKA SUDAH ADA ORDER LINE SEBELUMNYA
         if(self.sale_order_line_service_ids):
@@ -389,11 +454,18 @@ class TranshybridSaleOrderLineModel(models.Model):
 
             if(self.service_id):
 
+                vendor = self.env.context.get('vendor')
+                print "Vendor ::: ", vendor
+                tmpChoise = 1
+                if(vendor):
+                    tmpChoise = 2
+
                 index = 1
                 while(index<=self.total_service):
 
                     listDetailServicePickup.append((0,0,{
                             'service_id' : self.service_id.id,
+                            'assign_to_choise':tmpChoise,
                             #'total_item_service' : 1,   
                                              
                         }))
@@ -418,6 +490,43 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     _name="sale.order.line.service.model"
     _description = "Sale Order Line Service Model"
     _order = "id asc"
+
+
+
+    @api.model
+    def _get_default_choise(self):
+
+        vendor = self.env.context.get('vendor')
+        
+        if(vendor):
+            return 2
+        else:
+            return 1
+
+
+    @api.model
+    def _get_filter_user(self):
+
+        vendor = self.env.context.get('vendor') 
+        listUserUnderPic = []
+        resUserModel = self.env['res.users']
+
+        if(vendor):
+
+            dataUserPic = resUserModel.search([('user_condition','=',2),('user_company','=',vendor),('is_manager_other_company','=',2)])
+            for dataUser in dataUserPic:
+                listUserUnderPic.append(dataUser.id)
+            
+        else:
+            
+            dataUserPic = resUserModel.search([('user_condition','=',1)])
+            for dataUser in dataUserPic:
+                listUserUnderPic.append(dataUser.id)
+
+                    
+        return [
+            ('id','in',listUserUnderPic)
+        ]
 
 
     sale_order_line_id          =   fields.Many2one('sale.order.line','Sale Order Line',ondelete='cascade',required=True)
@@ -451,9 +560,11 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
-                                    (2,'Vendor')],'Assign To',default=1,required=True)
+                                    (2,'Vendor')],'Assign To',
+                                    domain=_get_default_choise)
 
-    assign_to           =   fields.Many2one('res.users',string='Assign To',required=True)
+    assign_to           =   fields.Many2one('res.users',string='Assign To',
+                                domain=_get_filter_user,required=True)
     price_service       =   fields.Float('Price Service',required=True)
 
     # fields.Float(related='substation.longitude',string='Longitude',readonly=True)
