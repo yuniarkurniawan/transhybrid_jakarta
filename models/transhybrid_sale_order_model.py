@@ -305,16 +305,17 @@ class TranshybridSaleOrderModel(models.Model):
         listServiceItem = []
         if(self.id):
             
-            
+            '''
             self.write({
                 'state_new':2,
                 'deal_date':date.today().strftime('%Y-%m-%d')
             })
+            '''
             
 
             number = 1
             for outData in self.order_line:
-                outData.state_new = 2
+                #outData.state_new = 2
 
                 for outDataService in outData.sale_order_line_service_ids:
                     if(outDataService.service_id.need_email_notif==2):
@@ -356,7 +357,7 @@ class TranshybridSaleOrderModel(models.Model):
 
 
                     
-        '''
+        
         if(kondisi):
 
             tmpHostEmail = ""
@@ -434,20 +435,18 @@ class TranshybridSaleOrderModel(models.Model):
             msg.attach(MIMEText(tmpMessageEmail))
 
             try:
-                server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
+                server = smtplib.SMTP_SSL(tmpHostEmail, int(tmpPortEmail))
                 server.ehlo()
-                server.starttls()
                 server.login(tmpPengirimEmail, tmpPasswordEmail)
 
                 server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
                 server.quit()
 
             except (smtplib.SMTPException), e:
-                print DEBUGSTREAM, 'got', e.__class__
                 raise ValidationError(_('Information :  Email Is Failed To Be Sent'))
 
 
-        '''
+        
 
 
     @api.multi
