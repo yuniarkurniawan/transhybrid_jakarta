@@ -305,16 +305,16 @@ class TranshybridSaleOrderModel(models.Model):
         listServiceItem = []
         if(self.id):
             
-            '''
+            
             self.write({
                 'state_new':2,
                 'deal_date':date.today().strftime('%Y-%m-%d')
             })
-            '''
+            
 
             number = 1
             for outData in self.order_line:
-                #outData.state_new = 2
+                outData.state_new = 2
 
                 for outDataService in outData.sale_order_line_service_ids:
                     if(outDataService.service_id.need_email_notif==2):
