@@ -305,16 +305,17 @@ class TranshybridSaleOrderModel(models.Model):
         listServiceItem = []
         if(self.id):
             
-            
+            '''
             self.write({
                 'state_new':2,
                 'deal_date':date.today().strftime('%Y-%m-%d')
             })
+            '''
             
 
             number = 1
             for outData in self.order_line:
-                outData.state_new = 2
+                #outData.state_new = 2
 
                 for outDataService in outData.sale_order_line_service_ids:
                     if(outDataService.service_id.need_email_notif==2):
@@ -437,9 +438,9 @@ class TranshybridSaleOrderModel(models.Model):
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.ehlo()
             server.starttls()
-            server.login('user.testing.transhybrid.jkt@gmail.com', 'p4@w5sW0rD_3k4d@T4')
+            server.login('yuniar.kurniawan.suroso@gmail.com', 'p3rUb4h@n11')
 
-            server.sendmail('user.testing.transhybrid.jkt@gmail.com', 'younee11@gmail.com', msg.as_string())
+            server.sendmail('yuniar.kurniawan.suroso@gmail.com', 'younee11@gmail.com', msg.as_string())
             server.close()
 
             #except (smtplib.SMTPException), e:
