@@ -8,6 +8,14 @@ import time
 import dateutil.parser
 import os
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.mime.text import MIMEText
+
+import email
+import email.encoders
+import smtplib
+
 
 API_KEY = "AIzaSyB22AKzqTK5SNaVcKasEyrtXhMLiGn5UUM"
 
@@ -252,17 +260,193 @@ class TranshybridSaleOrderModel(models.Model):
         return x.title()
         
 
+
+    def get_email_server_configuration(self):
+
+        listEmailConfiguration = []
+        configurationModel = self.env['transhybrid.configuration']
+        configurationPool = configurationModel.search([('is_email_server_configuration','=',True)])
+
+        if(configurationPool):
+            for outData in configurationPool:
+
+                new_dict={}
+                new_dict['email_host'] = outData.email_host
+                new_dict['email_port'] = outData.email_port
+                new_dict['email_sender'] = outData.email_sender
+
+                new_dict['email_password'] = outData.email_password
+                listEmailConfiguration.append(new_dict)
+
+        return listEmailConfiguration
+
+
+    def get_email_send_to_configuration(self):
+
+        listEmailConfiguration = []
+        configurationModel = self.env['transhybrid.configuration']
+        configurationPool = configurationModel.search([('is_email_send_to','=',True)])
+
+        if(configurationPool):
+            for outData in configurationPool:
+
+                new_dict={}
+                new_dict['email_send_to'] = outData.email_send_to
+                
+                listEmailConfiguration.append(new_dict)
+
+        return listEmailConfiguration
+
+
     @api.multi
     def action_deal(self):
 
+        kondisi = False
+        listServiceItem = []
         if(self.id):
+            
+            '''
             self.write({
                 'state_new':2,
                 'deal_date':date.today().strftime('%Y-%m-%d')
             })
+            '''
 
+            number = 1
             for outData in self.order_line:
-                outData.state_new = 2
+                #outData.state_new = 2
+
+                for outDataService in outData.sale_order_line_service_ids:
+                    if(outDataService.service_id.need_email_notif==2):
+
+                        kondisi = True
+                        listServiceItem.append("")
+                        listServiceItem.append(str(number) +". ")
+                        listServiceItem.append(str(outDataService.service_id.name))
+                        listServiceItem.append("\n")
+                        
+                        listServiceItem.append("    ")
+                        listServiceItem.append("Item ")
+                        listServiceItem.append(str(outDataService.item_service_id.name))
+                        listServiceItem.append("\n")
+
+                        listServiceItem.append("    ")
+                        listServiceItem.append("Worker ")
+                        listServiceItem.append(str(outDataService.assign_to.name))
+                        listServiceItem.append("\n")
+
+                        listServiceItem.append("    ")
+                        listServiceItem.append("Customer PIC ")
+                        listServiceItem.append(str(outDataService.pic))
+                        listServiceItem.append("\n")
+
+                        listServiceItem.append("    ")
+                        listServiceItem.append("Customer PIC Address ")
+                        listServiceItem.append(str(outDataService.address))
+                        listServiceItem.append("\n")
+
+                        listServiceItem.append("    ")
+                        listServiceItem.append("Rp. ")
+                        listServiceItem.append(str(outDataService.price_service))
+                        listServiceItem.append("\n")
+                        listServiceItem.append("\n")
+
+                        number+=1
+
+
+
+                    
+
+        if(kondisi):
+
+            tmpHostEmail = ""
+            tmpPortEmail = ""
+            tmpPengirimEmail = ""
+
+            tmpPasswordEmail = ""
+            listEmailconfiguration = []
+            listEmailconfiguration = self.get_email_server_configuration()
+            
+            if(len(listEmailconfiguration)<=0):
+                raise ValidationError(_('Information :  You Have Not Set Email Sender Configuration.'))
+            else:
+
+                for outDataEmail in listEmailconfiguration:
+                    tmpHostEmail = outDataEmail['email_host']
+                    tmpPortEmail = outDataEmail['email_port']
+                    tmpPengirimEmail = outDataEmail['email_sender']
+                    tmpPasswordEmail = outDataEmail['email_password']
+
+                if(tmpHostEmail==False or tmpPortEmail==False or tmpPengirimEmail==False or tmpPasswordEmail==False):
+                    raise ValidationError(_('Information :  You Have Not Set Email Sender Configuration.'))
+
+
+
+            tmpSendTo = ""
+            listEmailSendToConfiguration = []
+            listEmailSendToConfiguration = self.get_email_send_to_configuration()
+            if(len(listEmailSendToConfiguration)<=0):
+                raise ValidationError(_('Information :  You Have Not Set Email Sender Configuration.'))
+            else:
+                for outDataEmailSendTo in listEmailSendToConfiguration:
+                    tmpSendTo = outDataEmailSendTo['email_send_to']
+
+                if(tmpSendTo==False):
+                    raise ValidationError(_('Information :  You Have Not Set Email Sender Configuration.'))
+
+
+
+            listBodyEmail = []
+                        
+            listBodyEmail.append(str(self.partner_id.customer_code))
+            listBodyEmail.append(" - ")
+            listBodyEmail.append(str(self.partner_id.name))
+            listBodyEmail.append("\n")
+
+            listBodyEmail.append("Order Date ")
+            listBodyEmail.append(self.date_order)
+            listBodyEmail.append("\n")
+
+            listBodyEmail.append("RFS Date ")
+            listBodyEmail.append(self.rfs_date)
+            listBodyEmail.append("\n")
+            listBodyEmail.append("\n")
+
+            listBodyEmail.append("Detail Services")
+            listBodyEmail.append("\n")
+
+            listBodyEmail.append(str(''.join(listServiceItem)))
+            listBodyEmail.append("\n\n")
+            listBodyEmail.append("Best Regards,")
+
+            listBodyEmail.append("\n\n\n")
+            listBodyEmail.append("THC Administrator")
+
+
+            #tmpMessageEmail = "TEST AHH\nLAGIIII"
+            tmpMessageEmail = ''.join(listBodyEmail)
+
+            msg = MIMEMultipart()
+            msg['From'] = tmpPengirimEmail
+            msg['To'] = ''.join(tmpSendTo)
+            msg['Date'] = email.Utils.formatdate(localtime=True)
+            msg['Subject'] = "Notification Manage CPE " + self.name
+            msg.attach(MIMEText(tmpMessageEmail))
+
+            try:
+                server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
+                server.ehlo()
+                server.starttls()
+                server.login(tmpPengirimEmail, tmpPasswordEmail)
+
+                server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
+                server.quit()
+
+            except smtplib.SMTPException,error:
+                raise ValidationError(_('Information :  Email Is Failed To Be Sent'))
+
+
+
 
 
     @api.multi
@@ -541,7 +725,12 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
 
     po_id                       =   fields.Integer(related="sale_order_line_id.order_id.id",store=True)
     po_name                     =   fields.Char(related="sale_order_line_id.order_id.name_order",string="Po Number",store=True)
+    
     company_name                =   fields.Many2one(related="sale_order_line_id.order_id.partner_id",string="Customer")
+    company_address             =   fields.Char(related="company_name.street")
+    company_phone               =   fields.Char(related="company_name.phone")
+    company_fax                 =   fields.Char(related="company_name.fax")
+
     po_order_date               =   fields.Datetime(related="sale_order_line_id.order_id.date_order",string="Order Date")
     rsf_date                    =   fields.Datetime(related="sale_order_line_id.order_id.rfs_date",string="RFS Date")
     
@@ -553,18 +742,29 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
                                             ],'State',related="sale_order_line_id.order_id.state")
 
 
-
-    
-
-
-
     assign_to_choise    =   fields.Selection([
                                     (1,'Internal'),
                                     (2,'Vendor')],'Assign To',
                                     domain=_get_default_choise)
 
+
+    is_customer_sign    =   fields.Selection([
+                                    (1,'Not Signed'),
+                                    (2,'Signed'),                                    
+                                    ],'Signature',default=1)
+
+
+    longitude               =   fields.Float('Longitude',digits=(0,6),required=True,default=0.0)
+    latitude                =   fields.Float('Latitude',digits=(0,6),required=True,default=0.0)
+    long_lat_address        =   fields.Text('Signature Address')
+    google_map              =   fields.Char(string="Map")
+
     assign_to           =   fields.Many2one('res.users',string='Assign To',
                                 domain=_get_filter_user,required=True)
+
+
+    assign_to_phone     =   fields.Char(related="assign_to.user_phone",string="User Phone")
+
     price_service       =   fields.Float('Price Service',required=True)
 
     # fields.Float(related='substation.longitude',string='Longitude',readonly=True)

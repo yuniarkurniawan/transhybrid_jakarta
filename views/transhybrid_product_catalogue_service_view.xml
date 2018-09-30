@@ -11,6 +11,11 @@
                     <sheet>
                         <group>
                             <field name="name" string="Name" class="oe_inline" />
+                            <field name="service_code" string="Code" class="oe_inline"/>
+                            <field name="need_email_notif" 
+                                string="Risma Notification"
+                                class="oe_inline"
+                                widget="radio" />
                             <field name="description" string="Description" class="oe_inline" />
                         </group>     
 
@@ -21,9 +26,16 @@
                             		string="Service Item" 
                             		name="product_service_line_ids" >
                                     <tree string="Service">
+
                                         <field 
                                         	name="name" 
                                         	string="Name" />
+
+                                        <field 
+                                            name="service_item_code"
+                                            string="Code"
+                                            />
+
                                         <field 
                                         	name="price"
                                         	string="Price"/>

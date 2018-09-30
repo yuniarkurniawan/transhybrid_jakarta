@@ -207,8 +207,9 @@
                                 <field 
                                     string="Item Service" 
                                     name="product_templete_line_ids" >
-                                    <tree string="Service">
+                                    <tree string="Service">                
                                         <field name="name" string="Name" />
+                                        <field name="service_code" string="Code" />
                                         <field name="description" string="Description" />
                                     </tree>
                                 </field>                                    

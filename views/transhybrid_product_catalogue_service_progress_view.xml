@@ -15,6 +15,10 @@
                                 string="Name" 
                                 class="oe_inline" />
                             <field 
+                                name="service_item_code"
+                                string="Code"
+                                class="oe_inline"/>
+                            <field 
                                 name="price"
                                 string="Price"
                                 class="oe_inline"

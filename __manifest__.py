@@ -43,6 +43,12 @@
         'views/transhybrid_sale_order_line_service_report_view.xml',
         'views/transhybrid_sale_order_monitoring_view.xml',
         'views/transhybrid_sale_order_line_service_assign_to_report_view.xml',
+        'views/transhybrid_berita_acara_lapangan_view.xml',
+
+        #'views/transhybrid_web_map_templates_view.xml',
+        #'views/transhybrid_res_config_views.xml',
+
+
         #'views/transhybrid_example_pivot_view.xml',
         #'views/transhybrid_sale_order_line_product_report_view.xml',
 
