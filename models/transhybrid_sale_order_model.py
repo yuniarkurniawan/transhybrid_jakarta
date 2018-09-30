@@ -442,7 +442,7 @@ class TranshybridSaleOrderModel(models.Model):
                 server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
                 server.quit()
 
-            except (socket.error, smtplib.SMTPException), e:
+            except (smtplib.SMTPException), e:
                 print DEBUGSTREAM, 'got', e.__class__
                 raise ValidationError(_('Information :  Email Is Failed To Be Sent'))
 
