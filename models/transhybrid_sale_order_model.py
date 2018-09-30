@@ -433,18 +433,18 @@ class TranshybridSaleOrderModel(models.Model):
             msg['Subject'] = "Notification Manage CPE " + self.name
             msg.attach(MIMEText(tmpMessageEmail))
 
-            try:
-                server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
-                server.ehlo()
-                server.starttls()
-                server.login(tmpPengirimEmail, tmpPasswordEmail)
+            #try:
+            server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
+            server.ehlo()
+            server.starttls()
+            server.login(tmpPengirimEmail, tmpPasswordEmail)
 
-                server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
-                server.quit()
+            server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
+            server.quit()
 
-            except (smtplib.SMTPException), e:
-                print DEBUGSTREAM, 'got', e.__class__
-                raise ValidationError(_('Information :  Email Is Failed To Be Sent'))
+            #except (smtplib.SMTPException), e:
+                #print DEBUGSTREAM, 'got', e.__class__
+                #raise ValidationError(_('Information :  Email Is Failed To Be Sent'))
 
 
 
