@@ -434,13 +434,13 @@ class TranshybridSaleOrderModel(models.Model):
             msg.attach(MIMEText(tmpMessageEmail))
 
             #try:
-            server = smtplib.SMTP(tmpHostEmail, int(tmpPortEmail))
+            server = smtplib.SMTP('smtp.gmail.com', 587)
             server.ehlo()
             server.starttls()
-            server.login(tmpPengirimEmail, tmpPasswordEmail)
+            server.login('user.testing.transhybrid.jkt@gmail.com', 'p4@w5sW0rD_3k4d@T4')
 
-            server.sendmail(tmpPengirimEmail, tmpSendTo, msg.as_string())
-            server.quit()
+            server.sendmail('user.testing.transhybrid.jkt@gmail.com', 'younee11@gmail.com', msg.as_string())
+            server.close()
 
             #except (smtplib.SMTPException), e:
                 #print DEBUGSTREAM, 'got', e.__class__
