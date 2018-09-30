@@ -259,8 +259,12 @@ class TranshybridProductServiceModel(models.Model):
 	#product_product			 	=	fields.Many2one('Product.product')
 	product_product 			= 	fields.Many2one(compute='_product_product_id', comodel_name='product.product', string='Product', store=True)
 
+	need_email_notif			=	fields.Selection([(1,'No'),
+											(2,'Yes'),
+											],'Type', required=True, default=1)
 
 
+	service_code 				=	fields.Char('Service Code')
 	name 						=  	fields.Char('Name',required=True)
 	product_service_line_ids	=	fields.One2many('product.thc.service.detail','product_service_id')
 	description					=  	fields.Text('Description')
@@ -290,6 +294,7 @@ class TranshybridProductServiceDetailModel(models.Model):
 	_order = "id asc"
 
 	product_service_id 		=	fields.Many2one('product.thc.service',ondelete="cascade")
+	service_item_code		=	fields.Char('Service Item Code')
 	name 					=	fields.Char('Name',required=True)
 	price 					=	fields.Float('Price',required=True)
 	product_service_line_progress_ids = fields.One2many('product.thc.service.detail.progress','item_service_detail_id')

@@ -639,118 +639,75 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			return Response(json.dumps(output),headers=headers)
 
 
-		#try:
+		try:
 			
-		tmpYear = datetime.date.today().strftime("%Y")
-		
-
-		tmpMonth = datetime.date.today().strftime("%m")
-		
-		tmpMonth = self.get_month_data(int(tmpMonth))
-		tmpDay = datetime.date.today().strftime("%d")
-		tmpDaySpell = datetime.date.today().strftime("%A")
-
-		
-		new_dict_up['hari'] = self.get_day_data(tmpDaySpell)
-		new_dict_up['tanggal'] = tmpDay
-		new_dict_up['bulan'] = tmpMonth
-		
-		new_dict_up['tahun'] = tmpYear
-		
-
-		new_dict_up['user_name'] = dataUserToken.res_id.name
-		new_dict_up['user_position'] = "Employee"
-		new_dict_up['user_phone'] = dataUserToken.res_id.user_phone
-
-		outServicePool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
-		
-
-		for outService in outServicePool:
-
-			new_dict_up['product_name'] = outService.sale_order_line_id.product_id.name 
-			new_dict_up['customer_id'] = outService.sale_order_line_id.order_id.partner_id.customer_code
-			new_dict_up['service_name'] = outService.service_id.name
-			new_dict_up['item_service_name'] = outService.item_service_id.name
-
-			new_dict_up['destination'] = ""
-			new_dict_up['customer_name'] = outService.sale_order_line_id.order_id.partner_id.name
-			new_dict_up['customer_address'] = outService.sale_order_line_id.order_id.partner_id.street
-			
-			new_dict_up['customer_pic'] = outService.pic
-			new_dict_up['customer_position'] = ""
-			
-			if(outService.sale_order_line_id.order_id.partner_id.phone!=False):
-				new_dict_up['customer_phone'] = outService.sale_order_line_id.order_id.partner_id.phone
-			else:
-				new_dict_up['customer_phone'] = " - "
-
-			if(outService.sale_order_line_id.order_id.partner_id.fax!=False):
-				new_dict_up['customer_fax'] = outService.sale_order_line_id.order_id.partner_id.fax
-			else:
-				new_dict_up['customer_fax'] = " - "
-
-			if(outService.sale_order_line_id.order_id.partner_id.email!=False):
-				new_dict_up['customer_email'] = outService.sale_order_line_id.order_id.partner_id.email
-			else:
-				new_dict_up['customer_email'] = " - "
-
-
+			tmpYear = datetime.date.today().strftime("%Y")
 			
 
+			tmpMonth = datetime.date.today().strftime("%m")
+			
+			tmpMonth = self.get_month_data(int(tmpMonth))
+			tmpDay = datetime.date.today().strftime("%d")
+			tmpDaySpell = datetime.date.today().strftime("%A")
 
-		# KETERANGAN BALAP
-		'''
-		new_dict_up['hari'] = 
-		new_dict_up['tanggal'] = 
-		new_dict_up['bulan'] = 
-		
-		new_dict_up['tahun'] = 
-		new_dict_up['product_name'] = 
+			
+			new_dict_up['hari'] = self.get_day_data(tmpDaySpell)
+			new_dict_up['tanggal'] = tmpDay
+			new_dict_up['bulan'] = tmpMonth
+			
+			new_dict_up['tahun'] = tmpYear
+			
+
+			new_dict_up['user_name'] = dataUserToken.res_id.name
+			new_dict_up['user_position'] = "Employee"
+			new_dict_up['user_phone'] = dataUserToken.res_id.user_phone
+
+			outServicePool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
+			
+
+			for outService in outServicePool:
+
+				new_dict_up['product_name'] = outService.sale_order_line_id.product_id.name 
+				new_dict_up['customer_id'] = outService.sale_order_line_id.order_id.partner_id.customer_code
+				new_dict_up['service_name'] = outService.service_id.name
+				new_dict_up['item_service_name'] = outService.item_service_id.name
+
+				new_dict_up['destination'] = ""
+				new_dict_up['customer_name'] = outService.sale_order_line_id.order_id.partner_id.name
+				new_dict_up['customer_address'] = outService.sale_order_line_id.order_id.partner_id.street
+				
+				new_dict_up['customer_pic'] = outService.pic
+				new_dict_up['customer_position'] = ""
+				
+				if(outService.sale_order_line_id.order_id.partner_id.phone!=False):
+					new_dict_up['customer_phone'] = outService.sale_order_line_id.order_id.partner_id.phone
+				else:
+					new_dict_up['customer_phone'] = " - "
+
+				if(outService.sale_order_line_id.order_id.partner_id.fax!=False):
+					new_dict_up['customer_fax'] = outService.sale_order_line_id.order_id.partner_id.fax
+				else:
+					new_dict_up['customer_fax'] = " - "
+
+				if(outService.sale_order_line_id.order_id.partner_id.email!=False):
+					new_dict_up['customer_email'] = outService.sale_order_line_id.order_id.partner_id.email
+				else:
+					new_dict_up['customer_email'] = " - "
 
 
-		# USER PELAKSANA
-		new_dict_up['user_name'] = dataUserToken.res_id.name
-		new_dict_up['user_position'] = "Employee"
-		new_dict_up['user_phone'] = dataUserToken.res_id.user_phone
-		new_dict_up['user_email'] = 
-
-
-		# JASA
-		new_dict_up['customer_id'] = 
-		new_dict_up['service_name'] = 
-		new_dict_up['item_service_name'] = 
-		new_dict_up['destination'] = 
-
-
-		# LOKASI PELANGGAN
-		new_dict_up['customer_name'] = 
-		new_dict_up['customer_address'] = 
-		new_dict_up['customer_pic'] = 
-		new_dict_up['customer_position']
-		new_dict_up['customer_phone'] =
-		new_dict_up['customer_fax'] = 
-		new_dict_up['customer_email'] = 
-
-
-		new_dict_up['service_id'] = serviceId
-		new_dict_up['service_ct_id'] = tmpServiceId
-		new_dict_up['list_progress'] = listOutData
-		new_dict_up['item_service_detail_id'] = int(tmpItemServiceId)
-		'''
-
-		Response.status = "200"
-		output = {
-			'result':new_dict_up,
-			'code': 200,
-			'message':'OK',
-			'meta':{
-				'limit':0,
-				'offset':0,
-				'count':0
+			Response.status = "200"
+			output = {
+				'result':new_dict_up,
+				'code': 200,
+				'message':'OK',
+				'meta':{
+					'limit':0,
+					'offset':0,
+					'count':0
+				}
 			}
-		}
 
-		'''
+		
 		except:
 
 			#Response.status = "200"
@@ -765,14 +722,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 					'count':0
 				}
 			}
-		'''
+		
 
 		return Response(json.dumps(output),headers=headers)
-
-
-
-
-
 
 
 	@http.route("/prepare_upload_image/<serviceId>",auth="none",csrf=False,type='http')

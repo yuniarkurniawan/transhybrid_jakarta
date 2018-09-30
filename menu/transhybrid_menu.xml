@@ -46,6 +46,25 @@
 			/>
 
 	
+		<menuitem
+			id="sub_menu_child_reporting_data_transhybrid_monitoring"
+			parent="sub_menu_reporting_data_transhybrid"
+			sequence="1"
+			name="Monitoring"
+			/>
+
+
+		<menuitem
+			id="sub_menu_child_reporting_data_transhybrid_news"
+			parent="sub_menu_reporting_data_transhybrid"
+			sequence="2"
+			name="Berita Acara"
+			/>
+
+
+
+
+
 
 		<!-- INVISIBLE MENU ITEM
 		<record id="make_invisible_transhybrid" model="res.groups">

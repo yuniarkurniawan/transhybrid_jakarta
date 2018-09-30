@@ -13,5 +13,8 @@ import transhybrid_sale_order_model
 import transhybrid_configuration
 import transhybrid_generated_number
 
+#import transhybrid_ir_http
+#import transhybrid_res_config
+
 #import ir_report_old
 #import transhybrid_state_progress_order
