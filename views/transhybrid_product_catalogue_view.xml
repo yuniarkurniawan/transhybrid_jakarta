@@ -168,6 +168,11 @@
                                         name="code"
                                         class="oe_inline"
                                     />
+
+                                    <field 
+                                        name="mrc_otp"
+                                        class="oe_inline"
+                                    />
                                     
                                     <field 
                                         name="list_price_compute"

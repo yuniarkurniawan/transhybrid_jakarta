@@ -14,6 +14,10 @@ class TranshybridProductCatalogueModel(models.Model):
 											(2,'Implementation'),
 											(3,'Maintenance'),
 											],'Type', required=True, default=1)
+
+	mrc_otp						=	fields.Selection([(1,'MRC'),
+											(2,'OTP'),
+											],'MRC/OTP', required=True, default=1)
 	
 	volume_solution				=	fields.Float('Volume Solution',digits=(0,2),default=0.0)
 	price_solution				=	fields.Float('Price Solution',digits=(0,2),default=0.0)
