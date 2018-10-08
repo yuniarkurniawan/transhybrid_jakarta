@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    	<!-- TREE VIEW -->
+        <record id="transhybrid_integration_news_tree_view" model="ir.ui.view">
+            <field name="name">transhybrid.integration.news.tree.view</field>
+            <field name="model">transhybrid.integration.news</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="nama_pelanggan" string="Customer"/>
+                    <field name="sale_order_line" string="Product Order"/>
+                    <field name="sale_order_line_service" string="Service"/> 
+                    <field name="state" string="State"/>                  
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- FORM VIEW -->
+        <record id="transhybrid_integration_news_form_view" model="ir.ui.view">
+            <field name="name">transhybrid.integration.news.form.view</field>
+            <field name="model">transhybrid.integration.news</field>
+            <field name="arch" type="xml">
+                <form>           
+
+                    <header>
+
+                        <button 
+                                name="action_signed" 
+                                string="Confirm" 
+                                type="object" 
+                                attrs="{'invisible':[('state','=',2)]}"
+                                />
+                            
+                        <field name="state" widget="statusbar" statusbar_visible="1,2"/>
+                    </header>
+
+                    <sheet>
+
+                        <h2>Purchase Order</h2>
+                        <group>
+                            <field 
+                                name="sale_order" 
+                                class="oe_inline"
+                                options="{'always_reload': True,'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                string="Purchase Order"/>
+
+                            <field 
+                                name="sale_order_line" 
+                                class="oe_inline"
+                                domain="[('order_id','=',sale_order)]"
+                                options="{'always_reload': True,'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                string="Product"/>
+
+                            <field 
+                                name="sale_order_line_service" 
+                                class="oe_inline"
+                                domain="[('sale_order_line_id','=',sale_order_line)]"
+                                options="{'always_reload': True,'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
+                                string="Service"/>
+
+
+                        </group>
+
+                        <h2>Data Pelanggan</h2>  
+
+                        <group>
+                            <field 
+                                name="nama_pelanggan"
+                                string="Nama Pelanggan"
+                                class="oe_inline"
+                                
+                                />
+
+                            <field 
+                                name="alamat_pelanggan"
+                                class="oe_inline"
+                                string="Alamat Pelanggan"
+                                
+                                />
+
+                            <field 
+                                name="latitude"
+                                string="Latitude"
+                                class="oe_inline"
+                                />
+
+                            <field 
+                                name="longitude"
+                                string="Longitude" 
+                                class="oe_inline" 
+                            />
+                            
+                            <field 
+                                name="eta"
+                                string="ETA"
+                                class="oe_inline"/>
+
+                            <field 
+                                name="alamat_instalasi_a"
+                                string="Alamat Instalasi A"
+                                class="oe_inline"/>
+
+                        </group>
+
+                        <group>
+
+                            <field 
+                                name="pic_pelanggan"
+                                string="PIC"
+                                class="oe_inline"/>
+                            
+                            <field 
+                                name="jabatan_pic_pelanggan"
+                                string="Jabatan"
+                                class="oe_inline"/>
+
+                            <field 
+                                name="telp_pic_pelanggan"
+                                string="Telp."
+                                class="oe_inline"/>
+
+                            <field 
+                                name="email_pic_pelanggan"
+                                string="Email"
+                                class="oe_inline"/>
+
+                            <field 
+                                name="alamat_instalasi_b"
+                                string="Alamat Instalasi B"
+                                class="oe_inline"/>
+                            
+                        </group>
+
+
+
+                        <notebook>
+
+                            <page string="Akses Lokasi">
+                                <group>
+                                    <group>
+                                        <field 
+                                            name="autorisasi" 
+                                            class="oe_inline"
+                                            widget="radio"
+                                            string="Autorisasi"/>
+                                        
+                                        <field 
+                                            name="surat_izin"
+                                            class="oe_inline"
+                                            widget="radio"
+                                            string="Surat Izin"/>
+                                    </group>
+                                    <group>
+                                        
+                                        <field 
+                                            name="waktu_izin"
+                                            class="oe_inline"
+                                            widget="radio"
+                                            string="Waktu Akses"
+                                            />
+                                        
+                                        <field 
+                                            name="alur_perizinan"
+                                            class="oe_inline"
+                                            widget="radio"
+                                            string="Alur Perizinan"
+                                            />
+                                    </group>
+                                </group>
+                                <group>
+
+                                    <field 
+                                        name="emergency_call"
+                                        class="oe_inline"
+                                        string="Emergency Call"
+                                        />            
+
+                                    <field 
+                                        name="catatan_akses_lokasi"
+                                        class="oe_inline"
+                                        string="Catatan"
+                                        />  
+                                </group>               
+                                        
+                                
+                            </page>
+
+                            <page string="Kondisi Lokasi">
+                                <group>
+                                    <group>
+                                        <field 
+                                            name="ruang_server"
+                                            string="Ruang Server" 
+                                            widget="radio"
+                                        />
+
+                                        <field 
+                                            name="air_conditioner"
+                                            string="Air Conditioner"
+                                            widget="radio"
+                                            />
+
+                                        <field 
+                                            name="cable_shaft"
+                                            string="Cable Shaft"
+                                            widget="radio"
+                                        />
+                                    </group>
+                                    <group>
+
+                                        <field 
+                                            name="label_perangkat"
+                                            string="Label Perangkat"
+                                            widget="radio"
+                                            />
+
+                                        <field 
+                                            name="ac_power"
+                                            string="AC Power"
+                                            widget="radio"
+                                            />
+
+                                        <field 
+                                            name="rack"
+                                            string="Rack"
+                                            widget="radio"
+                                            />
+
+                                    </group>
+                                    
+                                </group>
+                            </page>
+
+                            <page string="Pekerjaan">
+                                <h2>Proses</h2>
+                                <group>
+                                    <group>
+                                        <field 
+                                            name="plug_cable"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Plug Cable"
+                                            />
+
+                                        <field 
+                                            name="aktivasi_perangkat"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Aktivasi Perangkat"
+                                            />
+
+                                        <field 
+                                            name="integrasi_perangkat"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Integrasi Perangkat"/>
+                                    </group>
+                                    <group>
+                                        <field 
+                                            name="power_on_off"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Power On Off"/>
+
+                                        <field 
+                                            name="penarikan"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Penarikan"/>
+                                    </group>
+
+                                </group>
+
+                                <h2>Media</h2>
+                                <group>
+                                    <group>
+                                        <field 
+                                            name="is_fiber_optic"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Fiber Optic"
+                                            />
+
+                                        <field 
+                                            name="is_ethernet"
+                                            class="oe_inline"
+                                            string="Ethernet"
+                                            />
+
+                                        <field 
+                                            name="is_wire_less"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Catatan"/>
+                                        <field 
+                                            name="is_sip"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="SIP"/>
+                                        
+                                    </group>
+
+                                    <group>
+                                        <field 
+                                            name="is_tdm"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="TDM"/>
+
+                                        <field 
+                                            name="is_vsat"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="VSAT"/>
+
+                                        <field 
+                                            name="is_cooper"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="Cooper"/>
+
+                                        <field 
+                                            name="is_e1"
+                                            class="oe_inline"
+                                            type="checkbox"
+                                            string="E1"/>
+                                    </group>
+
+                                </group>
+                                <group>
+
+                                    <field 
+                                        name="lastmile_cpe"
+                                        class="oe_inline"
+                                        string="Lastmile CPE"/>
+
+                                    <field 
+                                        name="bandwith"
+                                        class="oe_inline"
+                                        string="Bandwith"/>
+
+                                    <field 
+                                        name="catatan_media"
+                                        class="oe_inline"
+                                        string="Catatan"/>
+
+                                    <field 
+                                        name="material_install_ids" 
+                                        string="Material Instal"
+                                        >
+                                        <tree editable="bottom">
+                                            <field 
+                                                name="perangkat" 
+                                                string="Perangkat"
+                                                required="1"/>
+                                            <field 
+                                                name="jumlah" 
+                                                string="Jumlah"
+                                                required="1"/>
+                                            <field name="serial_number" string="Serial Number"/>
+                                        </tree>
+                                    </field>
+
+                                </group>
+
+
+                            </page>
+
+                            <page string="Pelaksana">
+                                
+                                <group>
+                                    <field 
+                                        name="nama_pelaksana"
+                                        string="Nama" 
+                                        class="oe_inline"
+                                    />
+
+                                    <field 
+                                        name="jabatan_pelaksana"
+                                        string="Jabatan"
+                                        class="oe_inline"
+                                        />
+
+                                    <field 
+                                        name="telp_pelaksana"
+                                        string="Telp."
+                                        class="oe_inline"
+                                    />
+
+                                    <field 
+                                        name="email_pelaksana"
+                                        string="Email"
+                                        class="oe_inline"
+                                    />
+                                    
+                                </group>                                
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <!--  SEARCH VIEW -->
+        <record model="ir.ui.view" id="transhybrid_integration_news_search_view">
+            <field name="name">transhybrid.integration.news.search.view</field>
+            <field name="model">transhybrid.integration.news</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer">
+                    <field name="sale_order" string="Purchase Order"/>
+                    <field name="sale_order_line" string="Product Order"/>
+                    <field name="sale_order_line_service" string="Service"/> 
+                    <field name="state" string="State"/>        
+
+                    <filter 
+                            name="group_by_sale_order" 
+                            string="Purchase Order" 
+                            context="{'group_by' : 'sale_order'}" />
+
+                </search>
+            </field>
+        </record>
+
+
+
+        <!-- ACTION VIEW -->
+        <record id="transhybrid_integration_news_action" model="ir.actions.act_window">
+            <field name="name">Integrasi</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transhybrid.integration.news</field>
+            <field name="view_type">form</field>
+            <!--<field name="view_mode">tree,kanban,form</field>-->
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="transhybrid_integration_news_search_view"/>
+            <field name="context">{
+                'search_default_group_by_sale_order':1
+                }</field>
+            <field name="domain">[]</field>
+            
+        </record>
+
+        <record id="action_transhybrid_integration_news_tree_view1" 
+        	model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="transhybrid_integration_news_tree_view"/>
+            <field name="act_window_id" ref="transhybrid_integration_news_action"/>
+        </record>
+
+        <record id="action_transhybrid_integration_news_form_view1" 
+        	model="ir.actions.act_window.view">
+            <field eval="0" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="transhybrid_integration_news_form_view"/>
+            <field name="act_window_id" ref="transhybrid_integration_news_action"/>
+        </record>
+
+        <menuitem 
+        	action="transhybrid_integration_news_action" 
+        	icon="STOCK_JUSTIFY_FILL" 
+            sequence="5"
+            id="transhybrid_integration_news_menu_view" 
+            parent="sub_menu_child_reporting_data_transhybrid_news"
+        />
+    	
+
+    </data>
+</openerp>
