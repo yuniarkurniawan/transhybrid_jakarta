@@ -14,6 +14,7 @@ class TranshybridSurveyNews(models.Model):
 
 
 	# SALE ORDER
+	name 					=	fields.Char('No. Berita Acara Service')
 	sale_order 				=	fields.Many2one('sale.order',required=True)
 	sale_order_line			=	fields.Many2one('sale.order.line',string='Order Products',
 									required=True)

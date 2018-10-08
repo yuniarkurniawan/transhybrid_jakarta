@@ -14,6 +14,10 @@ import transhybrid_configuration
 import transhybrid_generated_number
 
 import transhybrid_survey_news
+import transhybrid_activation_news
+import transhybrid_testing_news
+
+import transhybrid_integration_news
 
 #import transhybrid_ir_http
 #import transhybrid_res_config

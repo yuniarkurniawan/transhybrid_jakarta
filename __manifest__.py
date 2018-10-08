@@ -46,6 +46,9 @@
 
         'views/transhybrid_berita_acara_lapangan_view.xml',
         'views/transhybrid_survey_news_view.xml',
+        'views/transhybrid_activation_news_view.xml',
+        'views/transhybrid_testing_news_view.xml',
+        'views/transhybrid_integration_news_view.xml',
 
 
 
