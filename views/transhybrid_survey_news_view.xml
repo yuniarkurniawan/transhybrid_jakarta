@@ -9,6 +9,7 @@
             <field name="priority">2</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="name" string="Number"/>
                     <field name="nama_pelanggan" string="Customer"/>
                     <field name="sale_order_line" string="Product Order"/>
                     <field name="sale_order_line_service" string="Service"/> 
@@ -43,9 +44,18 @@
                         <group>
                             <field 
                                 name="name"
-                                string="No.Berita Acara Survey"
+                                string="Number"
                                 readonly="1"
-                                class="oe_inline"/>
+                                class="oe_inline"
+                                />
+
+                            <field 
+                                name="name_show"
+                                string="Number"
+                                invisible="1"
+                                class="oe_inline"
+                                />
+
                             <field 
                                 name="sale_order" 
                                 class="oe_inline"
@@ -649,6 +659,8 @@
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Search Customer">
+                    <field name="name" string="Number"/>
+                    <field name="nama_pelanggan" string="Customer"/>
                     <field name="sale_order" string="Purchase Order"/>
                     <field name="sale_order_line" string="Product Order"/>
                     <field name="sale_order_line_service" string="Service"/> 
@@ -667,7 +679,7 @@
 
         <!-- ACTION VIEW -->
         <record id="transhybrid_survey_news_action" model="ir.actions.act_window">
-            <field name="name">Service</field>
+            <field name="name">BAS</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">transhybrid.survey.news</field>
             <field name="view_type">form</field>

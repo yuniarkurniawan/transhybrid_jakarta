@@ -192,17 +192,17 @@
 										
                                         <field 
                                             name="pic" 
-                                            string="PIC Lapangan"
+                                            string="Customer PIC"
                                             required="1"
                                             attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
 										
-                                        <!--
+                                        
                                         <field 
                                             name="pic_phone" 
-                                            string="Phone"
+                                            string="Customer PIC Phone"
                                             required="1"
                                             attrs="{'readonly':[('state_parent','in',(2,3,4))]}" />
-                                        -->
+                                        
                                         <field 
                                             name="price_service"
                                             string="Price"
