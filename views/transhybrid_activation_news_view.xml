@@ -9,6 +9,7 @@
             <field name="priority">2</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="name" string="Number"/>
                     <field name="nama_pelanggan" string="Customer"/>
                     <field name="sale_order_line" string="Product Order"/>
                     <field name="sale_order_line_service" string="Service"/> 
@@ -42,11 +43,24 @@
                         <h2>Purchase Order</h2>
                         <group>
                             <field 
+                                name="name"
+                                string="Number"
+                                readonly="1"
+                                class="oe_inline"/>
+
+                            <field 
+                                name="name_show"
+                                string="Number"
+                                invisible="1"
+                                class="oe_inline"/>
+                            
+
+                            <field 
                                 name="sale_order" 
                                 class="oe_inline"
                                 options="{'always_reload': True,'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"
                                 string="Purchase Order"/>
-
+                            
                             <field 
                                 name="sale_order_line" 
                                 class="oe_inline"
@@ -416,6 +430,8 @@
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Search Customer">
+                    <field name="name" string="Number"/>
+                    <field name="nama_pelanggan" string="Customer"/>
                     <field name="sale_order" string="Purchase Order"/>
                     <field name="sale_order_line" string="Product Order"/>
                     <field name="sale_order_line_service" string="Service"/> 
@@ -434,7 +450,7 @@
 
         <!-- ACTION VIEW -->
         <record id="transhybrid_activation_news_action" model="ir.actions.act_window">
-            <field name="name">Aktikasi</field>
+            <field name="name">BAA</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">transhybrid.activation.news</field>
             <field name="view_type">form</field>

@@ -11,10 +11,12 @@ import os
 class TranshybridSurveyNews(models.Model):
 
 	_name     = "transhybrid.survey.news"
+	_order = "id asc"
 
 
 	# SALE ORDER
-	name 					=	fields.Char('No. Berita Acara Service')
+	name 					=	fields.Char('BAS Number')
+	name_show 				=	fields.Char('BAS Number')
 	sale_order 				=	fields.Many2one('sale.order',required=True)
 	sale_order_line			=	fields.Many2one('sale.order.line',string='Order Products',
 									required=True)
@@ -139,7 +141,96 @@ class TranshybridSurveyNews(models.Model):
 	catatan_kondisi_tempat	=	fields.Text('Catatan Kondisi Tempat')
 
 
+	def get_month_converter(self, paramMonth):
+
+		tmpOut = ""
+		if(int(paramMonth)==1):
+			tmpOut = "I"
+		elif(int(paramMonth)==2):
+			tmpOut = "II"
+		elif(int(paramMonth)==3):
+			tmpOut = "III"
+		elif(int(paramMonth)==4):
+			tmpOut = "IV"
+		elif(int(paramMonth)==5):
+			tmpOut = "V"
+		elif(int(paramMonth)==6):
+			tmpOut = "VI"
+		elif(int(paramMonth)==7):
+			tmpOut = "VII"
+		elif(int(paramMonth)==8):
+			tmpOut = "VIII"
+		elif(int(paramMonth)==9):
+			tmpOut = "IX"
+		elif(int(paramMonth)==10):
+			tmpOut = "X"
+		elif(int(paramMonth)==11):
+			tmpOut = "XI"
+		else:
+			tmpOut = "XII"
+
+		return tmpOut
+
+
+	@api.onchange('sale_order_line_service')
+	def get_bas_number(self):
+
+		tmpLoanNumber = []
+		val = {}
+
+		now = datetime.now()
+		tmpYear = now.year
+		tmpYear = str(tmpYear)
+
+		tmpMonth = now.month
+		tmpMonth = self.get_month_converter(tmpMonth)
+
+
+		if(self.sale_order_line_service):
+			serviceCode = self.sale_order_line_service.service_id.service_code
+			serviceCode = str(serviceCode).lower()
+			serviceCode = 'bas.'+ serviceCode
+
+			nextNumber = self.env['ir.sequence'].get(str(serviceCode))
+			nextNumber = str(nextNumber)
+
+			tmpOutNumber = ""
+			if(len(nextNumber)<=3):
+				tmpOutNumber = str(nextNumber).zfill(3)
+				tmpLoanNumber.append(tmpOutNumber)
+			else:
+				tmpOutNumber = str(nextNumber)
+				tmpLoanNumber.append(tmpOutNumber)
+
+
+			tmpLoanNumber.append("/BAS-PROJECT/")
+			tmpLoanNumber.append(str(self.sale_order_line_service.service_id.product_id.code))
+			tmpLoanNumber.append("/")
+			tmpLoanNumber.append(tmpMonth)
+			tmpLoanNumber.append("/")
+			tmpLoanNumber.append(tmpYear)
+
+			outNumber = ''.join(tmpLoanNumber)
+						
+			val = {
+				'name' : outNumber,
+				'name_show' : outNumber,
+			}
+			
+
+		return {
+			'value' : val,
+		}
+
 	
+	@api.model
+	def create(self, values):
+
+		print " +++++++++++++++++++ "
+		values['name'] = values['name_show']
+
+		return super(TranshybridSurveyNews, self).create(values)
+  
 
 	@api.onchange('sale_order')
 	def onchange_sale_order_survey_news(self):

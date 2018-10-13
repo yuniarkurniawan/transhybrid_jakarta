@@ -612,6 +612,7 @@ class TranshybridSaleOrderLineModel(models.Model):
                         'assign_to_choise' : outData.assign_to_choise,
 
                         'price_service':outData.price_service,
+                        'pic_phone':outData.pic_phone,
 
                         'assign_to':outData.assign_to.id,
                         'price_service':outData.price_service,
@@ -638,7 +639,6 @@ class TranshybridSaleOrderLineModel(models.Model):
             if(self.service_id):
 
                 vendor = self.env.context.get('vendor')
-                print "Vendor ::: ", vendor
                 tmpChoise = 1
                 if(vendor):
                     tmpChoise = 2
@@ -880,11 +880,11 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
         for record in self:
             listName = []
 
-            listName.append(str(record.sale_order_line_id.product_id.name))
-            listName.append(" | ")
+            #listName.append(str(record.sale_order_line_id.product_id.name))
+            #listName.append(" | ")
             listName.append(str(record.service_id.name))
-            listName.append(" | PIC : ")
-            listName.append(str(record.pic))
+            #listName.append(" | PIC : ")
+            #listName.append(str(record.pic))
             
 
             res.append((record.id, ''.join(listName)))

@@ -38,6 +38,12 @@ class TranshybridProductCatalogueModel(models.Model):
 	list_price_compute     		=   fields.Float('Compute New Price',compute='_compute_list_new_price',store=True)
 
 	product_templete_line_ids	=	fields.One2many('product.thc.service','product_id')
+	category_acceptance 		=	fields.Selection([(1,'Out Task'),
+											(2,'Connectivity'),
+											(3,'CPE'),
+											],'Type', required=True, default=1)
+
+
 	#flag_template_line_ids 		=	fields.Char('Flag Tempalte',compute='_compute_flag_template_ids')
 	#flag_childs = fields.Char('Label XXX', compute='_compute_flag_childs')
 
@@ -268,11 +274,57 @@ class TranshybridProductServiceModel(models.Model):
 											],'Type', required=True, default=1)
 
 
-	service_code 				=	fields.Char('Service Code')
+	service_code 				=	fields.Char('Service Code',required=True)
 	name 						=  	fields.Char('Name',required=True)
 	product_service_line_ids	=	fields.One2many('product.thc.service.detail','product_service_id')
 	description					=  	fields.Text('Description')
 	
+	_sql_constraints = [('service_code_unique', 'unique(service_code)', 'Service Code Can Not Be Same.')]
+
+
+	@api.model
+	def create(self, values):
+
+		irSequenceModel = self.env['ir.sequence']
+
+		# ==== BEGIN BAS
+		tmpBAS = 'bas.' + str(values['service_code']).lower()
+		valueSequence = {
+			'name' : tmpBAS,
+			'code' : tmpBAS,
+		}
+		irSequenceModel.create(valueSequence)
+
+
+		# === BEGIN BAA
+		tmpBAA = 'baa.' + str(values['service_code']).lower()
+		valueSequence = {
+			'name' : tmpBAA,
+			'code' : tmpBAA,
+		}		
+		irSequenceModel.create(valueSequence)
+
+
+		# === BEGIN BAT
+		tmpBAT = 'bat.' + str(values['service_code']).lower()
+		valueSequence = {
+			'name' : tmpBAT,
+			'code' : tmpBAT,
+		}		
+		irSequenceModel.create(valueSequence)
+
+
+		# === BEGIN BAT
+		tmpBAI = 'bai.' + str(values['service_code']).lower()
+		valueSequence = {
+			'name' : tmpBAI,
+			'code' : tmpBAI,
+		}		
+		irSequenceModel.create(valueSequence)
+
+
+		return super(TranshybridProductServiceModel,self).create(values)
+
 
 	@api.depends('product_id')
 	def _product_product_id(self):
