@@ -4,7 +4,7 @@
 		<report
 			id="transhybrid_po_service_item_pdf"
 			model="transhybrid.activation.news"
-			string="Berita Acara Aktivasi"
+			string="BAA"
 			report_type="qweb-pdf"
 			name="transhybrid_jakarta.activation_news_report_pdf"
 			file="transhybrid_jakarta.activation_news_report_pdf"

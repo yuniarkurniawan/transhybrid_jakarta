@@ -38,10 +38,12 @@ class TranshybridProductCatalogueModel(models.Model):
 	list_price_compute     		=   fields.Float('Compute New Price',compute='_compute_list_new_price',store=True)
 
 	product_templete_line_ids	=	fields.One2many('product.thc.service','product_id')
+	'''
 	category_acceptance 		=	fields.Selection([(1,'Out Task'),
 											(2,'Connectivity'),
 											(3,'CPE'),
 											],'Type', required=True, default=1)
+	'''
 
 
 	#flag_template_line_ids 		=	fields.Char('Flag Tempalte',compute='_compute_flag_template_ids')
@@ -282,6 +284,86 @@ class TranshybridProductServiceModel(models.Model):
 	_sql_constraints = [('service_code_unique', 'unique(service_code)', 'Service Code Can Not Be Same.')]
 
 
+	@api.multi
+	def write(self, vals):
+
+		irSequenceModel = self.env['ir.sequence']
+		
+		if('service_code' in vals):
+
+			# ========= PENGECEKAN IR.SEQUENCE
+			# ==== BEGIN BAS
+			tmpBAS = 'bas.' + str(vals['service_code']).lower()
+
+			poolData = irSequenceModel.search([('name','=',tmpBAS)])
+			if(poolData.id!=False):
+				raise ValidationError(_('There Is Same Service Code In Sequence Number Configuration.'))
+
+
+			# === BEGIN BAA
+			tmpBAA = 'baa.' + str(vals['service_code']).lower()
+			poolData = irSequenceModel.search([('name','=',tmpBAA)])
+			if(poolData.id!=False):
+				raise ValidationError(_('There Is Same Service Code In Sequence Number Configuration.'))
+
+
+			# === BEGIN BAT
+			tmpBAT = 'bat.' + str(vals['service_code']).lower()
+			poolData = irSequenceModel.search([('name','=',tmpBAT)])
+			if(poolData.id!=False):
+				raise ValidationError(_('There Is Same Service Code In Sequence Number Configuration.'))
+
+
+			# === BEGIN BAI
+			tmpBAI = 'bai.' + str(vals['service_code']).lower()
+			poolData = irSequenceModel.search([('name','=',tmpBAI)])
+			if(poolData.id!=False):
+				raise ValidationError(_('There Is Same Service Code In Sequence Number Configuration.'))
+
+
+
+
+			# =========== INPUT IR.SEQUENCE
+			# ==== BEGIN BAS
+			tmpBAS = 'bas.' + str(vals['service_code']).lower()
+			valueSequence = {
+				'name' : tmpBAS,
+				'code' : tmpBAS,
+			}
+			irSequenceModel.create(valueSequence)
+
+
+			# === BEGIN BAA
+			tmpBAA = 'baa.' + str(vals['service_code']).lower()
+			valueSequence = {
+				'name' : tmpBAA,
+				'code' : tmpBAA,
+			}		
+			irSequenceModel.create(valueSequence)
+
+
+			# === BEGIN BAT
+			tmpBAT = 'bat.' + str(vals['service_code']).lower()
+			valueSequence = {
+				'name' : tmpBAT,
+				'code' : tmpBAT,
+			}		
+			irSequenceModel.create(valueSequence)
+
+
+			# === BEGIN BAI
+			tmpBAI = 'bai.' + str(vals['service_code']).lower()
+			valueSequence = {
+				'name' : tmpBAI,
+				'code' : tmpBAI,
+			}		
+			irSequenceModel.create(valueSequence)
+
+
+		return super(TranshybridProductServiceModel, self).write(vals)
+
+
+
 	@api.model
 	def create(self, values):
 
@@ -314,7 +396,7 @@ class TranshybridProductServiceModel(models.Model):
 		irSequenceModel.create(valueSequence)
 
 
-		# === BEGIN BAT
+		# === BEGIN BAI
 		tmpBAI = 'bai.' + str(values['service_code']).lower()
 		valueSequence = {
 			'name' : tmpBAI,

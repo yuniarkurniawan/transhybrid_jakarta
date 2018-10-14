@@ -800,6 +800,30 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
     progress_bar                =   fields.Float(related='percentage')
     sale_order_line_service_detail_ids =    fields.One2many('sale.order.line.service.detail.model','sale_order_line_service_id','Sale Order Line Service',required=True)
     
+    is_balap                    =   fields.Selection([(1,'Belum Dibuat'),
+                                            (2,'Sudah Dibuat'),
+                                            ],'State',default=1)
+
+    is_bas                      =   fields.Selection([(1,'Belum Dibuat'),
+                                            (2,'Sudah Dibuat'),
+                                            ],'State',default=1)
+
+
+    is_baa                      =   fields.Selection([(1,'Belum Dibuat'),
+                                            (2,'Sudah Dibuat'),
+                                            ],'State',default=1)
+
+
+
+    is_bat                      =   fields.Selection([(1,'Belum Dibuat'),
+                                            (2,'Sudah Dibuat'),
+                                            ],'State',default=1)
+
+
+    is_bai                      =   fields.Selection([(1,'Belum Dibuat'),
+                                            (2,'Sudah Dibuat'),
+                                            ],'State',default=1)
+
 
 
     @api.onchange('item_service_id')
@@ -883,6 +907,8 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
             #listName.append(str(record.sale_order_line_id.product_id.name))
             #listName.append(" | ")
             listName.append(str(record.service_id.name))
+            listName.append(" | ")
+            listName.append(str(record.item_service_id.name))
             #listName.append(" | PIC : ")
             #listName.append(str(record.pic))
             

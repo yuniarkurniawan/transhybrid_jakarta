@@ -52,6 +52,7 @@
 
 
 
+
         #'views/transhybrid_web_map_templates_view.xml',
         #'views/transhybrid_res_config_views.xml',
 
@@ -78,6 +79,15 @@
 
         'report/transhybrid_activation_news_report_pdf_template_view.xml',
         'report/transhybrid_activation_news_report_view.xml',
+        
+        'report/transhybrid_integration_news_report_pdf_template_view.xml',
+        'report/transhybrid_integration_news_report_view.xml',
+
+        'report/transhybrid_survey_news_report_pdf_template_view.xml',
+        'report/transhybrid_survey_news_report_view.xml',
+
+
+
 
 
         'security/security.xml',

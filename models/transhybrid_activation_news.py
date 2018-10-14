@@ -15,7 +15,7 @@ class TranshybridActivationNews(models.Model):
 	# SALE ORDER
 	name 					=	fields.Char('BAA Number')
 	name_show 				=	fields.Char('BAA Number')
-	sale_order 				=	fields.Many2one('sale.order',required=True)
+	sale_order 				=	fields.Many2one('sale.order',required=True,domain=[('state_new','=',4)])
 	sale_order_line			=	fields.Many2one('sale.order.line',string='Order Products',
 									required=True)
 	sale_order_line_service =	fields.Many2one('sale.order.line.service.model',required=True)
@@ -212,12 +212,57 @@ class TranshybridActivationNews(models.Model):
 		}
 
 
+	
 	@api.model
 	def create(self, values):
+
+		# MERUBAH STATUS MODEL SALE.ORDER.LINE.SERVICE.MODEL
+		saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+		dataPool = saleOrderLineServiceModel.search([('id','=',int(values['sale_order_line_service']))])
+		for dataOut in dataPool:
+			dataOut.is_baa = 2
+
 
 		values['name'] = values['name_show']
 
 		return super(TranshybridActivationNews, self).create(values)
+  
+
+	@api.multi
+	def action_signed(self):
+
+		if(self.id):
+
+			self.write({
+                'state':2
+            })
+
+			for out in self:
+				
+				saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+				dataPool = saleOrderLineServiceModel.search([('id','=',int(out.sale_order_line_service.id))])
+				for dataOut in dataPool:
+					dataOut.is_baa = 2
+
+			
+
+	@api.multi
+	def action_cancel(self):
+
+		if(self.id):
+
+			self.write({
+                'state':3
+            })
+
+			for out in self:
+				
+				saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+				dataPool = saleOrderLineServiceModel.search([('id','=',int(out.sale_order_line_service.id))])
+				for dataOut in dataPool:
+					dataOut.is_baa = 1
+
+
 
 	@api.onchange('sale_order')
 	def onchange_sale_order_survey_news(self):

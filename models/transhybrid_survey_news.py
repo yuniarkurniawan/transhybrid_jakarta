@@ -17,14 +17,15 @@ class TranshybridSurveyNews(models.Model):
 	# SALE ORDER
 	name 					=	fields.Char('BAS Number')
 	name_show 				=	fields.Char('BAS Number')
-	sale_order 				=	fields.Many2one('sale.order',required=True)
+	sale_order 				=	fields.Many2one('sale.order',required=True,domain=[('state_new','=',4)])
 	sale_order_line			=	fields.Many2one('sale.order.line',string='Order Products',
 									required=True)
 	sale_order_line_service =	fields.Many2one('sale.order.line.service.model',required=True)
 
 	state    				=   fields.Selection([
                                     (1,'Draft'),
-                                    (2,'Signed')],'State',default=1)
+                                    (2,'Signed'),
+                                    (3,'Cancel')],'State',default=1)
 
 	# PEMBBUAT ORDER
 	name_pembuat_order      =   fields.Char('Nama Pembuat Order')
@@ -226,11 +227,52 @@ class TranshybridSurveyNews(models.Model):
 	@api.model
 	def create(self, values):
 
-		print " +++++++++++++++++++ "
+		# MERUBAH STATUS MODEL SALE.ORDER.LINE.SERVICE.MODEL
+		saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+		dataPool = saleOrderLineServiceModel.search([('id','=',int(values['sale_order_line_service']))])
+		for dataOut in dataPool:
+			dataOut.is_bas = 2
+
+
 		values['name'] = values['name_show']
 
 		return super(TranshybridSurveyNews, self).create(values)
   
+
+	@api.multi
+	def action_signed(self):
+
+		if(self.id):
+
+			self.write({
+                'state':2
+            })
+
+			for out in self:
+				
+				saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+				dataPool = saleOrderLineServiceModel.search([('id','=',int(out.sale_order_line_service.id))])
+				for dataOut in dataPool:
+					dataOut.is_bas = 2
+
+			
+
+	@api.multi
+	def action_cancel(self):
+
+		if(self.id):
+
+			self.write({
+                'state':3
+            })
+
+			for out in self:
+				
+				saleOrderLineServiceModel = self.env['sale.order.line.service.model']
+				dataPool = saleOrderLineServiceModel.search([('id','=',int(out.sale_order_line_service.id))])
+				for dataOut in dataPool:
+					dataOut.is_bas = 1
+	
 
 	@api.onchange('sale_order')
 	def onchange_sale_order_survey_news(self):

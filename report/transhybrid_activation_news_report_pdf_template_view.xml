@@ -24,7 +24,7 @@
 														<td align="center"><b>BERITA ACARA AKTIVASI</b></td>
 													</tr>
 													<tr>
-														<td align="center"><b>MANAGE OUT TASK SERVICE</b></td>
+														<td align="center"><b>{NAMA_SERVICE}</b></td>
 													</tr>
 													<tr>
 														<td align="center"><b>NO. </b></td>
@@ -56,7 +56,7 @@
 									<table width="100%">
 										<tr>
 											<td style="text-align:justify;">
-												Pada hari <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tanggal <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> bulan <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tahun <![CDATA[&nbsp;]]> bersama-sama memeriksa proses pekerjaan berupa <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> kepada PT. Transhybrid Communication dengan detail sebagai berikut  :
+												Pada hari <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tanggal <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> bulan <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tahun <![CDATA[&nbsp;]]> bersama-sama memeriksa proses pekerjaan berupa instalasi dan aktivasi<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> oleh PT. Transhybrid Communication pada Customer dengan detail sebagai berikut  :
 											</td>
 										</tr>
 										<tr>
@@ -66,190 +66,321 @@
 								</td>
 							</tr>
 
-							
-							
-
+			
 							<tr>
-								<table style="border:1px solid black;width:100%">
-									<tr style="background-color:#99bbff">
-										<td align="center" colspan="2"><b>DATA PELANGGAN</b></td>
-									</tr>
-
-									<tr>
-										<td>
-											<table style="border:1px solid black;width:100%">
-												<tr>
-													<td>Nama Pelanggan</td>
-													<td>:</td>
-													<td>{ALAMAT_PELANGGAN}</td>
-												</tr>
-												<tr>
-													<td>Alamat Pelanggan</td>
-													<td>:</td>
-													<td>{ALAMAT_PELANGGAN}</td>
-												</tr>
-												<tr>
-													<td>Koordinat</td>
-													<td>:</td>
-													<td>{KOORDINAT}</td>
-												</tr>
-												<tr>
-													<td>ETA (Waktu Tempuh)</td>
-													<td>:</td>
-													<td>{WAKTU_TEMPUH}</td>
-												</tr>
-
-												<tr>
-													<td>Alamat Instalasi A</td>
-													<td>:</td>
-													<td>{ALAMAT_INSTALASI_A}</td>
-												</tr>
-
-											</table>
-
+			
+								<table width="100%" border="1">
+									  <tr>
+									    <td width="14%"><![CDATA[&nbsp;]]></td>
+									    <td width="2%"><![CDATA[&nbsp;]]></td>
+									    <td width="32%"><![CDATA[&nbsp;]]></td>
+									    <td width="1%"><![CDATA[&nbsp;]]></td>
+									    <td width="14%"><![CDATA[&nbsp;]]></td>
+									    <td width="2%"><![CDATA[&nbsp;]]></td>
+									    <td width="31%"><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  
+									  
+									  <tr style="background-color:#003399">
+									    <td colspan="7"><div align="center"><font style="color:#FFFFFF">Data Pelanggan</font></div></td>
+									  </tr>
+									  <tr>
+									    <td>Nama Pelanggan</td>
+									    <td>:</td>
+									    <td>{Nama Pelanggan}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>PIC</td>
+									    <td>:</td>
+									    <td>{Nama PIC}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Alamat Pelanggan</td>
+									    <td valign="top">:</td>
+									    <td>{Perum KPAD Sejahtera Block O No.4 Padalarang Barat}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Jabatan</td>
+									    <td valign="top">:</td>
+									    <td>{Jabatan PIC}</td>
+									  </tr>
+									  <tr>
+									    <td>Koordinat</td>
+									    <td>:</td>
+									    <td>{Koordinat}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Telepon</td>
+									    <td>:</td>
+									    <td>{Telepon}</td>
+									  </tr>
+									  <tr>
+									    <td>ETA (Waktu Tempu)</td>
+									    <td>:</td>
+									    <td>{Waktu Tempuh}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Email</td>
+									    <td>:</td>
+									    <td>{Email}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Alamat Instalasi A</td>
+									    <td valign="top">:</td>
+									    <td>{alamat_instalasi_a}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Alamat Instalasi B</td>
+									    <td valign="top">:</td>
+									    <td>{alamat_instalasi_b}</td>
+									  </tr>
+									  <tr>
+									    <td colspan="7" ><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td style="background-color:#003399" colspan="3"><div align="center"><font style="color:#FFFFFF">Akses Lokasi</font></div></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td style="background-color:#003399" colspan="3"><div align="center"><font style="color:#FFFFFF">Kondisi Lokasi</font></div></td>
+									  </tr>
+									  <tr>
+									    <td>Autorisasi</td>
+									    <td>:</td>
+									    <td>{yes_no_autorisasi}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Ruang Server</td>
+									    <td>:</td>
+									    <td>{ruang_server}</td>
+									  </tr>
+									  <tr>
+									    <td>Surat Izin</td>
+									    <td>:</td>
+									    <td>{yes_no_surat_izin}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Air Conditioner</td>
+									    <td>:</td>
+									    <td>{air_conditioner}</td>
+									  </tr>
+									  <tr>
+									    <td>Waktu Akses</td>
+									    <td>:</td>
+									    <td>{yes_no_waktu_akses}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Cable Shaft</td>
+									    <td>:</td>
+									    <td>{cable_shaft}</td>
+									  </tr>
+									  <tr>
+									    <td>Alur Perizinan</td>
+									    <td>:</td>
+									    <td>{alur_perizinan}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>Label Perangkat</td>
+									    <td>:</td>
+									    <td>{label_perangkat}</td>
+									  </tr>
+									  <tr>
+									    <td>Emergency Call</td>
+									    <td>:</td>
+									    <td>{emergency_call}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td>AC Power</td>
+									    <td>:</td>
+									    <td>{ac_power}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Catatan</td>
+									    <td valign="top">:</td>
+									    <td>{catatan}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Rack</td>
+									    <td valign="top">:</td>
+									    <td>{rack}</td>
+									  </tr>
+									  <tr>
+									    <td colspan="7" ><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr style="background-color:#003399">
+									    <td colspan="7" valign="top"><div align="center"><font style="color:#FFFFFF">Pekarjaan</font></div></td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Proses</td>
+									    <td valign="top">:</td>
+									    <td>{proses}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Media</td>
+									    <td valign="top">:</td>
+									    <td>{media}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Lastmile CPE</td>
+									    <td valign="top">:</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Bandwith</td>
+									    <td valign="top">:</td>
+									    <td>{bandwith}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Material</td>
+									    <td valign="top">:</td>
+									    <td colspan="5">
+									    	<table width="100%" style="border:1px solid black;border-collapse:collapse;">
+										      <tr>
+										        <td width="9%" style="border:1px solid black;border-collapse:collapse;"><div align="center">No.</div></td>
+										        <td width="31%" style="border:1px solid black;border-collapse:collapse;"><div align="center">Perangkat</div></td>
+										        <td width="20%" style="border:1px solid black;border-collapse:collapse;"><div align="center">Jumlah</div></td>
+										        <td width="40%" style="border:1px solid black;border-collapse:collapse;"><div align="center">Serial Number</div></td>
+										      </tr>
+										      <tr>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										      </tr>
+										      <tr>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										        <td style="border:1px solid black;border-collapse:collapse;"><![CDATA[&nbsp;]]></td>
+										      </tr>
+										    </table>
 										</td>
-										<td>
-											
-											<table style="border:1px solid black;width:100%">
-												<tr>
-													<td>PIC</td>
-													<td>:</td>
-													<td>{PIC}</td>
-												</tr>
-												<tr>
-													<td>Jabatan</td>
-													<td>:</td>
-													<td>{JABATAN}</td>
-												</tr>
-												<tr>
-													<td>Telepon</td>
-													<td>:</td>
-													<td>{TELEPON}</td>
-												</tr>
-												<tr>
-													<td>Email</td>
-													<td>:</td>
-													<td>{EMAIL}</td>
-												</tr>
-
-												<tr>
-													<td>Alamat Instalasi B</td>
-													<td>:</td>
-													<td>{ALAMAT_INSTALASI_B}</td>
-												</tr>
-
-											</table>
-
-										</td>
-
-									</tr>
-
-									<tr>
-										<td colspan="2"><![CDATA[&nbsp;]]></td>
-									</tr>
-
-									<tr>
-										<td align="center" style="background-color:#99bbff">AKSES LOKASI</td>
-										<td align="center" style="background-color:#99bbff">KONDISI LOKASI</td>
-									</tr>
-
-
-									
-									<tr>
-										<td>
-											<table style="border:1px solid black;width:100%">
-												<tr>
-													<td>
-														<table>
-															<tr>
-																<td>Autorisasi</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-															<tr>
-																<td>Surat Izin</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-														</table>
-													</td>
-													<td>
-														<table>
-															<tr>
-																<td>Autorisasi</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-															<tr>
-																<td>Surat Izin</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-
-											</table>
-										</td>
-										<td>
-											<table style="border:1px solid black;width:100%">
-												<tr>
-													<td>
-														<table>
-															<tr>
-																<td>Ruang Server</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-															<tr>
-																<td>Surat Izin</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-														</table>
-													</td>
-													<td>
-														<table>
-															<tr>
-																<td>Autorisasi</td>
-																<td>:</td>
-																<td>Yes</td>
-															</tr>
-															<tr>
-																<td>Surat Izin</td>
-																<td>:</td>
-																<td style="vertical-align:bottom"><input type="checkbox" checked="checked"/></td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-
-											</table>
-										</td>
-									</tr>
-
-									<tr>
-										<td>00</td>
-										<td></td>
-									</tr>
+									  </tr>
+									  <tr>
+									    <td valign="top">Catatan</td>
+									    <td valign="top">:</td>
+									    <td>{Catatan asdlfkjas;df asdlfajsld f;asdlf as;dlfkjas;dl asdllkasdfa asldfkja asldkfjasdf}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr style="background-color:#003399">
+									    <td colspan="7"><div align="center"><font style="color:#FFFFFF">Pelaksana</font></div></td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Nama</td>
+									    <td valign="top">:</td>
+									    <td>{nama_pelaksana}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Jabatan</td>
+									    <td valign="top">:</td>
+									    <td>{jabatan_pelaksana}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top">Telepon</td>
+									    <td valign="top">:</td>
+									    <td>{telepon_pelaksanan}</td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top">Email</td>
+									    <td valign="top">:</td>
+									    <td>{email_pelaksana}</td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+									  <tr>
+									    <td colspan="3" valign="top"><table width="100%" border="1">
+									      <tr>
+									        <td>{alamat_ttd}, {tanggal_ttd}</td>
+									        </tr>
+									      <tr>
+									        <td>Pelaksana</td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									        <td height="109" valign="bottom">(...............................)</td>
+									        </tr>
+									    </table></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td colspan="3" valign="top">
+									    <table width="100%" border="1">
+									      <tr>
+									        <td>Mengetahui</td>
+									        </tr>
+									      <tr>
+									        <td>Pelanggan</td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									      	<td><![CDATA[&nbsp;]]></td>
+									      </tr>
+									      <tr>
+									        <td height="109" valign="bottom">(...............................)</td>
+									        </tr>
+									    </table></td>
+									  </tr>
+									  <tr>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td valign="top"><![CDATA[&nbsp;]]></td>
+									    <td><![CDATA[&nbsp;]]></td>
+									  </tr>
+								</table>	
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-									
-
-								</table>
 
 							</tr>
 
