@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<report
+			id="transhybrid_survey_news_pdf"
+			model="transhybrid.survey.news"
+			string="BAS"
+			report_type="qweb-pdf"
+			name="transhybrid_jakarta.survey_news_report_pdf"
+			file="transhybrid_jakarta.survey_news_report_pdf"
+			attachment_use="True"
+		/>
+	</data>
+</openerp>
