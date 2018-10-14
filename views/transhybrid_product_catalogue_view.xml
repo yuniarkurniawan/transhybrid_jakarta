@@ -174,11 +174,13 @@
                                         class="oe_inline"
                                     />
 
+                                    <!--
                                     <field 
                                         name="category_acceptance"
                                         class="oe_inline"
                                         string="Category"
                                     />
+                                -->
 
                                     <field 
                                         name="list_price_compute"
