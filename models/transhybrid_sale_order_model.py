@@ -113,6 +113,56 @@ class TranshybridSaleOrderModel(models.Model):
         message_body=message_body)
 
 
+    @api.model
+    def get_deadline_purchase_order(self):
+
+        saleOrderModel = self.env['sale.order']
+        poolData = saleOrderModel.search([('state_new','in',(2,3))])
+        transhybridPurchaseOrderNotificationModel = self.env['transhybrid.purchase.order.notification']
+
+        for outData in poolData:
+
+            now = datetime.now()
+            piss = datetime.strftime(now,'%Y-%m-%d %H:%M:%S')
+
+            order_date = dateutil.parser.parse(outData.date_order)
+            rfsDate = dateutil.parser.parse(outData.rfs_date)
+            hariIni = dateutil.parser.parse(datetime.strftime(now,'%Y-%m-%d %H:%M:%S')) 
+            
+            akhir = rfsDate - hariIni 
+            days = akhir.days
+            
+            print "Days : ", days
+            if(days<=3):
+
+                descriptionDays = ""
+                if(days<0):
+                    descriptionDays = "more than " + str(days * (-1)) + " days"
+                elif(days==1):
+                    descriptionDays = str(days) + " day left"
+                else:
+                    descriptionDays = str(days) + " days left"
+                
+
+                listDescription = []
+
+                listDescription.append("Purchase Order Of ")
+                listDescription.append(str(outData.name))
+                listDescription.append(" Is Now Deadline")
+
+                valueNotification = {
+                    'name'          : outData.name, 
+                    'order_date'    : outData.date_order,
+                    'customer_name' : outData.partner_id.name,
+                    'duration'      : descriptionDays,
+                    'rfs_date'      : outData.rfs_date,
+                    'amount_total'  : outData.amount_total,
+                    'description'   : ''.join(listDescription), 
+                }
+
+                transhybridPurchaseOrderNotificationModel.create(valueNotification)
+
+                
     @api.multi
     def action_confirm(self):
 

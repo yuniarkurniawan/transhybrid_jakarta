@@ -18,6 +18,7 @@ import transhybrid_activation_news
 import transhybrid_testing_news
 
 import transhybrid_integration_news
+import transhybrid_purchase_order_notification
 
 #import transhybrid_ir_http
 #import transhybrid_res_config

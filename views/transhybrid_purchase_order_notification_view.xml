@@ -1,0 +1,128 @@
+<odoo>
+	<data>
+
+		<!--TREE VIEW -->
+        <record model="ir.ui.view" id="transhybrid_purchase_order_notification_tree_view">
+            <field name="name">transhybrid.purchase.order.notification.tree.view</field>
+            <field name="model">transhybrid.purchase.order.notification</field>
+            <field name="type">tree</field> 
+            <field name="arch" type="xml">
+                <tree edit="0" create="0">
+                    <field name="name" string="Purchase Order"/>
+                    <field name="customer_name" string="Customer" />
+                    <field name="order_date" string="Order Date"/>
+                    <field name="rfs_date" string="RFS Date"/>
+                    <field name="duration" string="Days"/>
+                    <!--<field name="amount_total" string="Total"/>-->
+                    <field name="description" string="Description"/>
+                    <field name="state" string="Status"/> 
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- FORM VIEW -->
+        <record model="ir.ui.view" id="transhybrid_purchase_order_notification_form_view">
+            <field name="name">transhybrid_purchase_order_notification_form_view</field>
+            <field name="model">transhybrid.purchase.order.notification</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form create="0" edit="0">   
+
+                    <header>
+
+                        <button 
+                            string="Confirmation" 
+                            name="action_notification" 
+                            class="oe_highlight"
+                            confirm="Are You Sure To Confirmed ?" 
+                            type="object"
+                            attrs="{'invisible':[('state','=',2)]}"
+                            
+                            />
+
+                        <field name="state" widget="statusbar" statusbar_visible="1,2"/>
+                    </header>
+
+                    <sheet>
+                        <h1>
+                            <field 
+                                name="name"
+                                string="Purchase Order"
+                                class="oe_inline" 
+                                />
+                        </h1>
+                        <group>
+
+                            <field name="customer_name" string="Customer" class="oe_inline" />
+                            <field name="order_date" string="Order Date" class="oe_inline"/>
+                            <field name="rfs_date" string="RFS Date" class="oe_inline"/>
+                            <field name="duration" string="Days"/>
+                            <!--<field name="amount_total" string="Total" class="oe_inline"/>-->
+                            <field name="description" string="Description"/>
+                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- SEARCH VIEW -->
+        <record model="ir.ui.view" id="transhybrid_purchase_order_notification_search_view">
+            <field name="name">transhybrid.purchase.order.notification.search.view</field>
+            <field name="model">transhybrid.purchase.order.notification</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Searching">                    
+                    <field name="name" string="Purchase Order"/>
+                    <field name="customer_name" string="Customer" />
+                    <field name="order_date" string="Order Date"/>
+                    <field name="rfs_date" string="RFS Date"/>
+                    <field name="duration" string="Days"/>
+                    <!--<field name="amount_total" string="Total"/>-->
+                    <field name="description" string="Description"/>
+                    <field name="state" string="Status"/>    
+                </search>
+            </field>
+        </record>
+
+
+        <!--ACTION-->
+        <record id="transhybrid_purchase_order_notification_action" model="ir.actions.act_window">
+            <field name="name">Deadline Purchase Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">transhybrid.purchase.order.notification</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="transhybrid_purchase_order_notification_search_view" />
+        </record>
+
+        <record 
+        	model="ir.actions.act_window.view" 
+        	id="action_transhybrid_purchase_order_notification_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="transhybrid_purchase_order_notification_tree_view"/>
+            <field name="act_window_id" ref="transhybrid_purchase_order_notification_action"/>
+        </record>
+        
+        <record 
+        	model="ir.actions.act_window.view" 
+        	id="action_transhybrid_purchase_order_notification_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="transhybrid_purchase_order_notification_form_view"/>
+            <field name="act_window_id" ref="transhybrid_purchase_order_notification_action"/>
+        </record>        
+        
+
+        <menuitem 
+            action="transhybrid_purchase_order_notification_action" 
+            icon="STOCK_JUSTIFY_FILL" 
+            sequence="5"
+            id="transhybrid_purchase_order_notification_menu_view" 
+            parent="sub_menu_child_reporting_data_transhybrid_monitoring"  
+        />
+
+	</data>
+</odoo>

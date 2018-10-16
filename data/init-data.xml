@@ -14,9 +14,66 @@
             <field name="email_password">p4@w5sW0rD_3k4d@T4</field>
             <field name="is_email_server_configuration">True</field>
             <field name="email_host">smtp.gmail.com</field>
-            <field name="email_port">587</field>
+            <field name="email_port">465</field>
             <field name="email_server_description">Description</field>
         </record>
+
+        <record id="default_notification_purchase_order" model="ir.cron">
+            <field name="name">Purchase Order Notification Reminder</field>
+            <field name="user_id">1</field>
+            <field name="internal_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="model">sale.order</field>
+            <field name="function">get_deadline_purchase_order</field>
+        </record>
+
+        <!-- 
+        <record id="default_transhybrid_outask_bas_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Survey OutTask</field>
+            <field name="code">bas.outask</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="default_transhybrid_connectiviey_bas_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Survey Connectivity</field>
+            <field name="code">bas.connectivity</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="default_transhybrid_cpe_bas_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Survey CPE</field>
+            <field name="code">bas.cpe</field>
+            <field name="active">True</field>
+        </record>
+        
+
+
+
+
+        
+        <record id="default_transhybrid_outask_baa_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Activation OutTask</field>
+            <field name="code">baa.outask</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="default_transhybrid_connectiviey_baa_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Activation Connectivity</field>
+            <field name="code">baa.connectivity</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="default_transhybrid_cpe_baa_sequence" model="ir.sequence">
+            <field name="name">Acceptance Official Activation CPE</field>
+            <field name="code">baa.cpe</field>
+            <field name="active">True</field>
+        </record>
+        -->
+
+
+
+
+
 
 	</data>
 </odoo>

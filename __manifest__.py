@@ -49,6 +49,7 @@
         'views/transhybrid_activation_news_view.xml',
         'views/transhybrid_testing_news_view.xml',
         'views/transhybrid_integration_news_view.xml',
+        'views/transhybrid_purchase_order_notification_view.xml',
 
 
 
