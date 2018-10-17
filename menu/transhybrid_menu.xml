@@ -63,6 +63,67 @@
 
 
 
+		<record model="ir.ui.menu" id="hr.menu_hr_root">
+            <field name="name">Karyawan</field>
+            <field name="sequence">1</field>
+        </record>
+
+
+        <record model="ir.ui.menu" id="hr.menu_hr_department_tree">
+        	<field name="name">Departemen</field>
+        </record>
+
+
+
+		<menuitem
+			id="transhybrid_hr_employee_department_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="0"
+			name="Departemen"
+		/>
+
+		<menuitem
+			id="transhybrid_hr_employee_job_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="1"
+			name="Jabatan"
+			
+			/>			
+
+		<menuitem
+			id="transhybrid_hr_employee_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="2"
+			name="Karyawan"
+			
+			/>
+
+		<menuitem
+			id="transhybrid_hr_employee_configuration_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="3"
+			name="Konfigurasi"
+			
+			/>
+
+
+		<!-- INVISIBLE MENU ITEM -->
+		<record id="make_invisible" model="res.groups">
+		    <field name="name">Invisible</field>
+		</record>
+
+		<record model="ir.ui.menu" id="hr.menu_human_resources_configuration">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
+		
+		<record model="ir.ui.menu" id="hr.menu_open_view_employee_list_my">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
+		
+		<record model="ir.ui.menu" id="hr.menu_hr_department_tree">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
+
 
 
 

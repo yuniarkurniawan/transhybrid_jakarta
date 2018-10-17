@@ -2,7 +2,7 @@
     'name': "PT. Primedia Armoekadata",
     'version': '1.0',
     'external_dependencies': {'python': ['xlwt']},
-    'depends': ['base', 'account','base_iban', 'base_vat', 'web','crm','sale'],
+    'depends': ['base', 'hr','account','base_iban', 'base_vat', 'web','crm','sale'],
     'author': 'PT. Primedia Armoekadata',
     'category': '-',
     'summary': '-',
@@ -51,6 +51,13 @@
         'views/transhybrid_integration_news_view.xml',
         'views/transhybrid_purchase_order_notification_view.xml',
 
+        'views/transhybrid_hr_employee_view.xml',
+        'views/transhybrid_hr_employee_religion_view.xml',
+        'views/transhybrid_hr_inactive_employee_view.xml',
+        'views/transhybrid_hr_employee_family_view.xml',
+        'views/transhybrid_hr_employee_department_view.xml',
+        'views/transhybrid_hr_employee_category_view.xml',
+        'views/transhybrid_hr_employee_job_view.xml',
 
 
 

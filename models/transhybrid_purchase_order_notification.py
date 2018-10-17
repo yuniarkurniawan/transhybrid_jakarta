@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 
-class TranshbridPurchaseOrderNotificationWGSNotification(models.Model):
+class TranshbridPurchaseOrderNotificationNotification(models.Model):
     
     _name = "transhybrid.purchase.order.notification"
     _description = "Transhybrid Notification"

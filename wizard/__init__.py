@@ -1,1 +1,2 @@
-#import transhybrid_sale_order_report
+import transhybrid_hr_employee_delete_dept_wizard
+import transhybrid_hr_employee_delete_emp_wizard

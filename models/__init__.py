@@ -20,6 +20,17 @@ import transhybrid_testing_news
 import transhybrid_integration_news
 import transhybrid_purchase_order_notification
 
+import transhybrid_hr_employee_religion
+import transhybrid_hr_employee_family
+import transhybrid_hr_employee
+
+import transhybrid_hr_employee_department
+import transhybrid_hr_employee_job
+import transhybrid_hr_employee_category
+
+import transhybrid_hr_employee_dept_job
+import transhybrid_hr_res_users
+
 #import transhybrid_ir_http
 #import transhybrid_res_config
 
