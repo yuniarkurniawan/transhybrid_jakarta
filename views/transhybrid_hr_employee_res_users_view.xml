@@ -1,0 +1,293 @@
+<odoo>
+	<data>
+		
+		<record model="ir.ui.view" id="res_groups_client_form">
+			<field name="name">res.groups.client.form</field>
+			<field name="model">res.groups</field>
+			<field name="arch" type="xml">
+				<form string="Usergroup">
+					
+					<sheet>
+						
+						<group>
+							<field 
+								name="name"
+								class="oe_inline"
+								/>
+							
+							<field 
+								name="access_level_id" 
+								widget="selection" 
+								string="Referensi Hak Akses"
+								/>
+							
+							<field 
+								name="company_id" 
+								readonly="1" 
+								string="Perusahaan"
+								options="{'no_open': True}" 
+								invisible="1"/>
+							
+							<field 
+								name="group_type" 
+								invisible="1" />
+							
+						</group>
+					
+						<notebook>
+							<page name="access_rights" string="Hak Akses">
+								<h5>Keterangan:</h5>
+								<p>
+									Set hak akses setiap menu dengan pilihan sebagai berikut: <br/>
+									R untuk melihat data. <br/>
+									C untuk menambah/membuat data baru. <br/>
+									U untuk mengubah/memperbaharui data. <br/>
+									D untuk menghapus data.
+								</p>
+								<field 
+									name="access_hierarchy_data" 
+									widget="access_rights" />
+							</page>
+
+							<page name="users" string="Users">
+								<field 
+									name="users"
+									class="oe_inline" 
+									/>
+							</page>
+							
+							<page name="notes" string="Notes">
+								<field 
+									name="comment"
+									class="oe_inline"
+								/>
+							</page>
+						</notebook>
+								
+
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+		<record id="base.action_res_groups" model="ir.actions.act_window">
+			<field name="name">System-level Groups</field>
+			<field name="domain">[('group_type','=','system')]</field>
+		</record>
+
+		<record id="action_res_groups_client" model="ir.actions.act_window">
+			<field name="name">Client-generated Groups</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.groups</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('group_type','=','client')]</field>			
+			<field name="context">{'default_group_type': 'client', 'client_mode': 1}</field>
+		</record>
+		<record id="action_res_groups_client_view1" model="ir.actions.act_window.view">
+			<field eval="10" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="chjs_access_rights.res_groups_tree"/>
+			<field name="act_window_id" ref="action_res_groups_client"/>
+		</record>
+		<record id="action_res_groups_client_view2" model="ir.actions.act_window.view">
+			<field eval="20" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="res_groups_client_form"/>
+			<field name="act_window_id" ref="action_res_groups_client"/>
+		</record>
+		
+		<record id="action_res_groups_client2" model="ir.actions.act_window">
+			<field name="name">Hak Akses</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.groups</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('group_type','=','client')]</field>
+			<field name="context">{'default_group_type': 'client', 'client_mode': 1}</field>
+		</record>
+		<record id="action_res_groups_client2_view1" model="ir.actions.act_window.view">
+			<field eval="10" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="chjs_access_rights.res_groups_tree"/>
+			<field name="act_window_id" ref="action_res_groups_client2"/>
+		</record>
+		<record id="action_res_groups_client2_view2" model="ir.actions.act_window.view">
+			<field eval="20" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="res_groups_client_form"/>
+			<field name="act_window_id" ref="action_res_groups_client2"/>
+		</record>
+		
+		<record model="ir.ui.view" id="transhybrid_hr_employee.res_users_client_form_view">
+			<field name="name">res.users.client.form</field>
+			<field name="model">res.users</field>
+			<field name="priority">20</field>
+			<field name="arch" type="xml">
+				<form string="User">
+					
+					<sheet>
+
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-md-3">
+									<field name="image" widget='image' class="oe_avatar" options='{"preview_image": "image_medium"}'/>
+								</div>
+								<div class="col-md-5">
+									<h1 class="employee-name">
+										<field name="name" required="1"/>
+									</h1>
+									<h2 class="employee-name">
+										<field name="login"/>
+									</h2>
+									<button string="Ubah Password" type="action" class="oe_highlight" name="%(base.change_password_wizard_action)d" help="Ubah password user."/>
+									<field name="email" invisible="1"/>
+								</div>
+								<div class="col-md-4">
+									<div class="oe_button_box oe_edit_only" name="button_box">
+										<button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
+											<field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
+										</button>
+									</div>
+									<field name="id" invisible="1"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<notebook>
+										<page name="client_access_rights" string="Hak Akses" invisible="context.get('client_mode') != 1">
+											<br/>
+											<group invisible="context.get('client_mode') != 1">#client_groups#</group>
+										</page>
+										<page string="Preferensi">
+											<div class="row">
+												<div class="col-md-6">
+													<group name="preferences">
+														<field name="lang"/>
+														<field name="tz" widget="timezone_mismatch" options="{'tz_offset_field': 'tz_offset'}" />
+														<field name="tz_offset" invisible="1"/>
+													</group>
+												</div>
+												<div class="col-md-6">
+													<group name="messaging">
+														<field name="signature"/>
+													</group>
+												</div>
+											</div>
+										</page>
+									</notebook>
+								</div>
+							</div>
+						</div>
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+		<record id="transhybrid_hr_employee.res_users_client_tree_view" model="ir.ui.view">
+			<field name="name">transhybrid_hr_employee.res_users_client_tree_view</field>
+			<field name="model">res.users</field>
+			<field name="arch" type="xml">
+				<tree string="Pengguna">
+					<field name="login" string="Login"/>
+					<field name="name" string="Nama Pengguna"/>
+					<field name="job" string="Jabatan"/>
+					<field name="access_level" string="Hak Akses"/>
+					<field name="group_names" string="Nama Group"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="res_users_client_search_view" model="ir.ui.view">
+			<field name="name">res.users.client.search</field>
+			<field name="model">res.users</field>
+			<field name="arch" type="xml">
+				<search>
+					<field name="login" string="Login"/>
+					<field name="name" string="Nama Pengguna"/>
+					<field name="job" string="Jabatan"/>
+				</search>
+			</field>
+		</record>
+
+		<record id="base.action_res_users" model="ir.actions.act_window">
+			<field name="name">System-level Users</field>
+			<field name="domain">[('user_type','=','system')]</field>
+		</record>
+
+		<record id="action_res_users_client" model="ir.actions.act_window">
+			<field name="name">Client-generated Users</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.users</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('user_type','=','client')]</field>
+			<field name="context">{'default_user_type': 'client', 'client_mode': 1}</field>
+		</record>
+		<record id="action_res_users_client_view1" model="ir.actions.act_window.view">
+			<field eval="10" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="transhybrid_hr_employee.res_users_client_tree_view"/>
+			<field name="act_window_id" ref="action_res_users_client"/>
+		</record>
+		<record id="action_res_users_client_view2" model="ir.actions.act_window.view">
+			<field eval="20" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="transhybrid_hr_employee.res_users_client_form_view"/>
+			<field name="act_window_id" ref="action_res_users_client"/>
+		</record>
+
+		
+		<!-- ACTION VIEW -->
+		<record 
+			id="transhybrid_hr_employee.res_users_client2_action_view" 
+			model="ir.actions.act_window">
+			<field name="name">Akun Pengguna</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.users</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[('user_type','=','client')]</field>
+			<field name="context">{'default_user_type': 'client', 'client_mode': 1}</field>
+		</record>
+
+		<record 
+			id="transhybrid_hr_employee.res_users_tree_action_view" 
+			model="ir.actions.act_window.view">
+			<field eval="10" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="transhybrid_hr_employee.res_users_client_tree_view"/>
+			<field name="act_window_id" ref="transhybrid_hr_employee.res_users_client2_action_view"/>
+		</record>
+
+		<record 
+			id="transhybrid_hr_employee.res_users_form_action_view" 
+			model="ir.actions.act_window.view">
+			<field eval="20" name="sequence"/>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="transhybrid_hr_employee.res_users_client_form_view"/>
+			<field name="act_window_id" ref="transhybrid_hr_employee.res_users_client2_action_view"/>
+		</record>
+
+
+		<menuitem 
+			action="transhybrid_hr_employee.res_users_client2_action_view" 
+			id="transhybrid_hr_employee.res_users_client_menu_view" 
+			parent="transhybrid_hr_employee_sub_menu" 
+			sequence="1" 
+			name="User"
+			/>
+
+		<!--
+		<menuitem 
+			action="action_res_users_client" 
+			id="menu_action_res_users_client" 
+			parent="base.menu_users" 
+			sequence="20" 
+			groups="base.group_system" />
+		-->
+
+	</data>
+</odoo>

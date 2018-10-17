@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+    
+        <!-- Delete Employee Wizard -->
+        <record id="transhybrid_jakarta.delete_emp_wizard_view" model="ir.ui.view">
+        <field name="name">transhybrid.hr.employee.delete.emp.wizard</field>
+        <field name="model">transhybrid.hr.employee.delete.emp.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Hapus Karyawan">
+            <p>Apakah Anda yakin ingin menghapus Karyawan ini?</p>
+            <group>
+                <field name="empl_id" readonly="1"/>
+            </group>
+            <footer>
+                <button name="del_empl" type="object" class="oe_highlight" string="Hapus"/>
+                <button special="cancel" string="Batal"/>
+            </footer>
+            </form>
+        </field>
+        </record>
+    </data>
+</odoo>

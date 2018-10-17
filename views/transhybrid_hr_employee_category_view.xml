@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr.view_employee_category_list" model="ir.ui.view">
+            <field name="name">transhybrid_hr_employee.tree.employee.category.view</field>
+            <field name="model">hr.employee.category</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Employees Tags">
+                    <field name="name" string="Nama"/>
+                    <field name="description" string="Keterangan"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr.view_employee_category_form" model="ir.ui.view">
+            <field name="name">transhybrid_hr_employee.form.employee.category.view</field>
+            <field name="model">hr.employee.category</field>
+            <field name="arch" type="xml">
+                <form>
+                    
+                    <sheet>
+                        <group>
+                            <field 
+                                name="name" 
+                                string="Nama"
+                                class="oe_inline"/>
+                            <field 
+                                name="description" 
+                                string="Keterangan"
+                                class="oe_inline"/>
+                            <!--
+                            <field 
+                                name="employee_ids"
+                                string="Karyawan" 
+                                widget="many2many"/>
+                            -->
+                        </group>
+                            <notebook>
+                                <page string="Daftar Karyawan">
+                                    <field name="employee_line_ids">
+                                        <tree create="0" edit="0" delete="0">
+                                            <field name="identification_id" string="NIK"/>
+                                            <field name="name" string="Nama"/>
+                                            <field name="job_id" string="Pekerjaan"/>
+                                            <field name="department_id" string="Departemen"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+
+                            
+                        
+                    </sheet> 
+                </form>
+            </field>
+        </record>
+
+        <record id="transhybrid_hr_employee_category_action" model="ir.actions.act_window">
+            <field name="name">Kategori Karyawan</field>
+            <field name="res_model">hr.employee.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+         <menuitem
+            id="transhybrid_hr_employee_category_menu"
+            action="transhybrid_hr_employee_category_action"
+            parent="transhybrid_hr_employee_configuration_sub_menu"
+            sequence="1"
+            />
+
+    </data>
+</odoo>

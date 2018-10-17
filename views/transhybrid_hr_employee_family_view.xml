@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record model="ir.ui.view" id="transhybrid_hr_employee_family_form_view">
+            <field name="name">transhybrid.hr.employee.family.form.view</field>
+            <field name="model">transhybrid.hr.employee.family</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" string="Name" class="oe_inline" />
+                            <field name="f_relationship" string="Hubungan" class="oe_inline" />
+                            <field name="f_birth_place" string="Tempat Lahir" class="oe_inline" />
+                            <field name="f_birth_date" string="Tanggal Lahir" class="oe_inline" />
+                        </group>
+                        <group>
+
+                            <field name="f_last_edu" string="Pendidikan Terakhir" class="oe_inline" />
+                            <field name="f_job" string="Pekerjaan" class="oe_inline" />
+                            <field name="f_phone" string="No. HP" class="oe_inline" />
+                            <field name="description" class="oe_inline"/>
+                        </group>                                                
+                    </sheet>
+                </form>
+            </field>
+        </record>        
+    </data>
+</odoo>

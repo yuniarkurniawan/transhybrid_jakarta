@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <record id="view_department_form" model="ir.ui.view">
+            <field name="name">transhybrid_attendance.base_config_setting_hr_form_attendance_view</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form" />
+            <field name="priority">99</field>
+            <field name="arch" type="xml">
+
+            <xpath expr="//form" position="replace">
+
+                <form string="department">
+	                <sheet>
+	                    <div class="oe_button_box" name="button_box">
+	                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+	                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+	                        </button>
+	                    </div>
+	                    
+                        <group>
+	                        <field 
+                                name="name" 
+                                string="Nama" 
+                                class="oe_inline" />
+	                        <field 
+                                name="parent_id" 
+                                string="Departemen Induk" 
+                                
+                                class="oe_inline" 
+                            />
+                            
+                            <field 
+                                name="manager_id" 
+                                string="Atasan" 
+                                options="{'no_quick_create': True, 'no_create_edit' : True,'no_open':True}"
+                                class="oe_inline"
+                            />
+	                        
+	                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                            
+	                    </group>
+	                </sheet>
+                    
+	            </form>
+
+
+            </xpath> 
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

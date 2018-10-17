@@ -1,0 +1,151 @@
+<odoo>
+	<data>
+
+		<!-- TREE VIEW -->
+		<record id="transhybrid_hr_employee_job_tree_view" model="ir.ui.view">
+			<field name="name">transhybrid.hr.employee.job.tree.view</field>
+			<field name="model">hr.job</field>
+			<field name="arch" type="xml">
+				<tree string="Jabatan">
+					<field name="name"/>
+					<field name="department_id"/>
+					<field name="manager_id" string="Atasan Langsung"/>
+					<field name="no_of_employee"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- FORM VIEW -->
+	  	<record id="transhybrid_hr_employee_job_form_view" model="ir.ui.view">
+			<field name="name">transhybrid.hr.employee.job.form.view</field>
+			<field name="model">hr.job</field>
+			<field name="arch" type="xml">
+				<form>
+
+					<sheet>
+						<group>
+							<field 
+								name="name"
+								string="Nama"
+								class="oe_inline"
+								/>
+
+								
+							<!--
+							<field 
+								name="group_id"
+								options="{'no_open': True, 'no_create_edit': True}"
+								class="oe_inline"
+								/>
+							-->
+
+							<field 
+								name="department_id"
+								options="{'no_open': True, 'no_create_edit': True}"
+								class="oe_inline"
+								/>
+
+							<field 
+								name="cross_department"
+								class="oe_inline"
+								/>
+						</group>
+
+						<group>
+							<field 
+								name="parent_id" 
+								options="{'no_open': True, 'no_create_edit': True}"
+								class="oe_inline"
+								/>
+							<field 
+								name="manager_id"
+								options="{'no_open': True, 'no_create_edit': True}"
+								class="oe_inline"/>
+							
+							<field 
+								name="description"
+								string="Keterangan"
+								class="oe_inline"
+								/>
+						</group>
+
+						<notebook>
+							<page string="Jabatan Bawahan" name="child_job">
+								<field name="child_ids">
+									<tree create="0" edit="0" delete="0">
+										<field name="name"/>
+										<field name="department_id"/>
+										<field name="no_of_employee"/>
+									</tree>
+								</field>
+							</page>
+						</notebook>
+
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+
+		
+		<!-- SEARCH VIEW -->
+		<record id="transhybrid_hr_employee_job_search_view" model="ir.ui.view">
+	        <field name="name">transhybrid.hr.employee.job.search.view</field>
+	        <field name="model">hr.job</field>
+	        <field name="arch" type="xml">
+	            <search string="Jabatan">
+	                <field name="name" string="Jabatan"/>
+	                <field name="department_id"/>
+	                <field name="manager_id"/>
+	            </search>
+	        </field>
+	    </record>
+
+
+	    <record id="transhybrid_hr_employee_job_action" model="ir.actions.act_window">
+		  <field name="name">Jabatan</field>
+		  <field name="res_model">hr.job</field>
+		  <field name="view_type">form</field>
+		  <field name="view_mode">tree,form</field>
+		  <field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+			  Klik untuk menambah Jabatan baru.
+			</p>
+		  </field>
+		</record>
+
+
+	    <record model="ir.actions.act_window.view" id="action_transhybrid_hr_employee_job_tree_view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="transhybrid_hr_employee_job_tree_view"/>
+            <field name="act_window_id" ref="transhybrid_hr_employee_job_action"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="action_transhybrid_hr_employee_job_form_view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="transhybrid_hr_employee_job_form_view"/>
+            <field name="act_window_id" ref="transhybrid_hr_employee_job_action"/>
+        </record>        
+        
+        <!--
+        <menuitem 
+        	id="transhybrid_hr_employee_job_menu_view" 
+        	parent="transhybrid_hr_employee_job_sub_menu" 
+        	sequence="1"
+        	icon="STOCK_JUSTIFY_FILL"
+        	action="transhybrid_hr_employee_job_action"
+        	/>
+        -->
+
+        <menuitem 
+        	id="transhybrid_hr_employee_job_menu_view" 
+        	parent="transhybrid_hr_employee_sub_menu" 
+        	sequence="2"
+        	icon="STOCK_JUSTIFY_FILL"
+        	action="transhybrid_hr_employee_job_action"
+        	/>
+
+	</data>
+</odoo>
