@@ -27,11 +27,18 @@ class TranshybridSurveyNews(models.Model):
                                     (2,'Signed'),
                                     (3,'Cancel')],'State',default=1)
 
+	sign_date 				=	fields.Date('Signed Date')
+	tanggal 				=	fields.Char('Tanggal')
+	hari_spell 				=	fields.Char('Hari')
+	bulan_spell 			=	fields.Char('Bulan')
+	tahun_spell 			=	fields.Char('Tahun')
+
 	# PEMBBUAT ORDER
 	name_pembuat_order      =   fields.Char('Nama Pembuat Order')
 	nik_pembuat_order		=	fields.Char('NIK Pembuat Order')
 	telp_pembuat_order		=	fields.Char('Telp. Pembuat Order')
 	alamat_pembuat_order	=	fields.Text('Alamat Pembuat Order')
+	email_pembuat_order		=	fields.Char('Email Pembuat Order')
 
 
 	# JENIS LAYANAN
@@ -45,6 +52,7 @@ class TranshybridSurveyNews(models.Model):
 
 	is_vsat					=	fields.Boolean('Is VSAT')
 	is_dw_dm				=	fields.Boolean('Is DWDM')
+	keterangan_lainnya		=	fields.Char('Keterangan Lainnya')
 
 
 	# DATA PELANGGAN
@@ -68,6 +76,8 @@ class TranshybridSurveyNews(models.Model):
 	is_ethernet				=	fields.Boolean('Is Ethernet')
 	is_radio				=	fields.Boolean('Is Radio')
 	is_vsat_2				=	fields.Boolean('Is VSAT')
+	is_lainnya				=	fields.Boolean('Is Lainnya')
+	
 
 
 	# KONDISI TEMPAT
@@ -172,6 +182,62 @@ class TranshybridSurveyNews(models.Model):
 
 		return tmpOut
 
+	def get_day_data(self,paramDay):
+
+		
+		tmpOutDay =  ""
+
+		paramDay = paramDay.upper()
+		if(paramDay=='SATURDAY'):
+			tmpOutDay = "Sabtu"
+		elif(paramDay=='SUNDAY'):
+			tmpOutDay = "Minggu"
+		elif(paramDay=='MONDAY'):
+			tmpOutDay = "Senin"
+		elif(paramDay=='TUESDAY'):
+			tmpOutDay = "Selasa"
+		elif(paramDay=='WEDNESDAY'):
+			tmpOutDay = "Rabu"
+		elif(paramDay=='THURSDAY'):
+			tmpOutDay = "Kamis"
+		else:
+			tmpOutDay = "Jumat"
+		
+		return tmpOutDay
+
+
+	def get_month_data(self,paramMonth):
+
+		tmpParamMonth = int(paramMonth)
+		tmpOutMonth =  ""
+
+		if(tmpParamMonth==1):
+			tmpOutMonth = "Januari"
+		elif(tmpParamMonth==2):
+			tmpOutMonth = "Februari"
+		elif(tmpParamMonth==3):
+			tmpOutMonth = "Maret"
+		elif(tmpParamMonth==4):
+			tmpOutMonth = "April"
+		elif(tmpParamMonth==5):
+			tmpOutMonth = "Mei"
+		elif(tmpParamMonth==6):
+			tmpOutMonth = "Juni"
+		elif(tmpParamMonth==7):
+			tmpOutMonth = "Juli"
+		elif(tmpParamMonth==8):
+			tmpOutMonth = "Agustus"
+		elif(tmpParamMonth==9):
+			tmpOutMonth = "September"
+		elif(tmpParamMonth==10):
+			tmpOutMonth = "Oktober"
+		elif(tmpParamMonth==11):
+			tmpOutMonth = "Nopember"
+		else:
+			tmpOutMonth = "Desember"
+
+		return tmpOutMonth
+
 
 	@api.onchange('sale_order_line_service')
 	def get_bas_number(self):
@@ -244,8 +310,36 @@ class TranshybridSurveyNews(models.Model):
 
 		if(self.id):
 
+			tmpYear = datetime.now().strftime("%Y")
+			
+
+			tmpMonth = datetime.now().strftime("%m")
+			
+			tmpMonth = self.get_month_data(int(tmpMonth))
+			tmpDay = datetime.now().strftime("%d")
+			tmpDaySpell = datetime.now().strftime("%A")
+
+			
+			'''
+			new_dict_up['hari'] = self.get_day_data(tmpDaySpell)
+			new_dict_up['tanggal'] = tmpDay
+			new_dict_up['bulan'] = tmpMonth
+			
+			new_dict_up['tahun'] = tmpYear
+
+			sign_date 				=	fields.Datetime('Signed Date')
+			hari_spell 				=	fields.Char('Hari')
+			bulan_spell 			=	fields.Char('Bulan')
+			tahun_spell 			=	fields.Char('Tahun')
+			'''
+
 			self.write({
-                'state':2
+                'state':2,
+                'sign_date':date.today().strftime('%Y-%m-%d'),
+                'tanggal':tmpDay,
+                'hari_spell':self.get_day_data(tmpDaySpell),
+                'bulan_spell':tmpMonth,
+                'tahun_spell':tmpYear,
             })
 
 			for out in self:

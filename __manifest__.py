@@ -43,6 +43,7 @@
         'views/transhybrid_sale_order_line_service_report_view.xml',
         'views/transhybrid_sale_order_monitoring_view.xml',
         'views/transhybrid_sale_order_line_service_assign_to_report_view.xml',
+        'views/transhybrid_report_paperformat_view.xml',
 
         'views/transhybrid_berita_acara_lapangan_view.xml',
         'views/transhybrid_survey_news_view.xml',
@@ -53,7 +54,6 @@
 
         'views/transhybrid_hr_employee_view.xml',
         'views/transhybrid_hr_employee_religion_view.xml',
-        'views/transhybrid_hr_inactive_employee_view.xml',
         'views/transhybrid_hr_employee_family_view.xml',
         'views/transhybrid_hr_employee_department_view.xml',
         'views/transhybrid_hr_employee_category_view.xml',

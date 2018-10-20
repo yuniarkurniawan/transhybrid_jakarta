@@ -4,9 +4,9 @@
 		<template id="survey_news_report_pdf">
 
 			<t t-call="report.html_container">
-				<!--
+				
 				<t t-foreach="docs" t-as="o">
-				-->
+				
 					<div class="page">
 						
 						<table style="width:100%">
@@ -24,10 +24,10 @@
 														<td align="center"><b>BERITA ACARA SURVEY</b></td>
 													</tr>
 													<tr>
-														<td align="center"><b>{NAMA PRODUCT SERVICE}</b></td>
+														<td align="center"><b><span t-field="o.sale_order_line_service" /></b></td>
 													</tr>
 													<tr>
-														<td align="center"><b>NO. </b></td>
+														<td align="center"><b>NO. <span t-field="o.name" /></b></td>
 													</tr>
 													<tr>
 														<td align="center"><b>Jl. Bank Dagang Negara II No.22, RT.2/RW.11, Cilandak Barat, Jakarta Selatan</b></td>
@@ -56,7 +56,7 @@
 									<table width="100%">
 										<tr>
 											<td style="text-align:justify;">
-												Pada hari <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tanggal <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> bulan <![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> tahun <![CDATA[&nbsp;]]> bersama-sama memeriksa proses pekerjaan berupa instalasi dan aktivasi<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> oleh PT. Transhybrid Communication pada Customer dengan detail sebagai berikut  :
+												Pada hari <b> <span t-field="o.hari_spell" /> </b>tanggal <b> <span t-field="o.tanggal" /> </b>bulan<b> <span t-field="o.bulan_spell" /> </b>tahun <b> <span t-field="o.tahun_spell" /> </b>bersama-sama memeriksa proses pekerjaan berupa instalasi dan aktivasi<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]> oleh PT. Transhybrid Communication pada Customer dengan detail sebagai berikut  :
 											</td>
 										</tr>
 										<tr>
@@ -89,69 +89,127 @@
 								  <tr>
 								    <td>Nama Pelanggan</td>
 								    <td>:</td>
-								    <td>{Nama Pelanggan}</td>
+								    <td><span t-field="o.name_pembuat_order" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="2"><label>
-								      <input type="checkbox" name="checkbox" id="checkbox"  />
+								      
+								    	<t t-if = "o.is_internet==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
+								      
+								    
 								    </label><![CDATA[&nbsp;]]>Internet
 								    </td>
 								    <td><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+								    	
+								    	<t t-if = "o.is_voice==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
+
 								    </label>
 								    Voice</td>
 								  </tr>
 								  <tr>
 								    <td valign="top">NIK</td>
 								    <td valign="top">:</td>
-								    <td>{NIK}</td>
+								    <td><span t-field="o.nik_pembuat_order" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="2" valign="top"><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+								    	<t t-if = "o.is_local_loop==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
+								      	
+										
 								    </label>
 								    Local Loop</td>
 								    <td><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+
+								    	<t t-if = "o.is_sip_trunk==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
+								      
 								    </label>
 								    SIP Trunk</td>
 								  </tr>
 								  <tr>
 								    <td>Telepon</td>
 								    <td>:</td>
-								    <td>{Koordinat}</td>
+								    <td><span t-field="o.telp_pembuat_order" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="2"><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+
+								    	<t t-if = "o.is_metro_e==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
 								    </label>
 								      Metro - E</td>
 								    <td><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+
+								    	<t t-if = "o.is_tdm==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
 								    </label>
 								    TDM</td>
 								  </tr>
 								  <tr>
 								    <td>Email</td>
 								    <td>:</td>
-								    <td>{Email}</td>
+								    <td><span t-field="o.email_pembuat_order" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="2"><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+								      <t t-if = "o.is_vsat==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
 								    </label>
 								    VSAT</td>
 								    <td><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+
+								    	<t t-if = "o.is_dw_dm==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
 								    </label>
 								    DWDM</td>
 								  </tr>
 								  <tr>
 								    <td valign="top">Alamat Instalasi A</td>
 								    <td valign="top">:</td>
-								    <td>{alamat_instalasi_a}</td>
+								    <td><span t-field="o.alamat_pembuat_order" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="2" valign="top"><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+
+								      <t t-if = "o.is_lainnya==true">
+										    <input type="checkbox" checked="checked" />
+										</t>
+										<t t-else="">
+											 <input type="checkbox" />
+										</t>
 								    </label>
 								    Lainnya</td>
-								    <td>{Lainnya.....}</td>
+								    <td><span t-field="o.keterangan_lainnya" /></td>
 								  </tr>
 								  <tr>
 								  	<td colspan="7"><![CDATA[&nbsp;]]></td>
@@ -164,7 +222,7 @@
 								  <tr>
 								    <td>Nama Pelanggan</td>
 								    <td>:</td>
-								    <td>{nama_pelanggn}</td>
+								    <td><span t-field="o.nama_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td></td>
 								    <td></td>
@@ -173,7 +231,7 @@
 								  <tr>
 								    <td>Alamat Survey</td>
 								    <td>:</td>
-								    <td>{alamat_survey}</td>
+								    <td><span t-field="o.alamat_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td></td>
 								    <td></td>
@@ -182,7 +240,7 @@
 								  <tr>
 								    <td>Telepon</td>
 								    <td>:</td>
-								    <td>{telepon</td>
+								    <td><span t-field="o.telp_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td></td>
 								    <td></td>
@@ -191,7 +249,7 @@
 								  <tr>
 								    <td>Email</td>
 								    <td>:</td>
-								    <td>{email}</td>
+								    <td><span t-field="o.email_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td></td>
 								    <td></td>
@@ -200,7 +258,7 @@
 								  <tr>
 								    <td>Akses Permit</td>
 								    <td>:</td>
-								    <td>{akses_permit}</td>
+								    <td><span t-field="o.akses_permit_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td></td>
 								    <td></td>
@@ -209,7 +267,7 @@
 								  <tr>
 								    <td valign="top">Catatan</td>
 								    <td valign="top">:</td>
-								    <td>{catatan}</td>
+								    <td><span t-field="o.catatan_pelanggan" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td valign="top"></td>
 								    <td valign="top"></td>
@@ -224,23 +282,42 @@
 								  <tr>
 								    <td valign="top">Koordinat</td>
 								    <td valign="top">:</td>
-								    <td>{proses}</td>
+								    <td>Long : <span t-field="o.longitude" /><![CDATA[&nbsp;]]> Lat : <span t-field="o.longitude" /></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td valign="top">Nama Tempat</td>
 								    <td valign="top">:</td>
-								    <td><![CDATA[&nbsp;]]></td>
+								    <td><span t-field="o.nama_tempat" /></td>
 								  </tr>
 								  <tr>
-								    <td valign="top">Perangkat Petir</td>
+								    <td valign="top">Penangkal Petir</td>
 								    <td valign="top">:</td>
-								    <td><label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
-								    </label>
-								    Ada<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
-								    <label>
-								      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
-								    </label>
-								    Tidak Ada</td>
+								    <td>
+
+								    	<t t-if = "o.penangkal_petir==true">
+								    		<label>
+								    			<input type="checkbox" checked="checked" />
+								    		</label>
+								    		Ada<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+								    		<label>
+										      <input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+										    </label>
+										    Tidak Ada
+								    	</t>
+								    	<t t-else="">
+								    		<label>
+								    			<input type="checkbox" name="checkbox" id="checkbox" value="Testing" />
+								    		</label>
+								    		Ada<![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>
+								    		<label>
+										      <input type="checkbox" checked="checked" />
+										    </label>
+										    Tidak Ada
+								    	</t>
+
+
+								    	
+
+								    </td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td valign="top">Air Conditioner</td>
 								    <td valign="top">:</td>
@@ -434,10 +511,10 @@
 								  <tr>
 								    <td colspan="3" valign="top"><table width="100%" border="1">
 								      <tr>
-								        <td>{alamat_ttd}, {tanggal_ttd}</td>
+								        <td>Jakarta, <span t-field="o.tanggal" /> / <span t-field="o.bulan_spell" /> / <span t-field="o.tahun_spell" /></td>
 								        </tr>
 								      <tr>
-								        <td>Pelaksana</td>
+								        <td>Pelaksana,</td>
 								        </tr>
 								      <tr>
 									      	<td><![CDATA[&nbsp;]]></td>
@@ -449,17 +526,17 @@
 									      	<td><![CDATA[&nbsp;]]></td>
 									      </tr>
 								      <tr>
-								        <td height="109" valign="bottom">(...............................)</td>
+								        <td height="109" valign="bottom">(<![CDATA[&nbsp;]]><span t-field="o.sale_order_line_service.assign_to" /><![CDATA[&nbsp;]]>)</td>
 								        </tr>
 								    </table></td>
 								    <td><![CDATA[&nbsp;]]></td>
 								    <td colspan="3" valign="top">
 								    <table width="100%" border="1">
 								      <tr>
-								        <td>Mengetahui</td>
+								        <td><![CDATA[&nbsp;]]></td>
 								        </tr>
 								      <tr>
-								        <td>Pelanggan</td>
+								        <td>Pelanggan,</td>
 								        </tr>
 								      <tr>
 									      	<td><![CDATA[&nbsp;]]></td>
@@ -471,7 +548,7 @@
 									      	<td><![CDATA[&nbsp;]]></td>
 									      </tr>
 								      <tr>
-								        <td height="109" valign="bottom">(...............................)</td>
+								        <td height="109" valign="bottom">(<![CDATA[&nbsp;]]><b><span t-field="o.nama_pelanggan" /></b><![CDATA[&nbsp;]]>)</td>
 								        </tr>
 								    </table></td>
 								  </tr>
@@ -495,9 +572,8 @@
 						</table>					
 
 					</div>
-				<!--	
 				</t>
-				-->
+				
 			</t>
 
 		</template>

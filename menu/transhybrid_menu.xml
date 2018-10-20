@@ -2,18 +2,78 @@
 <openerp>
 	<data>
 
-		<!-- top menu -->
+		<!-- BEGIN USER & GROUP MENU -->
 		<menuitem
-			id="top_menu_transhybrid"
-			name="Transhybrid Menu"
+			id="top_menu_user_transhybrid"
+			name="User"
+			sequence="0"
 			/>
 
 		<menuitem
 			id="sub_menu_user_data_transhybrid" 
 			name="Users" 
-			parent="top_menu_transhybrid" 
+			parent="top_menu_user_transhybrid" 
 			sequence="0"
 			
+			/>
+
+
+
+		<!-- BEGIN EMPLOYEE MENU -->
+		<record model="ir.ui.menu" id="hr.menu_hr_root">
+            <field name="name">Employee</field>
+            <field name="sequence">1</field>
+        </record>
+
+
+        <menuitem
+			id="transhybrid_hr_employee_department_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="0"
+			name="Department"
+		/>
+
+		<menuitem
+			id="transhybrid_hr_employee_job_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="1"
+			name="Position"
+			
+			/>			
+
+		<menuitem
+			id="transhybrid_hr_employee_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="2"
+			name="Employee"
+			
+			/>
+
+		<menuitem
+			id="transhybrid_hr_employee_configuration_sub_menu"
+			parent="hr.menu_hr_root"
+			sequence="3"
+			name="Configuration"
+			
+			/>
+
+
+
+
+
+
+		<!-- BEGIN PURCHASING MENU -->
+		<menuitem
+			id="top_menu_transhybrid"
+			name="Purchasing"
+			sequence="2"
+			/>
+
+		<menuitem
+			id="sub_menu_master_data_transhybrid"
+			name="Master Data" 
+			parent="top_menu_transhybrid"
+			sequence="0"
 			/>
 
 		<menuitem
@@ -30,22 +90,23 @@
 			sequence="2"			
 			/>
 
+		<!--
 		<menuitem
 			id="sub_menu_reporting_data_transhybrid"
 			parent="top_menu_transhybrid"
 			sequence="3"
 			name="Reporting"
 			/>
-
+		-->
 
 		<menuitem
 			id="sub_menu_configuration_data_transhybrid"
 			parent="top_menu_transhybrid"
-			sequence="4"
+			sequence="3"
 			name="Configuration"
 			/>
 
-	
+		<!--
 		<menuitem
 			id="sub_menu_child_reporting_data_transhybrid_monitoring"
 			parent="sub_menu_reporting_data_transhybrid"
@@ -60,54 +121,47 @@
 			sequence="2"
 			name="Acceptance Official"
 			/>
+		-->
 
 
-
-		<record model="ir.ui.menu" id="hr.menu_hr_root">
-            <field name="name">Karyawan</field>
-            <field name="sequence">1</field>
-        </record>
-
-
-        <record model="ir.ui.menu" id="hr.menu_hr_department_tree">
-        	<field name="name">Departemen</field>
-        </record>
-
-
-
+		<!-- BEGIN REPORTING MENU -->
 		<menuitem
-			id="transhybrid_hr_employee_department_sub_menu"
-			parent="hr.menu_hr_root"
-			sequence="0"
-			name="Departemen"
-		/>
-
-		<menuitem
-			id="transhybrid_hr_employee_job_sub_menu"
-			parent="hr.menu_hr_root"
-			sequence="1"
-			name="Jabatan"
-			
-			/>			
-
-		<menuitem
-			id="transhybrid_hr_employee_sub_menu"
-			parent="hr.menu_hr_root"
-			sequence="2"
-			name="Karyawan"
-			
-			/>
-
-		<menuitem
-			id="transhybrid_hr_employee_configuration_sub_menu"
-			parent="hr.menu_hr_root"
+			id="top_menu_reporting_transhybrid"
+			name="Reporting"
 			sequence="3"
-			name="Konfigurasi"
-			
+			/>
+
+		<menuitem
+			id="sub_menu_reporting_monitoring_transhybrid"
+			name="Monitoring" 
+			parent="top_menu_reporting_transhybrid"
+			sequence="0"
+			/>
+
+		<menuitem
+			id="sub_menu_reporting_acceptance_official_transhybrid"
+			name="Acceptance Official"
+			parent="top_menu_reporting_transhybrid"
+			sequence="1"			
 			/>
 
 
-		<!-- INVISIBLE MENU ITEM -->
+		<menuitem
+			id="sub_menu_reporting_configuration_transhybrid"
+			parent="top_menu_reporting_transhybrid"
+			sequence="2"
+			name="Configuration"
+			/>
+
+
+
+
+
+
+
+
+
+		<!-- INVISIBLE HR MENU -->
 		<record id="make_invisible" model="res.groups">
 		    <field name="name">Invisible</field>
 		</record>
@@ -125,6 +179,20 @@
 		</record>
 
 
+		<!-- INVISBLE SALE MENU-->
+		<record model="ir.ui.menu" id="sales_team.menu_base_partner">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
+
+		<!-- INVISIBLE APPS MENU -->
+		<record model="ir.ui.menu" id="base.menu_management">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
+
+		<!-- INVISIBLE INVOICE MENU -->
+		<record model="ir.ui.menu" id="account.menu_finance">
+		    <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+		</record>
 
 
 		<!-- INVISIBLE MENU ITEM
@@ -135,7 +203,7 @@
 		<record model="ir.ui.menu" id="mail.mail_channel_action_client_chat">
 		    <field name="groups_id" eval="[(6,0,[ref('make_invisible_transhybrid')])]"/>
 		</record>
-	-->
+		-->
 
 
 	</data>

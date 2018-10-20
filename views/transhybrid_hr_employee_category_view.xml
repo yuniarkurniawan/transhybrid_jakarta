@@ -58,7 +58,7 @@
         </record>
 
         <record id="transhybrid_hr_employee_category_action" model="ir.actions.act_window">
-            <field name="name">Kategori Karyawan</field>
+            <field name="name">Employee Category</field>
             <field name="res_model">hr.employee.category</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

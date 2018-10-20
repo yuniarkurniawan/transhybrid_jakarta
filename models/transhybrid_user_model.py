@@ -13,7 +13,7 @@ class TranshybridUserModel(models.Model):
 	
 		
 	user_condition 	= 	fields.Selection([
-									(1,'PT. Primedia Armoekadata'),
+									(1,'Internal'),
 									(2,'Others')],'Company',default=1)
 
 	user_company		=	fields.Many2one('res.partner',domain=[('supplier', '=', 1)])

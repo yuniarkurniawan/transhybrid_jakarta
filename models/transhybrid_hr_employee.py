@@ -15,7 +15,6 @@ class TranshybridHREmployee(models.Model):
     birthday = fields.Date('Date of Birth')
     place_of_birth = fields.Char('Place of Birth')
 
-    bank_name = fields.Char(string="Nama Bank")
     bank_account_number = fields.Char(string="Nomor Rekening Bank")
     blood_group = fields.Selection([('a', 'A'),('b', 'B'),('o', 'O'),('ab', 'AB')], string="Golongan Darah")
 
@@ -56,8 +55,6 @@ class TranshybridHREmployee(models.Model):
     nomor_kk = fields.Char(string="Nomor Kartu Keluarga")
     nomor_ktp = fields.Char(string="Nomor KTP")
 
-    file_cv = fields.Binary(string='File CV',)
-    file_cv_filename = fields.Char("File Name")
     manager_id = fields.Many2one('hr.employee', string="Nama Atasan Langsung", readonly=True, compute='_set_manager_id')
 
     
