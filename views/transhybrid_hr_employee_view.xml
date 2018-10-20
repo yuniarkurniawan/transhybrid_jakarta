@@ -108,7 +108,7 @@
 	                            <h1>
 	                                <field 
 	                                	name="name" 
-	                                	placeholder="Nama Karyawan"
+	                                	placeholder="Employee Name"
 	                                />
 	                            	
 	                            </h1>
@@ -129,14 +129,14 @@
 
                         	<page 
                         		name="personal_information" 
-                        		string="Informasi Pribadi" 
+                        		string="Personal Information" 
                         		groups="hr.group_hr_user">
                                 
                                 
-                                    <group string="Kewarganegaraan">
+                                    <group string="Nationality">
                                         <field 
                                         	name="country_id" 
-                                        	string="Negara"
+                                        	string="Country"
                                         	class="oe_inline"
                                         	options='{"no_open": True, "no_create": True}'/>
                                         
@@ -146,50 +146,21 @@
                                         	class="oe_inline"
                                         	required="1"
                                         	groups="hr.group_hr_user"/>
-                                        <!--
-                                        <field 
-                                        	name="passport_id" 
-                                        	string="No. Passpor"
-                                        	class="oe_inline"
-                                        	groups="hr.group_hr_user"/>
-
-                                        <field 
-                                        	name="bank_name"
-                                        	string="Nama Bank"
-                                        	class="oe_inline"
-                                        	/>
-                                        <field 
-                                        	name="bank_account_id"
-                                        	class="oe_inline"
-                                            string="Akun Bank"
-                                        	context="{'default_partner_id': address_home_id}"
-                                            
-                                            />
-
-                                        <field 
-                                            name="file_cv" 
-                                            widget="binary" 
-                                            max-file-size="1048576" 
-                                            filename="file_cv_filename"
-                                            />
-
-                                        <field name="file_cv_filename" invisible="1"/>
-                                    -->
-
+                                        
                                     </group>
                                     
-                                    <group string="Data Pribadi">
+                                    <group string="Personal Data">
 
                                     	<field 
                                     		name="last_education"
-                                    		string="Pendidikan Terakhir"
+                                    		string="Last Education"
                                     		class="oe_inline"
                                     		required="1"
                                     		/>
 
                                         <field 
                                         	name="gender" 
-                                        	string="Jenis Kelamin"
+                                        	string="Sex"
                                         	class="oe_inline"
                                         	required="1"
                                         	/>
@@ -197,7 +168,7 @@
                                         <field 
                                         	name="marital"
                                         	class="oe_inline"
-                                        	string="Status Perkawinan"
+                                        	string="Marital Status"
                                         	required="1"
                                         	/>
                                     </group>
@@ -205,26 +176,18 @@
                                         <field 
                                         	name="place_of_birth"
                                         	class="oe_inline"
-                                        	string="Tempat Lahir"/>
+                                        	string="Place Of Birth"/>
 
                                         <field 
                                         	name="birthday" 
-                                        	string="Tanggal Lahir"
+                                        	string="Birthday"
                                         	class="oe_inline"
                                         />
                                         
-                                        <!--
-                                        <field 
-                                        	name="blood_group"
-                                        	class="oe_inline"
-                                        	string="Golongan Darah"
-                                        	/>
-                                        -->
-
                                         <field 
                                         	name="religion"
                                         	class="oe_inline"
-                                        	string="Agama"
+                                        	string="Religion"
                                         	/>
 
                                         <field name="address_home_id" invisible="1"/>
@@ -243,8 +206,8 @@
                                 
                             </page>
 
-                            <page name="public" string="Informasi Umum">
-                                <group string="Kontak">
+                            <page name="public" string="General Information">
+                                <group string="Contact">
                                     
                                 	<!--
                                     <field name="address_id"
@@ -254,12 +217,13 @@
                                     <field 
                                     	name="mobile_phone"
                                     	required="1"
-                                    	string="No. HP"
+                                    	string="Mobile No."
                                         class="oe_inline"/>
 
                                     <field 
                                     	name="work_email" 
                                     	string="Email"
+                                        required="1"
                                     	widget="email"
                                         class="oe_inline"
 
@@ -271,42 +235,31 @@
                                         />
 
                                 </group>
-                                <group string="Posisi">
+                                <group string="Position">
                                     <field 
                                         name="department_id" 
-                                        string="Departemen"
+                                        string="Department"
                                         class="oe_inline"
                                         />
                                     
                                     <field 
                                         name="job_id"
                                         class="oe_inline"
-                                        string="Pekerjaan"/>
+                                        string="Position"/>
 
                                     <field 
                                         name="parent_id" 
-                                        string="Atasan 1"
+                                        string="Supervisor"
                                         class="oe_inline"
                                         />
-                                    
-                                    <field 
-                                        name="coach_id" 
-                                        string="Atasan 2"
-                                        class="oe_inline"
-                                        />
-                                    <!--
-                                    <field 
-                                        name="calendar_id"
-                                        class="oe_inline"
-                                        string="Jam kerja"/>
-                                    -->
+                                                                        
                                 </group>
                                                                 
                             </page>
                             
                             <page 
                                 name="hr_settings" 
-                                string="Pengaturan User" 
+                                string="User Account" 
                                 groups="hr.group_hr_user">
                                 
                                 <group>
@@ -317,7 +270,8 @@
                                             groups="base.group_multi_company"/>
                                         <field 
                                             name="user_id" 
-                                            string="Nama User"
+                                            string="User Name"
+                                            domain="[('user_condition', '=', 1)]"
                                             options="{'no_open':True,'no_quick_create': True, 'no_create_edit' : True}"/>
                                     </group>
                                 </group>
@@ -363,7 +317,7 @@
 
         <!--ACTION-->
         <record id="transhybrid_hr_employee_view_action" model="ir.actions.act_window">
-            <field name="name">Karyawan</field>
+            <field name="name">Employee</field>
             <field name="res_model">hr.employee</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>

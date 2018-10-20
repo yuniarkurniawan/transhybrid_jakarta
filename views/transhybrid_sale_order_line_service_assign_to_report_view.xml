@@ -146,7 +146,7 @@
 
         <!-- ACTION VIEW -->
         <record id="sale_order_line_service_assign_to_thc_action" model="ir.actions.act_window">
-            <field name="name">User / Worker</field>
+            <field name="name">Surveyor</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">sale.order.line.service.model</field>
             <field name="view_type">form</field>
@@ -182,7 +182,7 @@
         	action="sale_order_line_service_assign_to_thc_action" 
         	icon="STOCK_JUSTIFY_FILL" sequence="3"
             id="sale_order_line_service_assign_to_thc_menu_view" 
-            parent="sub_menu_child_reporting_data_transhybrid_monitoring"
+            parent="sub_menu_reporting_monitoring_transhybrid"
         />    	
 
     </data>

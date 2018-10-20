@@ -287,7 +287,7 @@
         	action="sale_order_line_service_thc_action" 
         	icon="STOCK_JUSTIFY_FILL" sequence="2"
             id="sale_order_line_service_thc_menu_view" 
-            parent="sub_menu_child_reporting_data_transhybrid_monitoring"
+            parent="sub_menu_reporting_monitoring_transhybrid"
         />
     	
 

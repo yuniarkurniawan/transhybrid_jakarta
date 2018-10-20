@@ -121,7 +121,7 @@
             icon="STOCK_JUSTIFY_FILL" 
             sequence="5"
             id="transhybrid_purchase_order_notification_menu_view" 
-            parent="sub_menu_child_reporting_data_transhybrid_monitoring"  
+            parent="sub_menu_reporting_monitoring_transhybrid"  
         />
 
 	</data>

@@ -7,10 +7,9 @@
 			<field name="model">hr.job</field>
 			<field name="arch" type="xml">
 				<tree string="Jabatan">
-					<field name="name"/>
-					<field name="department_id"/>
-					<field name="manager_id" string="Atasan Langsung"/>
-					<field name="no_of_employee"/>
+					<field name="name" string="Position Name"/>
+					<field name="department_id" string="Department"/>
+					<field name="manager_id" string="Supervisor"/>
 				</tree>
 			</field>
 		</record>
@@ -30,15 +29,6 @@
 								class="oe_inline"
 								/>
 
-								
-							<!--
-							<field 
-								name="group_id"
-								options="{'no_open': True, 'no_create_edit': True}"
-								class="oe_inline"
-								/>
-							-->
-
 							<field 
 								name="department_id"
 								options="{'no_open': True, 'no_create_edit': True}"
@@ -46,40 +36,12 @@
 								/>
 
 							<field 
-								name="cross_department"
-								class="oe_inline"
-								/>
-						</group>
-
-						<group>
-							<field 
-								name="parent_id" 
-								options="{'no_open': True, 'no_create_edit': True}"
-								class="oe_inline"
-								/>
-							<field 
-								name="manager_id"
-								options="{'no_open': True, 'no_create_edit': True}"
-								class="oe_inline"/>
-							
-							<field 
 								name="description"
-								string="Keterangan"
+								string="Description"
 								class="oe_inline"
 								/>
-						</group>
 
-						<notebook>
-							<page string="Jabatan Bawahan" name="child_job">
-								<field name="child_ids">
-									<tree create="0" edit="0" delete="0">
-										<field name="name"/>
-										<field name="department_id"/>
-										<field name="no_of_employee"/>
-									</tree>
-								</field>
-							</page>
-						</notebook>
+						</group>
 
 					</sheet>
 					
@@ -103,7 +65,7 @@
 
 
 	    <record id="transhybrid_hr_employee_job_action" model="ir.actions.act_window">
-		  <field name="name">Jabatan</field>
+		  <field name="name">Position</field>
 		  <field name="res_model">hr.job</field>
 		  <field name="view_type">form</field>
 		  <field name="view_mode">tree,form</field>

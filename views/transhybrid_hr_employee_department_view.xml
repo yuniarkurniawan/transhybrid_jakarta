@@ -152,7 +152,7 @@
 
         <!-- ACTION -->
 	    <record id="transhybrid_hr_employee_department_view_action" model="ir.actions.act_window">
-            <field name="name">Departemen</field>
+            <field name="name">Department</field>
             <field name="res_model">hr.department</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>

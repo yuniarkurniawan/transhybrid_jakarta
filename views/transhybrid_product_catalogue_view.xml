@@ -298,7 +298,7 @@
         </record>        
         
         <menuitem action="product_thc_action" icon="STOCK_JUSTIFY_FILL" sequence="3"
-            id="product_thc_model_menu_view" parent="sub_menu_purchasing_data_transhybrid"
+            id="product_thc_model_menu_view" parent="sub_menu_master_data_transhybrid"
         />
                 
     </data>
