@@ -483,7 +483,7 @@
         	icon="STOCK_JUSTIFY_FILL" 
             sequence="4"
             id="transhybrid_testing_news_menu_view" 
-            parent="sub_menu_child_reporting_data_transhybrid_news"
+            parent="sub_menu_reporting_acceptance_official_transhybrid"
         />
     	
 

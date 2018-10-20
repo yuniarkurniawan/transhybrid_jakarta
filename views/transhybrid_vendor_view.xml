@@ -446,7 +446,7 @@
         </record>        
         
         <menuitem action="vendor_res_parnter_action" icon="STOCK_JUSTIFY_FILL" sequence="1"
-            id="vendor_res_partner_menu_view" parent="sub_menu_purchasing_data_transhybrid"
+            id="vendor_res_partner_menu_view" parent="sub_menu_master_data_transhybrid"
         />
                 
     </data>

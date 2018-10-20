@@ -37,7 +37,7 @@
 
                         <button 
                                 name="action_signed" 
-                                string="Confirm" 
+                                string="Signed" 
                                 type="object" 
                                 attrs="{'invisible':[('state','in',(2,3))]}"
                                 />
@@ -149,6 +149,12 @@
                                         class="oe_inline"
                                         string="Telp."
                                         />
+
+                                    <field 
+                                        name="email_pembuat_order"
+                                        class="oe_inline"
+                                        string="Email"
+                                        />
                                     
                                     <field 
                                         name="alamat_pembuat_order"
@@ -185,12 +191,17 @@
                                             string="VSAT"
                                             type="checkbox"
                                             />
+                                        <field 
+                                            name="is_lainnya"
+                                            string="Lainnya"
+                                            type="checkbox"
+                                        />
 
                                     </group>
                                     <group>
                                         <field 
                                             name="is_local_loop"
-                                            string="Internet" 
+                                            string="Local Loop" 
                                             type="checkbox" 
                                         />
 
@@ -209,6 +220,12 @@
                                             name="is_dw_dm"
                                             type="checkbox"
                                             string="DWDM"/>
+
+                                        <field 
+                                            name="keterangan_lainnya"
+                                            string="Keterangan"
+                                            class="oe_inline"
+                                            attrs="{'invisible': [('is_lainnya', '=', False)],'required':[('is_lainnya','=',True)]}"/>
 
                                     </group>
                                 </group>
@@ -721,7 +738,7 @@
         	icon="STOCK_JUSTIFY_FILL" 
             sequence="2"
             id="transhybrid_survey_news_menu_view" 
-            parent="sub_menu_child_reporting_data_transhybrid_news"
+            parent="sub_menu_reporting_acceptance_official_transhybrid"
         />
     	
 
