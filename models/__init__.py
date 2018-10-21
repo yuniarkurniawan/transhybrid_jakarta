@@ -1,3 +1,6 @@
+import ir_http
+import res_config
+
 import transhybrid_user_model
 import transhybrid_group_model
 

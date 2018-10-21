@@ -14,7 +14,7 @@ var list_widget_registry = core.list_widget_registry;
 var ColumnProgressBar = ListView.Column.extend({
     _format: function (row_data, options) {
         return _.template(
-            '<div class="background-color: #ddd;valign: middle;"><div style="width:<%-value%>%;background-color: #2196F3;text-align: center;color: white;" value="<%-value%>" max="100"><%-value%>%</div></div>')({
+            '<div class="background-color: #ddd;valign: middle;"><div style="width:<%-value%>%;background-color: #2196F3;text-align: center;color: black;" value="<%-value%>" max="100"><%-value%>%</div></div>')({
                 value: _.str.sprintf("%.2f", row_data[this.id].value || 0)
             });
     }

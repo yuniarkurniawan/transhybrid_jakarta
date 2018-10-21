@@ -61,8 +61,8 @@
 
 
 
-        #'views/transhybrid_web_map_templates_view.xml',
-        #'views/transhybrid_res_config_views.xml',
+        'views/web_map_templates.xml',
+        'views/res_config_views.xml',
 
 
         #'views/transhybrid_example_pivot_view.xml',
@@ -93,6 +93,9 @@
 
         'report/transhybrid_survey_news_report_pdf_template_view.xml',
         'report/transhybrid_survey_news_report_view.xml',
+
+        'report/transhybrid_balap_news_report_pdf_template_view.xml',
+        'report/transhybrid_balap_news_report_view.xml',
 
 
 

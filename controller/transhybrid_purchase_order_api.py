@@ -13,6 +13,7 @@ import json
 import os
 import base64
 import shutil
+import json
 
 
 HTTP_UNAUTHORIZED = 401;
@@ -1026,69 +1027,104 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		transhybridBalapNews = request.env['transhybrid.balap.news']
 
 		serviceId = post.get('service_id')
-		poId = post.get('puchase_order_id')
-		orderLineId = post.get('order_line_id')
-		
 		workerId = post.get('worker_id')
 		partnerId = post.get('partner_id')
-		hari = post.get('hari')
-
-		customerAddress = post.get('customer_address')
-		serviceName = post.get('service_name')
-		userPhone = post.get('user_phone')
-
-		destination = post.get('destination')
-		customerPic = post.get('customer_pic')
-		bulan = post.get('bulan')
-
-		tanggal = post.get('tanggal')
-		itemServiceName = post.get('item_service_name')
-		longitude = post.get('longitude')
-
-		latitude = post.get('latitude')
-		customerPosition = post.get('customer_position')
-		tahun = post.get('tahun')
-
-		customerFax = post.get('customer_fax')
-		customerId = post.get('customer_fax')
-		userName = post.get('user_name')
-
-		productName = post.get('product_name')
+				 
 
 		tmpNumberBalap = self.get_balap_number(serviceId)
+		productName = post.get('product_name')
+		hari = post.get('hari')
+		bulan = post.get('bulan')
+		tanggal = post.get('tanggal')
+		tahun = post.get('tahun')
+
+
+		poId = post.get('puchase_order_id')
+		orderLineId = post.get('order_line_id')
+
+
+		# pelaksana
+		userName = post.get('user_name')
+		userPhone = post.get('user_phone')
+		userEmail = post.get('user_email')
+		userJabatan = post.get('user_jabatan')
+		userPhone = post.get('user_phone')
+
+		# jasa
+		customerId = post.get('customer_id')
+		serviceName = post.get('service_name')
+		itemServiceName = post.get('item_service_name')
+		destination = post.get('destination')
+
+		# lokasi pelanggan
+		customerName = post.get('customer_name')
+		customerAddress = post.get('customer_address')
+		customerPic = post.get('customer_pic')
+		jabatanCustomerPic = post.get('jabatan_customer_pic')
+		customerPhone = post.get('customer_phone')
+		customerFax = post.get('customer_fax')
+		customerEmail = post.get('customer_email')
+
+		longitude = post.get('longitude')
+		latitude = post.get('latitude')
+		customerPosition = post.get('customer_position')
+
+
+		maps_loc = {
+				
+				'is_kml':True,
+				'position_task':[	
+					{'address':'','lat': float(latitude),'lng': float(longitude)}
+				],
+				'all_kml_file':[],
+
+				'zoom': 8
+				}
+
+		json_map = json.dumps(maps_loc)
+
 
 		
 		dataBalapValue = {
+
+			'product_name' : productName,
 			'name' : tmpNumberBalap,
 			'is_button_progress' : 1,
 			'is_button_upload':1,
-			'sale_order' : int(poId),
 
+			'hari':hari,
+			'bulan' : bulan,
+			'tanggal':tanggal,
+			'tahun':tahun,
+
+			'sale_order' : int(poId),
 			'sale_order_line' : int(orderLineId),
 			'sale_order_line_service' : int(serviceId),
-			'hari':hari,
-
-			'customer_address' : customerAddress,
-			'service_name' 	: serviceName,
-			'user_phone' : userPhone,
-
-			'destination' : destination,
-			'customer_pic' : customerPic,
-			'bulan' : bulan,
-
-			'tanggal' : tanggal,
-			'item_service_name' : itemServiceName,
-			'customer_position' : customerPosition,
-
-			'tahun' : tahun,
-			'customer_fax' : customerFax,
-			'customer_id' : customerId,
-
+			
 			'user_name' : userName,
-			'product_name' : productName,
-			'longitude' : longitude,
+			'user_phone' : userPhone,
+			'user_email':userEmail,
+			'user_jabatan':userJabatan,
+			'user_phone':userPhone,
 
+			'customer_id' : customerId,
+			'service_name' 	: serviceName,
+			'item_service_name' : itemServiceName,
+			'destination' : destination,
+
+			'customer_name' : customerName,
+			'customer_address' : customerAddress,
+			'customer_pic' : customerPic,
+			'jabatan_customer_pic':jabatanCustomerPic,
+			'customer_phone':customerPhone,
+			'customer_fax':customerFax,
+			'customer_email':customerEmail,
+			
+			'longitude' : longitude,
 			'latitude' : latitude,
+			'customer_position' : customerPosition,
+			'google_map':json_map,
+			
 
 		}
 

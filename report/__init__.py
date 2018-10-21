@@ -1,7 +1,7 @@
 #import report_xlsx
 #import report_xls
-import transhybrid_po_service_item_report_pdf
-import transhybrid_activation_news_report_pdf
-import transhybrid_integration_news_report_pdf
+#import transhybrid_po_service_item_report_pdf
+#import transhybrid_activation_news_report_pdf
+#import transhybrid_integration_news_report_pdf
 
 #import transhybrid_survey_news_report_pdf
