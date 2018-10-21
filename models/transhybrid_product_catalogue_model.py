@@ -322,6 +322,14 @@ class TranshybridProductServiceModel(models.Model):
 
 
 
+			# === BEGIN BALAP
+			tmpBALAP = 'balap.' + str(vals['service_code']).lower()
+			poolData = irSequenceModel.search([('name','=',tmpBALAP)])
+			if(poolData.id!=False):
+				raise ValidationError(_('There Is Same Service Code In Sequence Number Configuration.'))
+
+
+
 
 			# =========== INPUT IR.SEQUENCE
 			# ==== BEGIN BAS
@@ -358,6 +366,16 @@ class TranshybridProductServiceModel(models.Model):
 				'code' : tmpBAI,
 			}		
 			irSequenceModel.create(valueSequence)
+
+
+			# === BEGIN BALAP
+			tmpBALAP = 'balap.' + str(vals['service_code']).lower()
+			valueSequence = {
+				'name' : tmpBALAP,
+				'code' : tmpBALAP,
+			}		
+			irSequenceModel.create(valueSequence)
+
 
 
 		return super(TranshybridProductServiceModel, self).write(vals)
@@ -401,6 +419,15 @@ class TranshybridProductServiceModel(models.Model):
 		valueSequence = {
 			'name' : tmpBAI,
 			'code' : tmpBAI,
+		}		
+		irSequenceModel.create(valueSequence)
+
+
+		# === BEGIN BALAP
+		tmpBALAP = 'balap.' + str(values['service_code']).lower()
+		valueSequence = {
+			'name' : tmpBALAP,
+			'code' : tmpBALAP,
 		}		
 		irSequenceModel.create(valueSequence)
 

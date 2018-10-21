@@ -874,6 +874,10 @@ class TranshybridSaleOrderLineServiceModel(models.Model):
                                             (2,'Sudah Dibuat'),
                                             ],'State',default=1)
 
+    is_button_upload            =   fields.Selection([(1,'Off'),
+                                            (2,'On'),
+                                            ],'State',default=1)
+
 
 
     @api.onchange('item_service_id')

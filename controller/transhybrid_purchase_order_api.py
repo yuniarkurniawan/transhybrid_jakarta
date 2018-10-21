@@ -507,9 +507,10 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
 
 
+				'''
 				if(int(outDataServiceDetail.progress.progress_percentage)==100):
 					kondisiBalapButton = True
-
+				'''
 
 				listOutDataImage = []
 				for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
@@ -530,7 +531,12 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 			new_dict['list_detail_images'] = listOutdataServiceDetail
-			new_dict['is_upload_balap_button'] = kondisiBalapButton
+
+			if(outData.is_button_upload==1):
+				new_dict['is_upload_balap_button'] = False
+			else:
+				new_dict['is_upload_balap_button'] = True
+			
 			listOutData.append(new_dict)
 
 
@@ -674,7 +680,15 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 				new_dict_up['product_name'] = outService.sale_order_line_id.product_id.name 
 				new_dict_up['customer_id'] = outService.sale_order_line_id.order_id.partner_id.customer_code
+				
+				new_dict_up['service_id'] = outService.id
+				new_dict_up['order_line_id'] = outService.sale_order_line_id.id
+				new_dict_up['puchase_order_id'] = outService.po_id
+				new_dict_up['partner_id'] = outService.sale_order_line_id.order_id.partner_id.id
+				new_dict_up['worker_id'] = outService.assign_to.id
+
 				new_dict_up['service_name'] = outService.service_id.name
+				
 				new_dict_up['item_service_name'] = outService.item_service_id.name
 
 				new_dict_up['destination'] = ""
@@ -682,6 +696,13 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				new_dict_up['customer_address'] = outService.sale_order_line_id.order_id.partner_id.street
 				
 				new_dict_up['customer_pic'] = outService.pic
+
+				if(outService.pic_phone):
+					new_dict_up['customer_pic_phone'] = outService.pic_phone
+				else:
+					new_dict_up['customer_pic_phone'] = ""
+
+
 				new_dict_up['customer_position'] = ""
 				
 				if(outService.sale_order_line_id.order_id.partner_id.phone!=False):
@@ -774,7 +795,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return Response(json.dumps(output),headers=headers)
 
 
-	#@http.route("/action_upload_balap")
+	
 
 
 
@@ -915,6 +936,125 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return ''.join(listAddres)
 
 
+	def get_month_converter(self, paramMonth):
+
+		tmpOut = ""
+		if(int(paramMonth)==1):
+			tmpOut = "I"
+		elif(int(paramMonth)==2):
+			tmpOut = "II"
+		elif(int(paramMonth)==3):
+			tmpOut = "III"
+		elif(int(paramMonth)==4):
+			tmpOut = "IV"
+		elif(int(paramMonth)==5):
+			tmpOut = "V"
+		elif(int(paramMonth)==6):
+			tmpOut = "VI"
+		elif(int(paramMonth)==7):
+			tmpOut = "VII"
+		elif(int(paramMonth)==8):
+			tmpOut = "VIII"
+		elif(int(paramMonth)==9):
+			tmpOut = "IX"
+		elif(int(paramMonth)==10):
+			tmpOut = "X"
+		elif(int(paramMonth)==11):
+			tmpOut = "XI"
+		else:
+			tmpOut = "XII"
+
+		return tmpOut
+
+
+	def get_balap_number(self,paramServiceId):
+
+		tmpLoanNumber = []
+		val = {}
+
+		now = datetime.datetime.now()
+		tmpYear = now.year
+		tmpYear = str(tmpYear)
+
+		tmpMonth = now.month
+		tmpMonth = self.get_month_converter(tmpMonth)
+
+		saleOrderLineService = request.env['sale.order.line.service.model']
+		poolService = saleOrderLineService.sudo().search([('id','=',int(paramServiceId))])
+
+		for outService in poolService:
+
+			serviceCode = outService.service_id.service_code
+			serviceCode = str(serviceCode).lower()
+			serviceCode = 'balap.'+ serviceCode
+
+			nextNumber = request.env['ir.sequence'].sudo().get(str(serviceCode))
+			nextNumber = str(nextNumber)
+
+			tmpOutNumber = ""
+			if(len(nextNumber)<=3):
+				tmpOutNumber = str(nextNumber).zfill(3)
+				tmpLoanNumber.append(tmpOutNumber)
+			else:
+				tmpOutNumber = str(nextNumber)
+				tmpLoanNumber.append(tmpOutNumber)
+
+
+			tmpLoanNumber.append("/BALAP-PROJECT/")
+			tmpLoanNumber.append(str(outService.service_id.product_id.code))
+			tmpLoanNumber.append("/")
+			tmpLoanNumber.append(tmpMonth)
+			tmpLoanNumber.append("/")
+			tmpLoanNumber.append(tmpYear)
+
+			outNumber = ''.join(tmpLoanNumber)
+						
+			
+		return outNumber
+
+
+	@http.route("/action_upload_balap",auth='none',csrf=False,type='http')
+	def action_upload_balap(self,**post):
+
+		headerData = request.httprequest.headers		
+		headers = {'Content-Type': 'application/json'}
+
+		output={}
+		transhybridBalapNews = request.env['transhybrid.balap.news']
+
+		serviceId = post.get('service_id')
+		poId = post.get('puchase_order_id')
+		orderLineId = post.get('order_line_id')
+		workerId = post.get('worker_id')
+		partnerId = post.get('partner_id')
+
+		tmpNumberBalap = self.get_balap_number(serviceId)
+
+		#is_button_upload
+
+
+		dataGenerateValue = {
+			'name' : tmpNumberBalap,
+			'year' : int(tmpYear),
+			'month' : int(tmpMonth),
+			'last_number' : 1
+		}
+
+		listPoNumber.append(str(1).zfill(5))
+		generatedNumberModel.sudo().create(dataGenerateValue)
+
+
+		output = {
+			'code': 200,
+			'number':tmpNumberBalap,
+			'message':'Upload BALAP Succes',
+		}
+		
+
+		return Response(json.dumps(output),headers=headers)
+
+
+
 	@http.route("/detail_service_upload_image",auth='none',csrf=False,type='http')
 	def upload_service_image(self,**post):
 
@@ -924,6 +1064,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		saleOrderLineServiceModel = request.env['sale.order.line.service.model']
 		saleOrderLineServiceImageModel = request.env['sale.order.line.service.image.model']
 		saleOrderLineServiceDetailModel = request.env['sale.order.line.service.detail.model']
+		productThcServiceDetailProgressModel = request.env['product.thc.service.detail.progress']
 
 		generatedNumberModel = request.env['transhybrid.generated.number']
 
@@ -955,6 +1096,14 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		output = {}
 
 		
+		kondisiButtonBalap = False
+		poolProgress = productThcServiceDetailProgressModel.sudo().search([('id','=',int(progressId))])
+		for outPercentage in poolProgress:
+			if(int(outPercentage.progress_percentage)==100):
+				kondisiButtonBalap = True
+
+
+
 		dataPool = generatedNumberModel.sudo().search([('is_image','=',True),('year','=',int(tmpYear)),('month','=',int(tmpMonth))])
 		tmpGenerateNumber = ""
 
@@ -1026,6 +1175,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			for serviceData in modelPool:
 				serviceData.item_service_progress = progressId
 
+				if(kondisiButtonBalap):
+					serviceData.is_button_upload = 2
+
 				# DISINI
 				# serviceData.percentage = 
 
@@ -1080,13 +1232,15 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			# UPDATE IMAGE BARU
 			for outMe in dataPoolService:
 
-				print " IIIIDDD :: ", outMe.id
+				#print " IIIIDDD :: ", outMe.id
 
 				# UPDATE PROGRESS BAR
 				modelPool = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
 				for serviceData in modelPool:
-					print " ======================== "
+					#print " ======================== "
 					serviceData.item_service_progress = progressId
+					if(kondisiButtonBalap):
+						serviceData.is_button_upload = 2
 
 
 				filename = ""
@@ -1148,7 +1302,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 					listFileName[:] = []
 				
-
+		#Response.status = "200"
 		output = {
 			'code': 200,
 			'message':'Upload Image Succes',

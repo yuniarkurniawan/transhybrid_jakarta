@@ -16,6 +16,7 @@ import transhybrid_generated_number
 import transhybrid_survey_news
 import transhybrid_activation_news
 import transhybrid_testing_news
+import transhybrid_balap_news
 
 import transhybrid_integration_news
 import transhybrid_purchase_order_notification
