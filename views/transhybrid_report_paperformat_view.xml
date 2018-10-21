@@ -52,7 +52,6 @@
             name="Reports"
             parent="sub_menu_reporting_configuration_transhybrid"
             sequence="15"
-            groups="base.group_no_one"
             />
 
 
@@ -62,7 +61,6 @@
             parent="transhybrid_reporting_menuitem"
             action="transhybrid_paper_format_action"
             sequence="2"
-            groups="base.group_no_one"
             />
         <menuitem
             id="transhybrid_reports_menuitem"
@@ -70,7 +68,6 @@
             parent="transhybrid_reporting_menuitem"
             action="transhybrid_reports_action"
             sequence="3"
-            groups="base.group_no_one"
             />
 
 
