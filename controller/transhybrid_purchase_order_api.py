@@ -700,6 +700,48 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 					new_dict_up['customer_email'] = " - "
 
 
+
+
+
+
+
+				listOutdataServiceDetail = []
+				for outDataServiceDetail in outService.sale_order_line_service_detail_ids:
+					
+					new_dict_in = {}
+					new_dict_in['upload_date'] = self.date_to_string_other(outDataServiceDetail.upload_date)
+					new_dict_in['description'] = outDataServiceDetail.description
+					new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
+
+
+					if(int(outDataServiceDetail.progress.progress_percentage)==100):
+						kondisiBalapButton = True
+
+
+					listOutDataImage = []
+					for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
+
+						new_dict_in_image = {}
+						
+						if(outDataImage.address_image_name):
+							#new_dict_in_image['address_image'] = self.get_base_path_image_data() + str(outDataImage.address_image_name)
+							new_dict_in_image['address_image'] = self.get_address_base_progress_image() + str(outDataImage.address_image_name)
+						else:
+							new_dict_in_image['address_image'] = ""
+
+						listOutDataImage.append(new_dict_in_image)
+
+					
+					new_dict_in['images'] = listOutDataImage
+					listOutdataServiceDetail.append(new_dict_in)
+
+
+				new_dict_up['list_detail_images'] = listOutdataServiceDetail
+
+
+
+
+
 			Response.status = "200"
 			output = {
 				'result':new_dict_up,
