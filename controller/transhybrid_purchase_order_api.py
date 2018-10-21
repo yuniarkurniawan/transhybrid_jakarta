@@ -774,6 +774,10 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		return Response(json.dumps(output),headers=headers)
 
 
+	#@http.route("/action_upload_balap")
+
+
+
 	@http.route("/prepare_upload_image/<serviceId>",auth="none",csrf=False,type='http')
 	def get_prepare_upload_image(self,serviceId,**values):
 
