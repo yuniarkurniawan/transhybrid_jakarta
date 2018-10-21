@@ -8,7 +8,7 @@
             <field name="model">transhybrid.balap.news</field>
             <field name="priority">2</field>
             <field name="arch" type="xml">
-                <tree create="0" delete="0">
+                <tree create="0">
                     <field name="name" string="Number"/>
                 	<field name="customer_name" string="Customer"/>
                 	<field name="sale_order_line_service" string="Service"/>
@@ -24,7 +24,7 @@
             <field name="arch" type="xml">
                 <form 
                 	create="false" 
-                    delete="false"
+                    
                     >
 
                     <!--
