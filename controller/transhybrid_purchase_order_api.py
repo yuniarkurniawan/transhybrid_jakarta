@@ -481,6 +481,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 		listOutData = []
+		kondisiBalapButton = False
 
 		saleOrderLineServiceData = saleOrderLineServiceModel.sudo().search([('id','=',int(serviceId))])
 		for outData in saleOrderLineServiceData:
@@ -506,6 +507,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
 
 
+				if(int(outDataServiceDetail.progress.progress_percentage)==100):
+					kondisiBalapButton = True
+
 
 				listOutDataImage = []
 				for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
@@ -526,6 +530,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 
 
 			new_dict['list_detail_images'] = listOutdataServiceDetail
+			new_dict['is_upload_balap_button'] = kondisiBalapButton
 			listOutData.append(new_dict)
 
 
