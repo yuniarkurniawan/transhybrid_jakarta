@@ -32,11 +32,17 @@ class TranshybridBalapNews(models.Model):
 	tanggal					=	fields.Char('Days Date')
 	item_service_name		=	fields.Char('Item Service Name')
 	customer_position 		=	fields.Char('Customer Position')
+	
 	tahun					=	fields.Char('Year')
 	customer_fax			=	fields.Char('Customer Fax')
 	customer_id 			=	fields.Char('Customer_id')
 	user_name				=	fields.Char('User Name')
+	
 	product_name 			=	fields.Char('Product Name')
+	longitude				=	fields.Float('Longitude',digits=(0,6),required=True,default=0.0)
+	latitude 				=	fields.Float('Latitude',digits=(0,6),required=True,default=0.0)
+
+
 
 
 

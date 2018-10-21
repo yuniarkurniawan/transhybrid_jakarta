@@ -507,11 +507,6 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 				new_dict_in['progress'] = str(outDataServiceDetail.progress.progress_percentage) + " %"
 
 
-				'''
-				if(int(outDataServiceDetail.progress.progress_percentage)==100):
-					kondisiBalapButton = True
-				'''
-
 				listOutDataImage = []
 				for outDataImage in outDataServiceDetail.sale_order_line_serive_image_ids:
 
@@ -537,6 +532,14 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			else:
 				new_dict['is_upload_balap_button'] = True
 			
+
+			if(outData.is_button_progress==1):
+				new_dict['is_upload_progress_button'] = False
+			else:
+				new_dict['is_upload_progress_button'] = True
+
+
+
 			listOutData.append(new_dict)
 
 
@@ -1025,28 +1028,75 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		serviceId = post.get('service_id')
 		poId = post.get('puchase_order_id')
 		orderLineId = post.get('order_line_id')
+		
 		workerId = post.get('worker_id')
 		partnerId = post.get('partner_id')
+		hari = post.get('hari')
+
+		customerAddress = post.get('customer_address')
+		serviceName = post.get('service_name')
+		userPhone = post.get('user_phone')
+
+		destination = post.get('destination')
+		customerPic = post.get('customer_pic')
+		bulan = post.get('bulan')
+
+		tanggal = post.get('tanggal')
+		itemServiceName = post.get('item_service_name')
+		longitude = post.get('longitude')
+
+		latitude = post.get('latitude')
+		customerPosition = post.get('customer_position')
+		tahun = post.get('tahun')
+
+		customerFax = post.get('customer_fax')
+		customerId = post.get('customer_fax')
+		userName = post.get('user_name')
+
+		productName = post.get('product_name')
 
 		tmpNumberBalap = self.get_balap_number(serviceId)
 
-		#is_button_upload
-
-
-		dataGenerateValue = {
+		
+		dataBalapValue = {
 			'name' : tmpNumberBalap,
-			'year' : int(tmpYear),
-			'month' : int(tmpMonth),
-			'last_number' : 1
+			'is_button_progress' : 1,
+			'is_button_upload':1,
+			'sale_order' : int(poId),
+
+			'sale_order_line' : int(orderLineId),
+			'sale_order_line_service' : int(serviceId),
+			'hari':hari,
+
+			'customer_address' : customerAddress,
+			'service_name' 	: serviceName,
+			'user_phone' : userPhone,
+
+			'destination' : destination,
+			'customer_pic' : customerPic,
+			'bulan' : bulan,
+
+			'tanggal' : tanggal,
+			'item_service_name' : itemServiceName,
+			'customer_position' : customerPosition,
+
+			'tahun' : tahun,
+			'customer_fax' : customerFax,
+			'customer_id' : customerId,
+
+			'user_name' : userName,
+			'product_name' : productName,
+			'longitude' : longitude,
+
+			'latitude' : latitude,
+
 		}
 
-		listPoNumber.append(str(1).zfill(5))
-		generatedNumberModel.sudo().create(dataGenerateValue)
+		transhybridBalapNews.sudo().create(dataBalapValue)
 
 
 		output = {
 			'code': 200,
-			'number':tmpNumberBalap,
 			'message':'Upload BALAP Succes',
 		}
 		
