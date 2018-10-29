@@ -1031,7 +1031,7 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 		partnerId = post.get('partner_id')
 				 
 
-		tmpNumberBalap = self.get_balap_number(int(serviceId))
+		tmpNumberBalap = self.get_balap_number(int(float(serviceId)))
 		productName = post.get('product_name')
 		hari = post.get('hari')
 		bulan = post.get('bulan')
