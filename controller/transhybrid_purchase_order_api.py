@@ -1097,9 +1097,9 @@ class TranshybridPurchaseOrderModelApi(http.Controller):
 			'tanggal':tanggal,
 			'tahun':tahun,
 
-			'sale_order' : int(poId),
-			'sale_order_line' : int(orderLineId),
-			'sale_order_line_service' : int(serviceId),
+			'sale_order' : int(float(poId)),
+			'sale_order_line' : int(float(orderLineId)),
+			'sale_order_line_service' : int(float(serviceId)),
 			
 			'user_name' : userName,
 			'user_phone' : userPhone,
